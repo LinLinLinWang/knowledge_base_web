@@ -44,10 +44,10 @@
                 },
                 rules: {
                     username: [
-                        { required: true, message: '请输入用户名', trigger: 'blur' }
+                        {required: true, message: '请输入用户名', trigger: 'blur'}
                     ],
                     password: [
-                        { required: true, message: '请输入密码', trigger: 'blur' }
+                        {required: true, message: '请输入密码', trigger: 'blur'}
                     ]
                 }
             }
@@ -58,9 +58,20 @@
         },
         methods: {
             testaxios() {
-                this.$axios
-                    .get('http://192.168.1.231:8888/users/getall')
-                    .then(response => (this.info = response))
+                this.$axios({
+                    method: 'POST',
+                    url: '/users/login',
+                    data: {
+                        username: 'uname',
+                        password: 'pwd'
+                    }
+                }).then(response => {
+                    var resdata = response.data;
+                    this.info = resdata;
+                    if (resdata.state == "200") {
+                        alert("登录成功\nmsg:" + resdata.msg+"\nstate:"+resdata.state);
+                    }
+                })
             }
         },
         submitForm(formName) {
