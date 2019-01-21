@@ -62,8 +62,8 @@
                     method: 'POST',
                     url: '/users/login',
                     data: {
-                        username: 'uname',
-                        password: 'pwd'
+                        username: this.ruleForm.username,
+                        password: this.ruleForm.password
                     }
                 }).then(response => {
                     var resdata = response.data;
