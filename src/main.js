@@ -12,9 +12,9 @@ Vue.use(ElementUI, {
     size: 'small'
 });
 
-// axios.defaults.baseURL = 'http://dm.aloli.cn:8888';  //之后的url直接写/xxx
+axios.defaults.baseURL = 'http://dm.aloli.cn:8888';  //之后的url直接写/xxx
 
-axios.defaults.baseURL = 'http://localhost:8888';  //之后的url直接写/xxx
+// axios.defaults.baseURL = 'http://localhost:8888';  //之后的url直接写/xxx
 
 
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'; //改为表单提交
