@@ -9,28 +9,22 @@
                     </el-input>
                 </el-form-item>
                 <el-form-item prop="password">
-                    <el-input type="password" placeholder="password" v-model="ruleForm.password"
-                              @keyup.enter.native="submitForm('ruleForm')">
+                    <el-input type="password" placeholder="password" v-model="ruleForm.password">
                         <el-button slot="prepend" icon="el-icon-lx-lock"></el-button>
                     </el-input>
                 </el-form-item>
                 <div class="login-btn">
                     <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
                 </div>
-
-                <div class="login-btn">
-                    <el-button type="primary" @click="testaxios()">登录test</el-button>
-                </div>
                 {{info}}
-                <p class="login-tips">Tips : 用户名和密码随便填。</p>
+                <!--<p class="login-tips">Tips : 用户名和密码随便填。</p>-->
             </el-form>
         </div>
     </div>
 </template>
 
 <script type="application/ecmascript">
-    import * as types from '../../types'
-
+    import * as types from '../../config/types'
     export default {
         name: '',
         data() {
@@ -53,60 +47,39 @@
             }
 
         },
-        mounted() {
-            this.$store.commit(types.TITLE, 'Login');
-        },
         methods: {
-            loginsubmit() {
-                this.$axios({
-                    method: 'POST',
-                    url: '/users/login',
-                    data: {
-                        username: this.ruleForm.username,
-                        password: this.ruleForm.password
+            submitForm(formName) {
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        this.$axios({
+                            method: 'POST',
+                            url: '/users/login',
+                            data: {
+                                username: this.ruleForm.username,
+                                password: this.ruleForm.password
+                            }
+                        }).then(response => {
+                            var resdata = response.data;
+                            this.info = resdata;
+                            if (resdata.state === "200") {
+                                this.$store.commit(types.LOGIN,resdata.token);
+                                console.log(this.$store.state);
+                                let redirect = decodeURIComponent(this.$route.query.redirect || '/');
+                                this.$router.push({
+                                    path: redirect
+                                })
+                            } else {
+                                console.log(this.$store.state);
+                                alert("用户名或密码错误");
+                            }
+                        })
+                    } else {
+                        alert("请输入用户名和密码");
+                        return false;
                     }
-                }).then(response => {
-                    var resdata = response.data;
-                    this.info = resdata;
-                    if (resdata.state == "200") {
-                        resdata.token
-                    }
-                })
-            },
-            testaxios() {
-                this.$axios({
-                    method: 'POST',
-                    url: '/users/login',
-                    data: {
-                        username: this.ruleForm.username,
-                        password: this.ruleForm.password
-                    }
-                }).then(response => {
-                    var resdata = response.data;
-                    this.info = resdata;
-                    if (resdata.state == "200") {
-                        alert("登录成功\nmsg:" + resdata.msg+"\nstate:"+resdata.state);
-                    }
-                })
+                });
             }
         },
-        submitForm(formName) {
-            this.$refs[formName].validate((valid) => {
-                if (valid) {
-                    if (this.token) {
-                        this.$store.commit(types.LOGIN, this.token)
-                        let redirect = decodeURIComponent(this.$route.query.redirect || '/');
-                        this.$router.push({
-                            path: redirect
-                        })
-                    }
-                    // this.$router.push('/');
-                } else {
-                    // console.log('error submit!!');
-                    return false;
-                }
-            });
-        }
     }
 
 
