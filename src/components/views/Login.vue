@@ -61,13 +61,15 @@
                         }).then(response => {
                             var resdata = response.data;
                             this.info = resdata;
+                            this.token = resdata.token;
                             if (resdata.state === "200") {
-                                this.$store.commit(types.LOGIN,resdata.token);
-                                console.log(this.$store.state);
-                                let redirect = decodeURIComponent(this.$route.query.redirect || '/');
-                                this.$router.push({
-                                    path: redirect
-                                })
+                                console.log("token:"+this.token);
+                                this.$store.commit(types.LOGIN,this.token);
+                                console.log("store:"+this.$store.state.token);
+                                // let redirect = decodeURIComponent(this.$route.query.redirect || '/');
+                                // this.$router.push({
+                                //     path: redirect
+                                // })
                             } else {
                                 console.log(this.$store.state);
                                 alert("用户名或密码错误");
