@@ -29,7 +29,7 @@
 </template>
 
 <script type="application/ecmascript">
-    import * as types from '../types'
+    import * as types from '../../types'
 
     export default {
         name: '',
@@ -57,6 +57,22 @@
             this.$store.commit(types.TITLE, 'Login');
         },
         methods: {
+            loginsubmit() {
+                this.$axios({
+                    method: 'POST',
+                    url: '/users/login',
+                    data: {
+                        username: this.ruleForm.username,
+                        password: this.ruleForm.password
+                    }
+                }).then(response => {
+                    var resdata = response.data;
+                    this.info = resdata;
+                    if (resdata.state == "200") {
+                        resdata.token
+                    }
+                })
+            },
             testaxios() {
                 this.$axios({
                     method: 'POST',
@@ -102,7 +118,7 @@
         position: relative;
         width: 100%;
         height: 100%;
-        background-image: url(../assets/img/login-bg.jpg);
+        background-image: url(../../assets/img/login-bg.jpg);
         background-size: 100%;
     }
 
