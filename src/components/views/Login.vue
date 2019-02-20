@@ -17,7 +17,7 @@
                     <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
                 </div>
                 {{info}}
-                <!--<p class="login-tips">Tips : 用户名和密码随便填。</p>-->
+                <p class="login-tips">Tips : 用户名1，密码2。</p>
             </el-form>
         </div>
     </div>
@@ -66,10 +66,10 @@
                                 console.log("token:"+this.token);
                                 this.$store.commit(types.LOGIN,this.token);
                                 console.log("store:"+this.$store.state.token);
-                                // let redirect = decodeURIComponent(this.$route.query.redirect || '/');
-                                // this.$router.push({
-                                //     path: redirect
-                                // })
+                                let redirect = decodeURIComponent(this.$route.query.redirect || '/');
+                                this.$router.push({
+                                    path: redirect
+                                })
                             } else {
                                 console.log(this.$store.state);
                                 alert("用户名或密码错误");

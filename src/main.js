@@ -10,9 +10,11 @@ import './assets/css/icon.css';
 Vue.config.productionTip = false
 
 //启用Element
-Vue.use(ELEMENT, {
-    size: 'small'
-});
+// Vue.use(ELEMENT, {
+//     size: 'small'
+// });
+Vue.use(ELEMENT);
+
 
 //注册全局变量
 Vue.prototype.$axios = axios;

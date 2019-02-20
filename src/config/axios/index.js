@@ -1,5 +1,5 @@
-import axios from 'axios';
 import store from "../store";
+import axios from 'axios';
 import * as types from '../types'
 import router from '../router'
 
@@ -7,8 +7,9 @@ import router from '../router'
 // http request 拦截器
 axios.interceptors.request.use(
     config => {
+        console.log("axios interceptors:"+store.state.token)
         if (store.state.token) {  // 判断是否存在token，如果存在的话，则每个http header都加上token
-            config.headers.Authorization = `token ${store.state.token}`;
+            config.headers.Authorization = `${store.state.token}`;
         }
         return config;
     },
@@ -37,10 +38,11 @@ axios.interceptors.response.use(
     });
 
 
-axios.defaults.baseURL = 'http://127.0.0.1:8888';  //之后的url直接写/xxx
+// axios.defaults.baseURL = 'http://127.0.0.1:8888';  //之后的url直接写/xxx
+axios.defaults.baseURL = 'http://dm.aloli.cn:8888';  //之后的url直接写/xxx
+
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'; //改为表单提交
 axios.defaults.withCredentials = true; //携带cookie
-// axios.defaults.headers.common['Authentication-Token'] = store.state.token;
 axios.interceptors.request.use(function (config) {
     // 在发送请求之前,格式化参数，增加token
     let data = config.data;
@@ -53,8 +55,6 @@ axios.interceptors.request.use(function (config) {
 }, function (error) {
     return Promise.reject(error);
 });
-
-
 
 
 export default axios;
