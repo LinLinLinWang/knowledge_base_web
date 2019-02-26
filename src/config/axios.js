@@ -1,7 +1,7 @@
-import store from "../store";
+import store from "./store";
 import axios from 'axios';
-import * as types from '../types'
-import router from '../router'
+import * as types from './types'
+import router from './router'
 
 
 // http request 拦截器
