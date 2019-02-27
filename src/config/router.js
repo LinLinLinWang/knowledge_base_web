@@ -1,10 +1,12 @@
-import Router from 'vue-router'
-import * as types from './types'
+import * as types from './types';
 import store from "./store";
+import Router from 'vue-router';
+
+
 
 // 页面刷新时，重新赋值token
-if (sessionStorage.getItem('token')) {
-    this.$store.commit(types.LOGIN, sessionStorage.getItem('token'))
+if (localStorage.getItem('token')) {
+    store.commit(types.LOGIN, localStorage.getItem('token'))
 }
 
 const router = new Router({
