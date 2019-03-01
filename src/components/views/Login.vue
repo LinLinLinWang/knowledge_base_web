@@ -15,16 +15,20 @@
                 </el-form-item>
                 <div class="login-btn">
                     <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
+
+
                 </div>
                 {{info}}
                 <p class="login-tips">Tips : 用户名1，密码2。</p>
             </el-form>
+            <el-button type="primary" @click="testLoginGetLast">测试getlast</el-button>
         </div>
     </div>
 </template>
 
 <script type="application/ecmascript">
     import * as types from '../../config/types'
+
     export default {
         name: '',
         data() {
@@ -38,10 +42,10 @@
                 },
                 rules: {
                     username: [
-                        {required: true, message: '请输入用户名', trigger: 'blur'}
+                        // {required: true, message: '请输入用户名', trigger: 'blur'}
                     ],
                     password: [
-                        {required: true, message: '请输入密码', trigger: 'blur'}
+                        // {required: true, message: '请输入密码', trigger: 'blur'}
                     ]
                 }
             }
@@ -63,9 +67,9 @@
                             this.info = resdata;
                             this.token = resdata.token;
                             if (resdata.state === "200") {
-                                console.log("token:"+this.token);
-                                this.$store.commit(types.LOGIN,this.token);
-                                console.log("store:"+this.$store.state.token);
+                                console.log("token:" + this.token);
+                                this.$store.commit(types.LOGIN, this.token);
+                                console.log("store:" + this.$store.state.token);
                                 let redirect = decodeURIComponent(this.$route.query.redirect || '/');
                                 this.$router.push({
                                     path: redirect
@@ -80,10 +84,26 @@
                         return false;
                     }
                 });
-            }
-        },
-    }
+            },
+            testLoginGetLast: function () {
+                //发送get请求
+                // Make a request for a user with a given ID
+                this.$axios({
+                    method: 'GET',
+                    url: '/usersLogin/getLast',
+                }).then(response => {
+                    var resdata = response.data;
+                    this.info = resdata;
+                    if (resdata.state === "200") {
+                        console.log("info:" + resdata);
+                    }
+                })
 
+            }
+
+
+        }
+    }
 
 </script>
 
