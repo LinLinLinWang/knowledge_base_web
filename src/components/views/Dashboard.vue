@@ -2,7 +2,7 @@
     <div>
         <el-row :gutter="20">
             <el-col :span="8">
-                <el-card shadow="hover" class="mgb20" style="height:252px;">
+                <el-card shadow="hover" class="mgb20" style="height:400px;">
                     <div class="user-info">
                         <img src="../../assets/img/img.jpg" class="user-avator" alt="">
                         <div class="user-info-cont">
@@ -10,8 +10,14 @@
                             <div>{{role}}</div>
                         </div>
                     </div>
-                    <div class="user-info-list">上次登录时间：<span>2018-01-01</span></div>
-                    <div class="user-info-list">上次登录地点：<span>东莞</span></div>
+                    <ul class="userlastinfoul">
+                        <li class="userlastinfoli"><div class="user-info-list">上次登录时间：<span>2018-01-01</span></div>
+                            <div class="user-info-list">上次登录地点：<span>东莞</span></div></li>
+                        <div style="float:left;width: 1px;height:50px; background:gray;"></div>
+                        <li class="userlastinfoli"><div class="user-info-list">上次登录时间：<span>2018-01-01</span></div>
+                            <div class="user-info-list">上次登录地点：<span>东莞</span></div></li>
+                    </ul>
+
                 </el-card>
                 <el-card shadow="hover" style="height:252px;">
                     <div slot="header" class="clearfix">
@@ -317,13 +323,25 @@
         color: #999;
         line-height: 25px;
     }
+.userlastinfoul{
 
-    .user-info-list span {
-        margin-left: 70px;
+    width: 1000px;
+}
+    .userlastinfoli{
+        list-style: none;
+        display: inline-block;
+        margin: 3px;
+        margin-left: 5px;
+        float: left;
+        color: red;
+
     }
+
+
 
     .mgb20 {
         margin-bottom: 20px;
+        width: 100%;
     }
 
     .todo-item {
