@@ -11,11 +11,15 @@
                         </div>
                     </div>
                     <ul class="userlastinfoul">
-                        <li class="userlastinfoli"><div class="user-info-list">上次登录时间：<span>{{beforelogintime}}</span></div>
-                            <div class="user-info-list">上次登录地点：<span>{{beforeloginaddress}}</span></div></li>
-                        <div style="float:left;width: 1px;height:50px; background: gray;"></div>
-                        <li class="userlastinfoli"><div class="user-info-list">本次登录时间：<span>{{lastlogintime}}</span></div>
-                            <div class="user-info-list">本次登录地点：<span>{{lastloginaddress}}</span></div></li>
+                        <li class="userlastinfoli" v-if="havelast">
+                            <div class="user-info-list">上次登录时间：<span>{{beforelogintime}}</span></div>
+                            <div class="user-info-list">上次登录地点：<span>{{beforeloginaddress}}</span></div>
+                        </li>
+                        <div style="float:left;width: 1px;height:50px; background: gray;" v-if="havelast"/>
+                        <li class="userlastinfoli">
+                            <div class="user-info-list">本次登录时间：<span>{{lastlogintime}}</span></div>
+                            <div class="user-info-list">本次登录地点：<span>{{lastloginaddress}}</span></div>
+                        </li>
                     </ul>
 
                 </el-card>
@@ -82,7 +86,9 @@
                         </el-table-column>
                         <el-table-column>
                             <template slot-scope="scope">
-                                <div class="todo-item" :class="{'todo-item-del': scope.row.status}">{{scope.row.title}}</div>
+                                <div class="todo-item" :class="{'todo-item-del': scope.row.status}">
+                                    {{scope.row.title}}
+                                </div>
                             </template>
                         </el-table-column>
                         <el-table-column width="60">
@@ -103,7 +109,8 @@
             </el-col>
             <el-col :span="12">
                 <el-card shadow="hover">
-                    <schart ref="line" class="schart" canvasId="line" :data="data" type="line" :options="options2"></schart>
+                    <schart ref="line" class="schart" canvasId="line" :data="data" type="line"
+                            :options="options2"></schart>
                 </el-card>
             </el-col>
         </el-row>
@@ -113,15 +120,21 @@
 <script>
     import Schart from 'vue-schart';
     import bus from '../common/bus';
+
     export default {
         name: 'dashboard',
         data() {
             return {
+                beforelogintime: "",
+                beforeloginaddress: "",
+                lastlogintime: "",
+                lastloginaddress: "",
+                havelast: true,
                 name: localStorage.getItem('ms_username'),
                 todoList: [{
-                        title: '今天要修复100个bug',
-                        status: false,
-                    },
+                    title: '今天要修复100个bug',
+                    status: false,
+                },
                     {
                         title: '今天要修复100个bug',
                         status: false,
@@ -143,9 +156,9 @@
                     }
                 ],
                 data: [{
-                        name: '2018/09/04',
-                        value: 1083
-                    },
+                    name: '2018/09/04',
+                    value: 1083
+                },
                     {
                         name: '2018/09/05',
                         value: 941
@@ -197,54 +210,55 @@
                 return this.name === 'admin' ? '超级管理员' : '普通用户';
             }
         },
-        created(){
-            this.handleListener();
-            this.changeDate();
+        created() {
+            // this.handleListener();
+            // this.changeDate();
+            this.loginGetLast();
         },
-        activated(){
+        activated() {
             this.handleListener();
         },
-        deactivated(){
+        deactivated() {
             window.removeEventListener('resize', this.renderChart);
             bus.$off('collapse', this.handleBus);
         },
         methods: {
-            changeDate(){
+            changeDate() {
                 const now = new Date().getTime();
                 this.data.forEach((item, index) => {
                     const date = new Date(now - (6 - index) * 86400000);
-                    item.name = `${date.getFullYear()}/${date.getMonth()+1}/${date.getDate()}`
+                    item.name = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`
                 })
             },
-            handleListener(){
+            handleListener() {
                 bus.$on('collapse', this.handleBus);
                 // 调用renderChart方法对图表进行重新渲染
                 window.addEventListener('resize', this.renderChart)
             },
-            handleBus(msg){
+            handleBus(msg) {
                 setTimeout(() => {
                     this.renderChart()
                 }, 300);
             },
-            renderChart(){
+            renderChart() {
                 this.$refs.bar.renderChart();
                 this.$refs.line.renderChart();
             },
             loginGetLast: function () {
                 //发送get请求
-                // Make a request for a user with a given ID
                 this.$axios({
                     method: 'GET',
                     url: '/usersLogin/getLast',
                 }).then(response => {
                     var resdata = response.data;
-                   this.lastloginaddress=resdata.get(0).getAttribute("loginlocation")
-                    this.lastlogintime=resdata.get(0).getAttribute("logintime")
-                    this.beforelogintime=resdata.get(1).getAttribute("loginlocation")
-                    this.beforeloginaddress=resdata.get(1).getAttribute("loginlocation")
-                    if (resdata.state === "200") {
-                        console.log("info:" + resdata);
-                    }
+                    // resdata = eval(resdata);
+                    console.log(resdata);
+                    this.lastloginaddress = resdata.area;
+                    this.lastlogintime = resdata.time;
+                    this.beforelogintime = resdata.lasttime;
+                    this.beforeloginaddress = resdata.lastarea;
+                    if (resdata.isfirst === "true")
+                        this.havelast = false;
                 })
 
             }
@@ -341,11 +355,13 @@
         color: #999;
         line-height: 25px;
     }
-.userlastinfoul{
 
-    width: 1000px;
-}
-    .userlastinfoli{
+    .userlastinfoul {
+
+        width: 1000px;
+    }
+
+    .userlastinfoli {
         list-style: none;
         display: inline-block;
         margin: 3px;
@@ -354,7 +370,6 @@
         color: red;
 
     }
-
 
 
     .mgb20 {
