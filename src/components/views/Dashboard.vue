@@ -13,7 +13,7 @@
                     <ul class="userlastinfoul">
                         <li class="userlastinfoli"><div class="user-info-list">上次登录时间：<span>2018-01-01</span></div>
                             <div class="user-info-list">上次登录地点：<span>东莞</span></div></li>
-                        <div style="float:left;width: 1px;height:50px; background:gray;"></div>
+                        <div style="float:left;width: 1px;height:50px; background: gray;"></div>
                         <li class="userlastinfoli"><div class="user-info-list">上次登录时间：<span>2018-01-01</span></div>
                             <div class="user-info-list">上次登录地点：<span>东莞</span></div></li>
                     </ul>
