@@ -11,11 +11,11 @@
                         </div>
                     </div>
                     <ul class="userlastinfoul">
-                        <li class="userlastinfoli"><div class="user-info-list">上次登录时间：<span>2018-01-01</span></div>
-                            <div class="user-info-list">上次登录地点：<span>东莞</span></div></li>
+                        <li class="userlastinfoli"><div class="user-info-list">上次登录时间：<span>{{beforelogintime}}</span></div>
+                            <div class="user-info-list">上次登录地点：<span>{{beforeloginaddress}}</span></div></li>
                         <div style="float:left;width: 1px;height:50px; background: gray;"></div>
-                        <li class="userlastinfoli"><div class="user-info-list">上次登录时间：<span>2018-01-01</span></div>
-                            <div class="user-info-list">上次登录地点：<span>东莞</span></div></li>
+                        <li class="userlastinfoli"><div class="user-info-list">本次登录时间：<span>{{lastlogintime}}</span></div>
+                            <div class="user-info-list">本次登录地点：<span>{{lastloginaddress}}</span></div></li>
                     </ul>
 
                 </el-card>
@@ -229,6 +229,24 @@
             renderChart(){
                 this.$refs.bar.renderChart();
                 this.$refs.line.renderChart();
+            },
+            loginGetLast: function () {
+                //发送get请求
+                // Make a request for a user with a given ID
+                this.$axios({
+                    method: 'GET',
+                    url: '/usersLogin/getLast',
+                }).then(response => {
+                    var resdata = response.data;
+                   this.lastloginaddress=resdata.get(0).getAttribute("loginlocation")
+                    this.lastlogintime=resdata.get(0).getAttribute("logintime")
+                    this.beforelogintime=resdata.get(1).getAttribute("loginlocation")
+                    this.beforeloginaddress=resdata.get(1).getAttribute("loginlocation")
+                    if (resdata.state === "200") {
+                        console.log("info:" + resdata);
+                    }
+                })
+
             }
         }
     }
