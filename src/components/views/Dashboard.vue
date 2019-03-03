@@ -2,7 +2,7 @@
     <div>
         <el-row :gutter="20">
             <el-col :span="8">
-                <el-card shadow="hover" class="mgb20" style="height:400px;">
+                <el-card shadow="hover" class="mgb20" style="height:265px;">
                     <div class="user-info">
                         <img src="../../assets/img/img.jpg" class="user-avator" alt="">
                         <div class="user-info-cont">
@@ -11,14 +11,37 @@
                         </div>
                     </div>
                     <ul class="userlastinfoul">
-                        <li class="userlastinfoli" v-if="havelast">
-                            <div class="user-info-list">上次登录时间：<span>{{beforelogintime}}</span></div>
-                            <div class="user-info-list">上次登录地点：<span>{{beforeloginaddress}}</span></div>
+                        <div v-if="havelast">
+                            <li class="userlastinfoli">
+                                <div class="user-info-list">上次登录时间：<span>{{beforelogintime}}</span></div>
+                                <div class="user-info-list">上次登录地点：<span>{{beforeloginaddress}}</span></div>
+                                <div class="user-info-list" v-if="beforelogintype==='1'">上次登录类型：<span>网页端</span></div>
+                                <div class="user-info-list" v-else-if="beforelogintype==='2'">上次登录类型：<span>移动端</span>
+                                </div>
+                                <div class="user-info-list" v-else-if="beforelogintype==='3'">上次登录类型：<span>客户端</span>
+                                </div>
+                                <div class="user-info-list" v-else-if="beforelogintype==='4'">上次登录类型：<span>微信端</span>
+                                </div>
+                                <div class="user-info-list" v-else-if="beforelogintype==='4'">上次登录类型：<span>安卓端</span>
+                                </div>
+                            </li>
+                            <div style="float:left;width: 1px;height:80px; background: gray;"></div>
+                        </div>
+                        <li v-else>
+                            欢迎访问，这是您第一次登录
                         </li>
-                        <div style="float:left;width: 1px;height:50px; background: gray;" v-if="havelast"/>
                         <li class="userlastinfoli">
                             <div class="user-info-list">本次登录时间：<span>{{lastlogintime}}</span></div>
                             <div class="user-info-list">本次登录地点：<span>{{lastloginaddress}}</span></div>
+                            <div class="user-info-list" v-if="lastlogintype==='1'">上次登录类型：<span>网页端</span></div>
+                            <div class="user-info-list" v-else-if="lastlogintype==='2'">上次登录类型：<span>移动端</span>
+                            </div>
+                            <div class="user-info-list" v-else-if="lastlogintype==='3'">上次登录类型：<span>客户端</span>
+                            </div>
+                            <div class="user-info-list" v-else-if="lastlogintype==='4'">上次登录类型：<span>微信端</span>
+                            </div>
+                            <div class="user-info-list" v-else-if="lastlogintype==='4'">上次登录类型：<span>安卓端</span>
+                            </div>
                         </li>
                     </ul>
 
@@ -127,8 +150,10 @@
             return {
                 beforelogintime: "",
                 beforeloginaddress: "",
+                beforelogintype: "",
                 lastlogintime: "",
                 lastloginaddress: "",
+                lastlogintype: "",
                 havelast: true,
                 name: localStorage.getItem('ms_username'),
                 todoList: [{
@@ -251,14 +276,14 @@
                     url: '/usersLogin/getLast',
                 }).then(response => {
                     var resdata = response.data;
-                    // resdata = eval(resdata);
-                    console.log(resdata);
-                    this.lastloginaddress = resdata.area;
-                    this.lastlogintime = resdata.time;
-                    this.beforelogintime = resdata.lasttime;
-                    this.beforeloginaddress = resdata.lastarea;
                     if (resdata.isfirst === "true")
                         this.havelast = false;
+                    this.lastloginaddress = resdata.area;
+                    this.lastlogintime = resdata.time;
+                    this.lastlogintype = resdata.lasttype;
+                    this.beforelogintime = resdata.lasttime;
+                    this.beforeloginaddress = resdata.lastarea;
+                    this.beforelogintype = resdata.type;
                 })
 
             }
