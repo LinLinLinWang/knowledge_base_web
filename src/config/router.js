@@ -6,8 +6,8 @@ import Router from 'vue-router';
 // 页面刷新时，重新赋值token
 if (localStorage.getItem('token')) {
     store.commit(types.LOGIN, {
-        token: localStorage.getItem('user'),
-        user: localStorage.getItem('user')
+        token: localStorage.getItem('token'),
+        user: eval("(" + localStorage.getItem('user') + ")")
     });
 }
 

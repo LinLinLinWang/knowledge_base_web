@@ -49,21 +49,17 @@
             return {
                 collapse: false,
                 fullscreen: false,
-                user:null,
+                user: null,
                 message: 0
             }
+        },
+        created() {
+            this.user = this.$store.state.user;
         },
         components: {
             Avatar
         },
-        created() {
-            this.setusername()
-        },
         methods: {
-            //获取用户名
-            setusername: function () {
-                this.user = this.$store.state.user;
-            },
             //退出操作
             handleCommand(command) {
                 if (command === 'loginout') {

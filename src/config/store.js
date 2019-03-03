@@ -12,7 +12,7 @@ export default new Vuex.Store({
     mutations: {
         [types.LOGIN]: (state, data) => {
             localStorage.token = data.token;
-            localStorage.user = data.user;
+            localStorage.user = JSON.stringify(data.user);
             state.token = data.token;
             state.user = data.user;
         },

@@ -7,7 +7,7 @@
                         <avatar :username=user.uname :size="100" color="#fff" background-color="#FFC107"></avatar>
                         <div class="user-info-cont">
                             <div class="user-info-name">{{user.uname}}</div>
-                            <!--<div v-if="">{{role}}</div>-->
+                            <div>{{role}}</div>
                         </div>
                     </div>
                     <ul class="userlastinfoul">
@@ -240,7 +240,6 @@
         created() {
             // this.handleListener();
             // this.changeDate();
-            console.log("user = " + this.$store.state.user);
             this.user = this.$store.state.user;
             this.loginGetLast();
         },
