@@ -17,19 +17,19 @@
                 <div class="btn-bell">
                     <el-tooltip effect="dark" :content="message?`有${message}条未读消息`:`消息中心`" placement="bottom">
                         <!--<router-link to="/tabs">-->
-                            <i class="el-icon-bell"></i>
+                        <i class="el-icon-bell"></i>
                         <!--</router-link>-->
                     </el-tooltip>
                     <span class="btn-bell-badge" v-if="message"></span>
                 </div>
                 <!-- 用户头像 -->
                 <div class="user-avator">
-                    <avatar :username=uname :size="45" color="#fff" background-color="#FFC107"></avatar>
+                    <avatar :username=user.uname :size="45" color="#fff" background-color="#FFC107"></avatar>
                 </div>
                 <!-- 用户名下拉菜单 -->
                 <el-dropdown class="user-name" trigger="click" @command="handleCommand">
                     <span class="el-dropdown-link">
-                        {{uname}} <i class="el-icon-caret-bottom"></i>
+                        {{user.uname}} <i class="el-icon-caret-bottom"></i>
                     </span>
                     <el-dropdown-menu slot="dropdown">
                         <el-dropdown-item divided command="loginout">退出登录</el-dropdown-item>
@@ -49,7 +49,7 @@
             return {
                 collapse: false,
                 fullscreen: false,
-                uname: 'Welcome',
+                user:null,
                 message: 0
             }
         },
@@ -62,10 +62,7 @@
         methods: {
             //获取用户名
             setusername: function () {
-                let lname = localStorage.getItem("user").uname;
-                if (lname) {
-                    this.uname = lname;
-                }
+                this.user = this.$store.state.user;
             },
             //退出操作
             handleCommand(command) {

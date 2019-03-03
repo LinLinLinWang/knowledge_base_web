@@ -58,11 +58,9 @@
                             }
                         }).then(response => {
                             var resdata = response.data;
-                            // var jsonuser = JSON.parse(resdata.user);
                             var jsonuser = eval('(' + resdata.user + ')');
                             if (resdata.state === "200") {
-                                this.$store.commit(types.LOGIN, resdata.token);
-                                this.$store.commit(types.SETUSER, jsonuser);
+                                this.$store.commit(types.LOGIN, {token: resdata.token, user: jsonuser});
                                 let redirect = decodeURIComponent(this.$route.query.redirect || '/');
                                 this.$router.push({
                                     path: redirect
