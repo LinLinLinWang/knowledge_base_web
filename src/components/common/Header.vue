@@ -4,7 +4,7 @@
         <div class="collapse-btn" @click="collapseChage">
             <i class="el-icon-menu"></i>
         </div>
-        <div class="logo">后台管理系统</div>
+        <div class="logo">有倾向性的可信点名系统</div>
         <div class="header-right">
             <div class="header-user-con">
                 <!-- 全屏显示 -->
@@ -16,27 +16,23 @@
                 <!-- 消息中心 -->
                 <div class="btn-bell">
                     <el-tooltip effect="dark" :content="message?`有${message}条未读消息`:`消息中心`" placement="bottom">
-                        <router-link to="/tabs">
+                        <!--<router-link to="/tabs">-->
                             <i class="el-icon-bell"></i>
-                        </router-link>
+                        <!--</router-link>-->
                     </el-tooltip>
                     <span class="btn-bell-badge" v-if="message"></span>
                 </div>
                 <!-- 用户头像 -->
-                <div class="user-avator"><img src="../../assets/img/img.jpg"></div>
+                <div class="user-avator">
+                    <avatar :username=uname :size="45" color="#fff" background-color="#FFC107"></avatar>
+                </div>
                 <!-- 用户名下拉菜单 -->
                 <el-dropdown class="user-name" trigger="click" @command="handleCommand">
                     <span class="el-dropdown-link">
-                        {{username}} <i class="el-icon-caret-bottom"></i>
+                        {{uname}} <i class="el-icon-caret-bottom"></i>
                     </span>
                     <el-dropdown-menu slot="dropdown">
-                        <a href="http://blog.gdfengshuo.com/about/" target="_blank">
-                            <el-dropdown-item>关于作者</el-dropdown-item>
-                        </a>
-                        <a href="https://github.com/lin-xin/vue-manage-system" target="_blank">
-                            <el-dropdown-item>项目仓库</el-dropdown-item>
-                        </a>
-                        <el-dropdown-item divided  command="loginout">退出登录</el-dropdown-item>
+                        <el-dropdown-item divided command="loginout">退出登录</el-dropdown-item>
                     </el-dropdown-menu>
                 </el-dropdown>
             </div>
@@ -45,36 +41,46 @@
 </template>
 <script>
     import bus from '../common/bus';
+    import * as types from '../../config/types'
+    import Avatar from 'vue-avatar'
+
     export default {
         data() {
             return {
                 collapse: false,
                 fullscreen: false,
-                name: 'linxin',
-                message: 2
+                uname: 'Welcome',
+                message: 0
             }
         },
-        computed:{
-            username(){
-                let username = localStorage.getItem('ms_username');
-                return username ? username : this.name;
-            }
+        components: {
+            Avatar
         },
-        methods:{
-            // 用户名下拉菜单选择事件
+        created() {
+            this.setusername()
+        },
+        methods: {
+            //获取用户名
+            setusername: function () {
+                let lname = localStorage.getItem("user").uname;
+                if (lname) {
+                    this.uname = lname;
+                }
+            },
+            //退出操作
             handleCommand(command) {
-                if(command == 'loginout'){
-                    localStorage.removeItem('ms_username')
+                if (command === 'loginout') {
+                    this.$store.commit(types.LOGOUT);
                     this.$router.push('/login');
                 }
             },
             // 侧边栏折叠
-            collapseChage(){
+            collapseChage() {
                 this.collapse = !this.collapse;
                 bus.$emit('collapse', this.collapse);
             },
             // 全屏事件
-            handleFullScreen(){
+            handleFullScreen() {
                 let element = document.documentElement;
                 if (this.fullscreen) {
                     if (document.exitFullscreen) {
@@ -101,8 +107,8 @@
                 this.fullscreen = !this.fullscreen;
             }
         },
-        mounted(){
-            if(document.body.clientWidth < 1500){
+        mounted() {
+            if (document.body.clientWidth < 1500) {
                 this.collapseChage();
             }
         }
@@ -117,32 +123,38 @@
         font-size: 22px;
         color: #fff;
     }
-    .collapse-btn{
+
+    .collapse-btn {
         float: left;
         padding: 0 21px;
         cursor: pointer;
         line-height: 70px;
     }
-    .header .logo{
+
+    .header .logo {
         float: left;
-        width:250px;
+        width: 250px;
         line-height: 70px;
     }
-    .header-right{
+
+    .header-right {
         float: right;
         padding-right: 50px;
     }
-    .header-user-con{
+
+    .header-user-con {
         display: flex;
         height: 70px;
         align-items: center;
     }
-    .btn-fullscreen{
+
+    .btn-fullscreen {
         transform: rotate(45deg);
         margin-right: 5px;
         font-size: 24px;
     }
-    .btn-bell, .btn-fullscreen{
+
+    .btn-bell, .btn-fullscreen {
         position: relative;
         width: 30px;
         height: 30px;
@@ -150,7 +162,8 @@
         border-radius: 15px;
         cursor: pointer;
     }
-    .btn-bell-badge{
+
+    .btn-bell-badge {
         position: absolute;
         right: 0;
         top: -2px;
@@ -160,26 +173,32 @@
         background: #f56c6c;
         color: #fff;
     }
-    .btn-bell .el-icon-bell{
+
+    .btn-bell .el-icon-bell {
         color: #fff;
     }
-    .user-name{
+
+    .user-name {
         margin-left: 10px;
     }
-    .user-avator{
+
+    .user-avator {
         margin-left: 20px;
     }
-    .user-avator img{
+
+    .user-avator img {
         display: block;
-        width:40px;
-        height:40px;
+        width: 40px;
+        height: 40px;
         border-radius: 50%;
     }
-    .el-dropdown-link{
+
+    .el-dropdown-link {
         color: #fff;
         cursor: pointer;
     }
-    .el-dropdown-menu__item{
+
+    .el-dropdown-menu__item {
         text-align: center;
     }
 </style>

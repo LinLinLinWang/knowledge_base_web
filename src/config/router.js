@@ -3,10 +3,10 @@ import store from "./store";
 import Router from 'vue-router';
 
 
-
 // 页面刷新时，重新赋值token
 if (localStorage.getItem('token')) {
-    store.commit(types.LOGIN, localStorage.getItem('token'))
+    store.commit(types.LOGIN, localStorage.getItem('token'));
+    store.commit(types.SETUSER, localStorage.getItem('user'));
 }
 
 const router = new Router({
@@ -16,20 +16,20 @@ const router = new Router({
             name: 'login',
             component: resolve => require(['../components/views/Login.vue'], resolve)
         },
+        // {
+        //     path: '/',
+        //     redirect: '/dashboard'
+        // },
         {
             path: '/',
-            redirect: '/dashboard'
-        },
-        {
-            path: '/',
-            name: 'home',
+            // name: 'home',
             meta: {
                 requireAuth: true // 添加该字段，表示进入这个路由是需要登录的
             },
             component: resolve => require(['../components/views/Home.vue'], resolve),
             children: [
                 {
-                    path: '/dashboard',
+                    path: '/',
                     component: resolve => require(['../components/views/Dashboard.vue'], resolve),
                     meta: {title: '系统首页'}
                 }

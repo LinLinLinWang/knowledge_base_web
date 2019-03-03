@@ -4,10 +4,10 @@
             <el-col :span="8">
                 <el-card shadow="hover" class="mgb20" style="height:265px;">
                     <div class="user-info">
-                        <img src="../../assets/img/img.jpg" class="user-avator" alt="">
+                        <avatar :username=user.uname :size="100" color="#fff" background-color="#FFC107"></avatar>
                         <div class="user-info-cont">
-                            <div class="user-info-name">{{name}}</div>
-                            <div>{{role}}</div>
+                            <div class="user-info-name">{{user.uname}}</div>
+                            <!--<div v-if="">{{role}}</div>-->
                         </div>
                     </div>
                     <ul class="userlastinfoul">
@@ -143,6 +143,7 @@
 <script>
     import Schart from 'vue-schart';
     import bus from '../common/bus';
+    import Avatar from 'vue-avatar'
 
     export default {
         name: 'dashboard',
@@ -155,7 +156,7 @@
                 lastloginaddress: "",
                 lastlogintype: "",
                 havelast: true,
-                name: localStorage.getItem('ms_username'),
+                user: null,
                 todoList: [{
                     title: '今天要修复100个bug',
                     status: false,
@@ -228,16 +229,19 @@
             }
         },
         components: {
-            Schart
+            Schart,
+            Avatar
         },
         computed: {
             role() {
-                return this.name === 'admin' ? '超级管理员' : '普通用户';
+                return this.user.type === '1' ? '老师' : '学生';
             }
         },
         created() {
             // this.handleListener();
             // this.changeDate();
+            console.log("user = " + this.$store.state.user);
+            this.user = this.$store.state.user;
             this.loginGetLast();
         },
         activated() {
