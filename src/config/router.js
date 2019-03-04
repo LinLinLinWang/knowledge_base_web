@@ -2,15 +2,6 @@ import * as types from './types';
 import store from "./store";
 import Router from 'vue-router';
 
-
-// 页面刷新时，重新赋值token
-if (localStorage.getItem('token')) {
-    store.commit(types.LOGIN, {
-        token: localStorage.getItem('token'),
-        user: eval("(" + localStorage.getItem('user') + ")")
-    });
-}
-
 const router = new Router({
     routes: [
         {
@@ -18,13 +9,8 @@ const router = new Router({
             name: 'login',
             component: resolve => require(['../components/views/Login.vue'], resolve)
         },
-        // {
-        //     path: '/',
-        //     redirect: '/dashboard'
-        // },
         {
             path: '/',
-            // name: 'home',
             meta: {
                 requireAuth: true // 添加该字段，表示进入这个路由是需要登录的
             },
@@ -34,12 +20,12 @@ const router = new Router({
                     path: '/',
                     component: resolve => require(['../components/views/Dashboard.vue'], resolve),
                     meta: {title: '系统首页'}
-                }
-                // {
-                //     path: '/table',
-                //     component: resolve => require(['../components/page/BaseTable.vue'], resolve),
-                //     meta: {title: '基础表格'}
-                // },
+                },
+                {
+                    path: '/info',
+                    component: resolve => require(['../components/views/ChangeInfo.vue'], resolve),
+                    meta: {title: '信息维护'}
+                },
                 // {
                 //     path: '/tabs',
                 //     component: resolve => require(['../components/page/Tabs.vue'], resolve),
@@ -92,22 +78,17 @@ const router = new Router({
                 //     component: resolve => require(['../components/page/Permission.vue'], resolve),
                 //     meta: {title: '权限测试', permission: true}
                 // },
-                // {
-                //     path: '/404',
-                //     component: resolve => require(['../components/page/404.vue'], resolve),
-                //     meta: {title: '404'}
-                // },
-                // {
-                //     path: '/403',
-                //     component: resolve => require(['../components/page/403.vue'], resolve),
-                //     meta: {title: '403'}
-                // }
+                {
+                    path: '/404',
+                    component: resolve => require(['../components/views/404.vue'], resolve),
+                    meta: {title: '404'}
+                },
+                {
+                    path: '/401',
+                    component: resolve => require(['../components/views/401.vue'], resolve),
+                    meta: {title: '401'}
+                }
             ]
-        },
-        {
-            path: '/test',
-            name: 'test',
-            component: resolve => require(['../components/views/Test.vue'], resolve)
         },
         {
             path: '*',
@@ -116,12 +97,15 @@ const router = new Router({
     ]
 })
 
+
 //使用钩子函数对路由进行权限跳转
 router.beforeEach((to, from, next) => {
     if (to.meta.requireAuth) {  // 判断该路由是否需要登录权限
         if (store.state.token) {  // 通过vuex state获取当前的token是否存在
+            console.log("exist login")
             next();
         } else {
+            console.log("un login")
             next({
                 path: '/login',
                 query: {redirect: to.fullPath}  // 将跳转的路由path作为参数，登录成功后跳转到该路由
@@ -131,5 +115,16 @@ router.beforeEach((to, from, next) => {
         next();
     }
 })
+
+
+// 页面刷新时，重新赋值token
+if (localStorage.getItem('token')) {
+    store.commit(types.LOGIN, {
+        token: localStorage.getItem('token'),
+        user: eval("(" + localStorage.getItem('user') + ")")
+    });
+} else {
+    router.push('/login');
+}
 
 export default router;

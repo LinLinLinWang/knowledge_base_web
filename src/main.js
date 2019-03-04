@@ -16,6 +16,8 @@ Vue.use(ELEMENT, {
 // Vue.use(ELEMENT);
 
 
+Vue.use(router);
+
 //注册全局变量
 Vue.prototype.$axios = axios;
 

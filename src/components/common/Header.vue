@@ -24,12 +24,12 @@
                 </div>
                 <!-- 用户头像 -->
                 <div class="user-avator">
-                    <avatar :username=user.uname :size="45" color="#fff" background-color="#FFC107"></avatar>
+                    <avatar :username=getuname :size="45" color="#fff" background-color="#FFC107"></avatar>
                 </div>
                 <!-- 用户名下拉菜单 -->
                 <el-dropdown class="user-name" trigger="click" @command="handleCommand">
                     <span class="el-dropdown-link">
-                        {{user.uname}} <i class="el-icon-caret-bottom"></i>
+                        {{getuname}} <i class="el-icon-caret-bottom"></i>
                     </span>
                     <el-dropdown-menu slot="dropdown">
                         <el-dropdown-item divided command="loginout">退出登录</el-dropdown-item>
@@ -54,7 +54,19 @@
             }
         },
         created() {
-            this.user = this.$store.state.user;
+
+        },
+        computed: {
+            getuname() {
+                let user = eval("(" + localStorage.getItem('user') + ")");
+                console.log("let user :" + user);
+                if (user == null){
+                    this.$router.push('/login');
+                }
+
+                let uanme = user.uname;
+                return this.$store.state.user ? this.$store.state.user : uanme;
+            }
         },
         components: {
             Avatar
@@ -104,6 +116,10 @@
             if (document.body.clientWidth < 1500) {
                 this.collapseChage();
             }
+            console.log("store " + this.$store.state.user.uname);
+            console.log("local " + localStorage.getItem('user').uname);
+            // this.user = this.$store.state.user;
+            console.log("this " + this.user.uname);
         }
     }
 </script>
