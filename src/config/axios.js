@@ -36,9 +36,11 @@ axios.interceptors.response.use(
         return Promise.reject(error.response.data)   // 返回接口返回的错误信息
     });
 
-
-axios.defaults.baseURL = 'http://127.0.0.1:8888';  //之后的url直接写/xxx
-// axios.defaults.baseURL = 'http://dm.aloli.cn:8888';  //之后的url直接写/xxx
+if (process.env.NODE_ENV === "production") {
+    axios.defaults.baseURL = 'http://dm.aloli.cn:8888';
+} else {
+    axios.defaults.baseURL = 'http://127.0.0.1:8888';
+}
 
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'; //改为表单提交
 axios.defaults.withCredentials = true; //携带cookie
