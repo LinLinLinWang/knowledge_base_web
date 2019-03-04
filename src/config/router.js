@@ -17,6 +17,10 @@ const router = new Router({
             path: '/login',
             name: 'login',
             component: resolve => require(['../components/views/Login.vue'], resolve)
+        },{
+            path: '/registe',
+            name: 'registe',
+            component: resolve => require(['../components/views/Registe.vue'], resolve)
         },
         // {
         //     path: '/',
