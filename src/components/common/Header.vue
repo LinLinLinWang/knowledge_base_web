@@ -53,19 +53,11 @@
                 message: 0
             }
         },
-        created() {
-
-        },
         computed: {
             getuname() {
                 let user = eval("(" + localStorage.getItem('user') + ")");
-                console.log("let user :" + user);
-                if (user == null){
-                    this.$router.push('/login');
-                }
-
                 let uanme = user.uname;
-                return this.$store.state.user ? this.$store.state.user : uanme;
+                return this.$store.state.user ? this.$store.state.user.uname : uanme;
             }
         },
         components: {
@@ -116,10 +108,6 @@
             if (document.body.clientWidth < 1500) {
                 this.collapseChage();
             }
-            console.log("store " + this.$store.state.user.uname);
-            console.log("local " + localStorage.getItem('user').uname);
-            // this.user = this.$store.state.user;
-            console.log("this " + this.user.uname);
         }
     }
 </script>
