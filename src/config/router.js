@@ -82,17 +82,13 @@ const router = new Router({
                 //     component: resolve => require(['../components/page/Permission.vue'], resolve),
                 //     meta: {title: '权限测试', permission: true}
                 // },
-                {
-                    path: '/404',
-                    component: resolve => require(['../components/views/404.vue'], resolve),
-                    meta: {title: '404'}
-                },
-                {
-                    path: '/401',
-                    component: resolve => require(['../components/views/401.vue'], resolve),
-                    meta: {title: '401'}
-                }
+
             ]
+        },
+        {
+            path: '/404',
+            component: resolve => require(['../components/views/404.vue'], resolve),
+            meta: {title: '404'}
         },
         {
             path: '*',
