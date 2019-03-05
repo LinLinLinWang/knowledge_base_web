@@ -21,27 +21,29 @@
                     <div class="form-group">
 
                         <input type="text" class="form-control" name="name" id="name" placeholder="起一个昵称吧"
-                               autocomplete="off"  v-model="username">
+                               autocomplete="off" v-model="username">
                     </div>
 
                     <div class="form-group">
                         <label for="email" class="sr-only">邮箱</label>
                         <input type="email" class="form-control" id="email" name="email" placeholder="输入邮箱"
-                               autocomplete="off"  v-model="useremail">
+                               autocomplete="off" v-model="useremail">
                     </div>
 
 
                     <div class="form-group">
                         <label for="phone" class="sr-only">手机号</label>
                         <input type="text" class="form-control" id="phone" name="phone" placeholder="手机号"
-                               autocomplete="off"   v-model="userphone" @input="getRealTimePhone">
+                               autocomplete="off" v-model="userphone" @input="getRealTimePhone"
+                               v-bind:disabled="disabled">
                     </div>
                     <div class="form-group">
                         <label for="code" class="sr-only">输入验证码</label>
                         <input type="text" class="form-control" id="code" name="code" placeholder="输入验证码"
-                               autocomplete="off"  v-model="validatecode">
+                               autocomplete="off" v-model="validatecode">
                         <!-- <img id="randImage"  onclick="refushcode();" title="换一张试试" name="randImage" src="code.jsp"> -->
-                        <input type="button" class="form-control" id="phonecode" value="获取验证码" @onclick="getPhoneValidateCode">
+                        <input type="button" class="form-control" id="phonecode" value="获取验证码"
+                               @click="getPhoneValidateCode">
                     </div>
                     <div class="form-group">
                         <p>已经有账号了吗? <a href="login_by_password.jsp">那去登陆吧</a></p>
@@ -72,74 +74,106 @@
         name: "Registe",
         data() {
             return {
-                username: this.username,
-                useremail: this.useremail,
-                userphone:this.userphone,
-                validatecode:this.validatecode
+                username:'',
+                useremail:'',
+                userphone:'',
+                validatecode:'',
+                disabled: false
             }
         },
 
-    methods: {
-  //实时获取用户输入的手机号
+        methods: {
+            //实时获取用户输入的手机号
 
-        getRealTimePhone(){
-              var  userphone=this.userphone;
-
-  if(userphone.length==11){
-      this.$axios({
-          method: 'POST',
-          url: '/usersRegiste/phoneIsOrNotExist',
-          data: {
-
-              userphone:this.userphone,
-
-          }
-      }).then(response => {
-          var resdata = response.data;
-          //      var jsonuser = eval('(' + resdata.user + ')');
-          if (resdata.state === "0") {
-              alert("手机号未注册");
-          } else {
-              alert("手机号已经注册");
-          }
-      })
-
-  }
+            getRealTimePhone() {
 
 
+                var userphone = this.userphone;
+
+                if (userphone.length == 11) {
+                    if (!(/^1[3|4|5|7|8][0-9]\d{8,11}$/.test(userphone))) {
+                        alert("手机号格式不对！");
+                        this.userphone = "";
+
+                    } else {
 
 
+                        this.$axios({
+                            method: 'POST',
+                            url: '/usersRegiste/phoneIsOrNotExist',
+                            data: {
+
+                                userphone: this.userphone,
+
+                            }
+                        }).then(response => {
+                            var resdata = response.data;
+                            //      var jsonuser = eval('(' + resdata.user + ')');
+                            if (null == resdata) {
+                                alert("后台崩溃了");
+                            }
+                            if (resdata.state === "0") {
+                                alert("手机号未注册");
+                            } else {
+                                alert("手机号已经注册");
+                            }
+                        })
 
 
-        },
-        //获取验证码
-        getPhoneValidateCode(){
+                    }
 
 
-
-        },
-        submitForm(){
+                }
 
 
-                    this.$axios({
-                        method: 'POST',
-                        url: '/users/registe',
-                        data: {
-                            username: this.username,
-                            useremail: this.useremail,
-                            userphone:this.userphone,
-                            validatecode:this.validatecode
+            },
+            //获取验证码
+            getPhoneValidateCode() {
 
-                        }
-                    }).then(response => {
-                        var resdata = response.data;
-                  //      var jsonuser = eval('(' + resdata.user + ')');
-                        if (resdata.state === "200") {
-                            alert("提交注册数据");
-                        } else {
-                            alert("用户名或密码错误");
-                        }
-                    })
+                this.disabled = "true";
+                this.$axios({
+                    method: 'POST',
+                    url: '/usersRegiste/getValidatecode',
+                    data: {
+
+                        userphone: this.userphone,
+
+
+                    }
+                }).then(response => {
+                    var resdata = response.data;
+                    //      var jsonuser = eval('(' + resdata.user + ')');
+                    if (resdata.state === "ok") {
+                        alert("手机验证码生成成功");
+                    } else {
+                        alert("手机验证码生成失败");
+                    }
+                })
+
+
+            },
+            submitForm() {
+
+
+                this.$axios({
+                    method: 'POST',
+                    url: '/users/registe',
+                    data: {
+                        username: this.username,
+                        useremail: this.useremail,
+                        userphone: this.userphone,
+                        validatecode: this.validatecode
+
+                    }
+                }).then(response => {
+                    var resdata = response.data;
+                    //      var jsonuser = eval('(' + resdata.user + ')');
+                    if (resdata.state === "200") {
+                        alert("提交注册数据");
+                    } else {
+                        alert("用户名或密码错误");
+                    }
+                })
 
             }
         }
@@ -159,14 +193,14 @@
         font-family: sans-serif;
         -webkit-text-size-adjust: 100%;
         -ms-text-size-adjust: 100%;
-        overflow:scroll;
+        overflow: scroll;
 
     }
 
 
     body {
         margin: 0;
-        overflow:scroll;
+        overflow: scroll;
         background-color: red;
 
     }
@@ -174,7 +208,6 @@
     article, aside, details, figcaption, figure, footer, header, hgroup, main, menu, nav, section, summary {
         display: block
     }
-
 
 
     audio, canvas, progress, video {
@@ -426,7 +459,6 @@
             border: 1px solid #ddd !important
         }
     }
-
 
 
     .glyphicon {
@@ -1508,7 +1540,7 @@
     }
 
     body {
-        overflow:scroll;
+        overflow: scroll;
 
         font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
         font-size: 14px;
@@ -7136,7 +7168,6 @@
     }
 
 
-
     .visible-lg, .visible-md, .visible-sm, .visible-xs {
         display: none !important
     }
@@ -7372,13 +7403,13 @@
     }
 
 
-
     .animated {
         -webkit-animation-duration: 1s;
         animation-duration: 1s;
         -webkit-animation-fill-mode: both;
         animation-fill-mode: both;
     }
+
     .animated-fast {
         -webkit-animation-duration: .5s;
         animation-duration: .5s;
@@ -7412,8 +7443,8 @@
         from, 20%, 53%, 80%, to {
             -webkit-animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
             animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
-            -webkit-transform: translate3d(0,0,0);
-            transform: translate3d(0,0,0);
+            -webkit-transform: translate3d(0, 0, 0);
+            transform: translate3d(0, 0, 0);
         }
 
         40%, 43% {
@@ -7431,8 +7462,8 @@
         }
 
         90% {
-            -webkit-transform: translate3d(0,-4px,0);
-            transform: translate3d(0,-4px,0);
+            -webkit-transform: translate3d(0, -4px, 0);
+            transform: translate3d(0, -4px, 0);
         }
     }
 
@@ -7440,8 +7471,8 @@
         from, 20%, 53%, 80%, to {
             -webkit-animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
             animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
-            -webkit-transform: translate3d(0,0,0);
-            transform: translate3d(0,0,0);
+            -webkit-transform: translate3d(0, 0, 0);
+            transform: translate3d(0, 0, 0);
         }
 
         40%, 43% {
@@ -7459,8 +7490,8 @@
         }
 
         90% {
-            -webkit-transform: translate3d(0,-4px,0);
-            transform: translate3d(0,-4px,0);
+            -webkit-transform: translate3d(0, -4px, 0);
+            transform: translate3d(0, -4px, 0);
         }
     }
 
@@ -10723,6 +10754,7 @@
         color: #848484;
         background-color: #f0f0f0;
     }
+
     body.style-2 {
         background-color: #ffffff;
         background-size: cover;
@@ -10731,8 +10763,9 @@
 
         height: 100%;
     }
+
     body.style-3 {
-        background: #ffffff ;
+        background: #ffffff;
     }
 
     a {
@@ -10743,6 +10776,7 @@
         -ms-transition: all 0.3s ease;
         transition: all 0.3s ease;
     }
+
     a:hover {
         color: #29a3a3;
     }
@@ -10751,6 +10785,7 @@
         padding: 0;
         margin: 30px 0 0 0;
     }
+
     .menu li {
         list-style: none;
         margin-bottom: 10px;
@@ -10759,9 +10794,11 @@
         zoom: 1;
         *display: inline;
     }
+
     .menu li a {
         padding: 5px;
     }
+
     .menu li.active a {
         color: #b3b3b3;
     }
@@ -10775,17 +10812,20 @@
         box-shadow: -4px 7px 46px 2px rgba(0, 0, 0, 0.1);
         background: #ffffff;
     }
+
     .style-2 .fh5co-form {
         -webkit-box-shadow: -4px 7px 46px 2px rgba(0, 0, 0, 0.1);
         -moz-box-shadow: -4px 7px 46px 2px rgba(0, 0, 0, 0.1);
         -o-box-shadow: -4px 7px 46px 2px rgba(0, 0, 0, 0.1);
         box-shadow: -4px 7px 46px 2px rgba(0, 0, 0, 0.1);
     }
+
     @media screen and (max-width: 768px) {
         .fh5co-form {
             padding: 15px;
         }
     }
+
     .fh5co-form h2 {
         text-transform: uppercase;
         letter-spacing: 2px;
@@ -10793,22 +10833,27 @@
         margin: 0 0 30px 0;
         color: #000000;
     }
+
     .fh5co-form .form-group {
         margin-bottom: 30px;
     }
+
     .fh5co-form .form-group p {
         font-size: 14px;
         color: #9f9f9f;
         font-weight: 300;
     }
+
     .fh5co-form .form-group p a {
         color: #000000;
     }
+
     .fh5co-form label {
         font-weight: 300;
         font-size: 14px;
         font-weight: 300;
     }
+
     .fh5co-form .form-control {
         font-size: 16px;
         font-weight: 300;
@@ -10831,29 +10876,35 @@
         -ms-transition: all 0.5s ease;
         transition: all 0.5s ease;
     }
+
     .fh5co-form .form-control::-webkit-input-placeholder {
         color: rgba(0, 0, 0, 0.9);
         text-transform: uppercase;
     }
+
     .fh5co-form .form-control::-moz-placeholder {
         color: rgba(0, 0, 0, 0.3);
         text-transform: uppercase;
     }
+
     .fh5co-form .form-control:-ms-input-placeholder {
         color: rgba(0, 0, 0, 0.3);
         text-transform: uppercase;
     }
-    .copyrights{
-        text-indent:-9999px;
-        height:0;
-        line-height:0;
-        font-size:0;
-        overflow:hidden;
+
+    .copyrights {
+        text-indent: -9999px;
+        height: 0;
+        line-height: 0;
+        font-size: 0;
+        overflow: hidden;
     }
+
     .fh5co-form .form-control:-moz-placeholder {
         color: rgba(0, 0, 0, 0.3);
         text-transform: uppercase;
     }
+
     .fh5co-form .form-control:focus, .fh5co-form .form-control:active {
         border-bottom: 1px solid rgba(0, 0, 0, 0.4);
     }
@@ -10870,6 +10921,7 @@
         -o-box-shadow: -2px 10px 20px -1px rgba(51, 204, 204, 0.4);
         box-shadow: -2px 10px 20px -1px rgba(51, 204, 204, 0.4);
     }
+
     .btn-primary:hover, .btn-primary:focus, .btn-primary:active {
         color: #ffffff;
         background: #47d1d1 !important;
@@ -10887,10 +10939,11 @@
     .js .animate-box {
         opacity: 0;
     }
+
     #phonecode {
         border: 0;
-        width:50%;
-        float:left;
+        width: 50%;
+        float: left;
         line-height: 40px;
 
         color: white;
@@ -10899,6 +10952,10 @@
         text-align: center;
         text-decoration: none;
     }
-    #code{width:50%;float: left}
+
+    #code {
+        width: 50%;
+        float: left
+    }
 
 </style>
