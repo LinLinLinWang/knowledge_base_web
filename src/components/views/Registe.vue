@@ -1,13 +1,7 @@
 <template>
     <div class="container">
-        <div class="row">
-            <div class="col-md-12 text-center">
-                <ul class="menu">
-                    <li class="active"><a href="registe.jsp">注册界面</a></li>
 
-                </ul>
-            </div>
-        </div>
+
         <div class="row">
             <div class="col-md-4 col-md-offset-4">
 
@@ -16,18 +10,13 @@
                 <form action="#" class="fh5co-form animate-box" data-animate-effect="fadeIn">
                     <h2>注册界面</h2>
                     <div class="form-group">
-                        <div class="alert alert-success" role="alert">请仔细填写信息</div>
+                        <div class="alert alert-success" role="alert">{{promot}}</div>
                     </div>
                     <div class="form-group">
 
                         <input type="text" class="form-control" name="name" id="name" placeholder="起一个昵称吧"
-                               autocomplete="off" v-model="username">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="email" class="sr-only">邮箱</label>
-                        <input type="email" class="form-control" id="email" name="email" placeholder="输入邮箱"
-                               autocomplete="off" v-model="useremail">
+                               autocomplete="off" v-model="username"
+                               @input="validateUsername">
                     </div>
 
 
@@ -35,15 +24,16 @@
                         <label for="phone" class="sr-only">手机号</label>
                         <input type="text" class="form-control" id="phone" name="phone" placeholder="手机号"
                                autocomplete="off" v-model="userphone" @input="getRealTimePhone"
-                               v-bind:disabled="disabled">
+                               v-bind:disabled="phoneinputdisabled">
                     </div>
                     <div class="form-group">
                         <label for="code" class="sr-only">输入验证码</label>
                         <input type="text" class="form-control" id="code" name="code" placeholder="输入验证码"
                                autocomplete="off" v-model="validatecode">
                         <!-- <img id="randImage"  onclick="refushcode();" title="换一张试试" name="randImage" src="code.jsp"> -->
-                        <input type="button" class="form-control" id="phonecode" value="获取验证码"
-                               @click="getPhoneValidateCode">
+                        <input type="button" class="form-control" id="phonecode"
+                               @click="getPhoneValidateCode" v-bind:value="showmsg" v-bind:disabled="changecodedisabled"
+                               v-bind:style="{opacity:changecodeopacity}">
                     </div>
                     <div class="form-group">
                         <p>已经有账号了吗? <a href="login_by_password.jsp">那去登陆吧</a></p>
@@ -72,27 +62,76 @@
     export default {
         inheritAttrs: false,
         name: "Registe",
+
         data() {
             return {
-                username:'',
-                useremail:'',
-                userphone:'',
-                validatecode:'',
-                disabled: false
+                username: '',
+                useremail: '',
+                userphone: '',
+                validatecode: '',
+                phoneinputdisabled: false,
+                promot: "请仔细填写数据",
+                showmsg: "获取验证码",
+
+                changecodedisabled: false,
+                changecodeopacity: "1"
+
+
             }
         },
 
         methods: {
+            //检测名字是否时汉字 且数目 为 2----20
+            validateUsername() {
+                this.promot = "用户昵称仅支持中文（长度2--20个字符）"
+                var reg = /^[\u4E00-\u9FA5]+$/;
+                if (this.username.length > 1 && this.username.length < 21) {
+
+                    if (!reg.test(this.username)) {
+                        alert("含有非中文");
+                        this.username = this.username.substring(0, this.username.length - 1);
+
+                    } else {
+                        this.promot = "名字符合规范";
+                    }
+                } else {
+
+                    if (this.username.length == 1) {
+
+                        if (!reg.test(this.username)) {
+                            alert("含有非中文");
+                            this.username = "";
+                        }
+
+                    } else {
+                        if (this.username.length > 20) {
+                            this.promot = "用户昵称长度至多20个字符"
+                            this.username = this.username.substring(0, 19);
+
+
+                        }
+
+                    }
+
+                }
+
+            },
+
+
             //实时获取用户输入的手机号
 
             getRealTimePhone() {
-
+                this.promot = "手机号请认证填写！"
 
                 var userphone = this.userphone;
 
-                if (userphone.length == 11) {
+                if (userphone.length == 11 || userphone.length > 11) {
+                    if (userphone.length > 11) {
+                        this.promot = "手机号只有11位！"
+                        this.userphone = "";
+                    }
                     if (!(/^1[3|4|5|7|8][0-9]\d{8,11}$/.test(userphone))) {
-                        alert("手机号格式不对！");
+                        this.promot = "手机号格式不对！"
                         this.userphone = "";
 
                     } else {
@@ -110,12 +149,12 @@
                             var resdata = response.data;
                             //      var jsonuser = eval('(' + resdata.user + ')');
                             if (null == resdata) {
-                                alert("后台崩溃了");
+                                this.promot = "后台崩溃了";
                             }
-                            if (resdata.state === "0") {
-                                alert("手机号未注册");
+                            if (resdata.state === "200") {
+                                this.promot = "该手机号可以注册使用";
                             } else {
-                                alert("手机号已经注册");
+                                this.promot = "手机号已经注册";
                             }
                         })
 
@@ -124,13 +163,11 @@
 
 
                 }
-
-
             },
             //获取验证码
             getPhoneValidateCode() {
 
-                this.disabled = "true";
+                this.phoneinputdisabled = "true";
                 this.$axios({
                     method: 'POST',
                     url: '/usersRegiste/getValidatecode',
@@ -141,18 +178,52 @@
 
                     }
                 }).then(response => {
+                    this.changeGetCodeButtonStyle();
                     var resdata = response.data;
                     //      var jsonuser = eval('(' + resdata.user + ')');
-                    if (resdata.state === "ok") {
-                        alert("手机验证码生成成功");
+                    if (resdata.state === "200") {
+                        this.promot = "请注意接收验证码";
+                        //进行按钮倒计时
                     } else {
-                        alert("手机验证码生成失败");
+                        alert(resdata.msg);
                     }
                 })
 
 
             },
             submitForm() {
+                var reg = /^[\u4E00-\u9FA5]+$/;
+                if (this.username.length > 1 && this.username.length < 21) {
+
+                    if (!reg.test(this.username)) {
+                        alert("含有非中文");
+
+                        return ;
+
+                    } else {
+                        this.promot = "名字符合规范";
+                    }
+                } else {
+
+                    if (this.username.length == 1) {
+
+                        if (!reg.test(this.username)) {
+                            alert("含有非中文");
+                        return ;
+                        }
+
+                    } else {
+                        if (this.username.length > 20) {
+                            this.promot = "用户昵称长度至多20个字符"
+                            this.username = this.username.substring(0, 19);
+                            return ;
+
+
+                        }
+
+                    }
+
+                }
 
 
                 this.$axios({
@@ -160,7 +231,7 @@
                     url: '/users/registe',
                     data: {
                         username: this.username,
-                        useremail: this.useremail,
+
                         userphone: this.userphone,
                         validatecode: this.validatecode
 
@@ -169,11 +240,35 @@
                     var resdata = response.data;
                     //      var jsonuser = eval('(' + resdata.user + ')');
                     if (resdata.state === "200") {
-                        alert("提交注册数据");
+                        alert("注册成功");
                     } else {
-                        alert("用户名或密码错误");
+                        alert("注册失败");
                     }
                 })
+
+            },
+            //改变获取验证码按钮样式
+            changeGetCodeButtonStyle() {
+                var that = this
+                this.changecodedisabled = true;
+                setTimeout(function () {
+
+                    that.changecodeopacity = "0.6";
+
+                }, 1000);
+
+                var time = 60;
+                var set = setInterval(function () {
+
+                    that.showmsg = "(" + --time + ")" + "秒后获取";
+                }, 1000);
+                setTimeout(function () {
+                    that.showmsg = "重新获取验证码";
+                    that.changecodeopacity = "1";
+                    that.changecodedisabled = false;
+                    clearInterval(set);
+                }, 60000);
+
 
             }
         }
@@ -2013,6 +2108,7 @@
     }
 
     .container {
+        OVERFLOW: scroll;
         position: relative;
         width: 100%;
         height: 100%;
@@ -3142,6 +3238,9 @@
         -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
         transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s
     }
+
+    /*更改getcodebutton样式*/
+
 
     .form-control:focus {
         border-color: #66afe9;
