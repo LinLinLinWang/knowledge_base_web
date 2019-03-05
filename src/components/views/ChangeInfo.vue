@@ -14,15 +14,15 @@
                         show-icon>
                 </el-alert>
                 <br>
-                <el-form ref="form" :model="form" label-width="80px">
+                <el-form ref="form" :model="form" :rules="rules" label-width="80px">
                     <el-form-item label="邮箱">
                         <el-input v-model="form.email"></el-input>
                     </el-form-item>
                     <el-form-item label="新密码">
-                        <el-input v-model="form.oldpassword"></el-input>
+                        <el-input v-model="form.newpassword" placeholder="请输入新密码"></el-input>
                     </el-form-item>
-                    <el-form-item label="新密码">
-                        <el-input v-model="form.newpassword"></el-input>
+                    <el-form-item label="确认密码" prop="newpassword">
+                        <el-input v-model="form.newpassword2" placeholder="请再次输入新密码"></el-input>
                     </el-form-item>
                     <el-form-item>
                         <el-button type="primary" @click="SubmitInfo">确认修改</el-button>
@@ -38,31 +38,37 @@
     export default {
         name: 'baseform',
         data: function () {
+            var validatePass = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请再次输入密码'));
+                } else if (value !== this.form.newpassword) {
+                    callback(new Error('两次输入密码不一致!'));
+                } else {
+                    callback();
+                }
+            };
             return {
                 form: {
-                    email: '',
-                    oldpassword: '',
+                    email: this.$store.state.user.email,
                     newpassword: '',
+                    newpassword2: '',
+                },
+                rules: {
+                    newpassword: [
+                        {validator: validatePass, trigger: 'blur'}
+                    ]
                 }
             }
         },
-        created() {
-            this.getInfo();
-        },
         methods: {
-            getInfo() {
-                this.$axios({
-                    method: 'GET',
-                    url: '/users/getInfo',
-                }).then(response => {
-                    var resdata = response.data;
-                    this.form.email = resdata.email;
-                });
-            },
             SubmitInfo() {
                 this.$axios({
                     method: 'POST',
                     url: '/users/changeInfo',
+                    data: {
+                        email: this.form.email,
+                        password: this.form.newpassword
+                    }
                 }).then(response => {
                     var resdata = response.data;
                     if (resdata.state === "200") {
