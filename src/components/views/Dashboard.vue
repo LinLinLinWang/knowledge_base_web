@@ -278,17 +278,27 @@
                     method: 'GET',
                     url: '/usersLogin/getLast',
                 }).then(response => {
-                    var resdata = response.data;
-                    if (resdata.isfirst === "true")
-                        this.havelast = false;
-                    this.lastloginaddress = resdata.area;
-                    this.lastlogintime = resdata.time;
-                    this.lastlogintype = resdata.lasttype;
-                    this.beforelogintime = resdata.lasttime;
-                    this.beforeloginaddress = resdata.lastarea;
-                    this.beforelogintype = resdata.type;
-                })
-
+                        var resdata = response.data;
+                        if (resdata.isfirst === "true") {
+                            this.havelast = false;
+                        } else {
+                            this.lastloginaddress = resdata.area;
+                            this.lastlogintime = resdata.time;
+                            this.lastlogintype = resdata.lasttype;
+                            this.beforelogintime = resdata.lasttime;
+                            this.beforeloginaddress = resdata.lastarea;
+                            this.beforelogintype = resdata.type;
+                        }
+                    },
+                    // error => {
+                    //     if (error.response) {
+                    //         switch (error.response.status) {
+                    //             case 401:
+                    //
+                    //         }
+                    //     }
+                    // }
+                )
             }
         }
     }
