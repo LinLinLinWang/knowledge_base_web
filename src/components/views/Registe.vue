@@ -21,34 +21,34 @@
                     <div class="form-group">
 
                         <input type="text" class="form-control" name="name" id="name" placeholder="起一个昵称吧"
-                               autocomplete="off">
+                               autocomplete="off"  v-model="username">
                     </div>
 
                     <div class="form-group">
                         <label for="email" class="sr-only">邮箱</label>
                         <input type="email" class="form-control" id="email" name="email" placeholder="输入邮箱"
-                               autocomplete="off">
+                               autocomplete="off"  v-model="useremail">
                     </div>
 
 
                     <div class="form-group">
                         <label for="phone" class="sr-only">手机号</label>
                         <input type="text" class="form-control" id="phone" name="phone" placeholder="手机号"
-                               autocomplete="off">
+                               autocomplete="off"   v-model="userphone" @input="getRealTimePhone">
                     </div>
                     <div class="form-group">
                         <label for="code" class="sr-only">输入验证码</label>
                         <input type="text" class="form-control" id="code" name="code" placeholder="输入验证码"
-                               autocomplete="off">
+                               autocomplete="off"  v-model="validatecode">
                         <!-- <img id="randImage"  onclick="refushcode();" title="换一张试试" name="randImage" src="code.jsp"> -->
-                        <input type="button" class="form-control" id="phonecode" value="获取验证码" onclick="codeButton();">
+                        <input type="button" class="form-control" id="phonecode" value="获取验证码" @onclick="getPhoneValidateCode">
                     </div>
                     <div class="form-group">
                         <p>已经有账号了吗? <a href="login_by_password.jsp">那去登陆吧</a></p>
                     </div>
 
                     <div class="form-group">
-                        <input type="button" value="注册" class="btn btn-primary" onclick="commit();">
+                        <input type="button" value="注册" class="btn btn-primary" @click="submitForm">
                     </div>
 
                 </form>
@@ -59,7 +59,7 @@
         <div class="row" style="padding-top: 60px; clear: both;">
             <div class="col-md-12 text-center">
                 <p>
-                    <small>&copy; 育婴门户网站</small>
+                    <small>&copy; 具有倾向性的点名系统</small>
                 </p>
             </div>
         </div>
@@ -70,12 +70,83 @@
     export default {
         inheritAttrs: false,
         name: "Registe",
-
+        data() {
+            return {
+                username: this.username,
+                useremail: this.useremail,
+                userphone:this.userphone,
+                validatecode:this.validatecode
+            }
+        },
 
     methods: {
+  //实时获取用户输入的手机号
+
+        getRealTimePhone(){
+              var  userphone=this.userphone;
+
+  if(userphone.length==11){
+      this.$axios({
+          method: 'POST',
+          url: '/usersRegiste/phoneIsOrNotExist',
+          data: {
+
+              userphone:this.userphone,
+
+          }
+      }).then(response => {
+          var resdata = response.data;
+          //      var jsonuser = eval('(' + resdata.user + ')');
+          if (resdata.state === "0") {
+              alert("手机号未注册");
+          } else {
+              alert("手机号已经注册");
+          }
+      })
+
+  }
+
+
+
+
+
+
+        },
+        //获取验证码
+        getPhoneValidateCode(){
+
+
+
+        },
+        submitForm(){
+
+
+                    this.$axios({
+                        method: 'POST',
+                        url: '/users/registe',
+                        data: {
+                            username: this.username,
+                            useremail: this.useremail,
+                            userphone:this.userphone,
+                            validatecode:this.validatecode
+
+                        }
+                    }).then(response => {
+                        var resdata = response.data;
+                  //      var jsonuser = eval('(' + resdata.user + ')');
+                        if (resdata.state === "200") {
+                            alert("提交注册数据");
+                        } else {
+                            alert("用户名或密码错误");
+                        }
+                    })
+
+            }
+        }
+
 
     }
-    }
+
 
 </script>
 <style scoped>
