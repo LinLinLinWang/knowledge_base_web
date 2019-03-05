@@ -155,6 +155,7 @@
                                 this.promot = "该手机号可以注册使用";
                             } else {
                                 this.promot = "手机号已经注册";
+                                this.changecodedisabled = true;
                             }
                         })
 
