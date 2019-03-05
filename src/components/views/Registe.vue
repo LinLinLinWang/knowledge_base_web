@@ -156,6 +156,7 @@
                             } else {
                                 this.promot = "手机号已经注册";
                                 this.changecodedisabled = true;
+                                this.changecodeopacity = "0.6";
                             }
                         })
 
