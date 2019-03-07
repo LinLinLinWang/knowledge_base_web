@@ -1,11 +1,8 @@
-// import Vue from 'vue'
 import Vuex from 'vuex'
+import app from './app'
 import * as types from './types'
 import {asyncRouterMap, constantRouterMap} from './router'
-import axios from './axios'
-
-// import permission from './permission'
-// Vue.use(Vuex);
+import getters from './getters'
 
 /**
  * 通过meta.role判断是否与当前用户权限匹配
@@ -41,6 +38,9 @@ function filterAsyncRouter(routes, roles) {
 
 
 export default new Vuex.Store({
+    modules: {
+        app
+    },
     state: {
         user: null,
         token: null,
@@ -54,7 +54,6 @@ export default new Vuex.Store({
             state.user = data.user;
             localStorage.token = data.token;
             localStorage.user = JSON.stringify(data.user);
-            console.log("mutations:" + state.user)
         },
         [types.LOGOUT]: (state) => {
             localStorage.removeItem('token');
@@ -90,5 +89,14 @@ export default new Vuex.Store({
                 resolve()
             })
         },
+    },
+    getters:{
+        sidebar: state => state.app.sidebar,
+        language: state => state.app.language,
+        size: state => state.app.size,
+        device: state => state.app.device,
+        token: state => state.user.token,
+        permission_routers: state => state.routers,
+        addRouters: state => state.addRouters,
     }
 })

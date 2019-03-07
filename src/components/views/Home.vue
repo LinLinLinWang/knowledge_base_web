@@ -17,7 +17,7 @@
 
 <script>
     import vHead from '../common/Header.vue';
-    import vSidebar from '../common/Sidebar.vue';
+    import vSidebar from '../common/Sidebar';
     import vTags from '../common/Tags.vue';
     import bus from '../common/bus';
     export default {
