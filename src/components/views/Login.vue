@@ -91,7 +91,8 @@
                                 let redirect = decodeURIComponent(this.$route.query.redirect || '/');
                                 this.$router.push({
                                     path: redirect
-                                })
+                                });
+                                console.log("get token finsh")
                             } else {
                                 alert("用户名或密码错误");
                             }

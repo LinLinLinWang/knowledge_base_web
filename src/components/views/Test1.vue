@@ -10,7 +10,11 @@
 <script>
     export default {
         name: "Test",
-        usertype: this.$store.state.user.type,
+        data() {
+            return {
+                usertype: this.$store.state.user.type,
+            }
+        }
     }
 </script>
 

@@ -1,11 +1,10 @@
 import router from './router'
 import store from './store'
-import {Message} from 'element-ui'
+// import {Message} from 'element-ui'
 import * as types from "./types";
 
 // 页面刷新时，重新赋值token
-if (localStorage.getItem('token')
-) {
+if (localStorage.getItem('token')) {
     store.commit(types.LOGIN, {
         token: localStorage.getItem('token'),
         // user: eval("(" + localStorage.getItem('user') + ")")
@@ -40,19 +39,22 @@ router.beforeEach((to, from, next) => {
     }
 
     //判断用户信息
-    if (store.state.user == null) {
-        console.log("to - getuser ");
+    if (store.state.hasrouter === false) {
+        console.log("to - getuser ,state:"+store.state.user);
         store.dispatch('GetUserInfo').then(res => { //获取用户信息
             const roles = ['' + res.data.user.type];
             store.dispatch('GenerateRoutes', {roles}).then(() => { //根据roles权限生成可访问的路由表
                 router.addRoutes(store.state.addRouters); // 动态添加可访问路由表
                 next({...to, replace: true}) //确保addRoutes已完成
-            })
-        }).catch((err) => {
-            store.dispatch('FedLogOut').then(() => {
-                Message.error(err);
-                next({path: '/401'})
-            })
+            });
+            console.log("to - getuser finsh");
         })
+        //     .catch((err) => {
+        //     store.dispatch('FedLogOut').then(() => {
+        //         Message.error(err);
+        //         next({path: '/login'})
+        //     })
+        //     console.log("to - getuser error");
+        // })
     }
 });

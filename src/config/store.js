@@ -1,7 +1,8 @@
 // import Vue from 'vue'
 import Vuex from 'vuex'
 import * as types from './types'
-import { asyncRouterMap, constantRouterMap } from './router'
+import {asyncRouterMap, constantRouterMap} from './router'
+import axios from './axios'
 
 // import permission from './permission'
 // Vue.use(Vuex);
@@ -27,7 +28,7 @@ function hasPermission(roles, route) {
 function filterAsyncRouter(routes, roles) {
     const res = [];
     routes.forEach(route => {
-        const tmp = { ...route };
+        const tmp = {...route};
         if (hasPermission(roles, tmp)) {
             if (tmp.children) {
                 tmp.children = filterAsyncRouter(tmp.children, roles)
@@ -43,6 +44,7 @@ export default new Vuex.Store({
     state: {
         user: null,
         token: null,
+        hasrouter: false,
         routers: constantRouterMap,
         addRouters: []
     },
@@ -62,13 +64,18 @@ export default new Vuex.Store({
         [types.SETUSER]: (state, data) => {
             localStorage.user = JSON.stringify(data.user);
             state.user = data.user;
+        },
+        [types.SET_ROUTERS]: (state, routers) => {
+            state.addRouters = routers;
+            state.routers = constantRouterMap.concat(routers);
+            state.hasrouter = true;
         }
     },
     actions: {
         // 获取用户信息
         GetUserInfo({commit}) {
             return new Promise((resolve, reject) => {
-                this.$axios({
+                axios({
                     method: 'POST',
                     url: '/users/getInfo',
                 }).then(response => {
@@ -82,21 +89,21 @@ export default new Vuex.Store({
             })
         },
         //生成路由
-        GenerateRoutes({ commit }, data) {
+        GenerateRoutes({commit}, data) {
             return new Promise(resolve => {
-                const { roles } = data
-                let accessedRouters
+                const {roles} = data;
+                let accessedRouters;
                 if (roles.includes('0')) {
                     accessedRouters = asyncRouterMap
                 } else {
                     accessedRouters = filterAsyncRouter(asyncRouterMap, roles)
                 }
-                commit('SET_ROUTERS', accessedRouters)
+                commit(types.SETUSER, accessedRouters);
                 resolve()
             })
         },
         //未授权访问
-        FedLogOut({ commit }) {
+        FedLogOut({commit}) {
             return new Promise(resolve => {
                 commit(types.LOGOUT);
                 resolve()

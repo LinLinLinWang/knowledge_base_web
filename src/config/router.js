@@ -12,12 +12,18 @@ export const constantRouterMap = [
         hidden: true,
         component: resolve => require(['../components/views/Registe.vue'], resolve)
     },
+    // {
+    //     path: '/',
+    //     redirect:'dashboard',
+    //     hidden: true,
+    // },
     {
-        path: '/',
+        path: '',
+        redirect:'dashboard',
         component: resolve => require(['../components/views/Home.vue'], resolve),
         children: [
             {
-                path: '/',
+                path: 'dashboard',
                 meta: {
                     requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
                     title: '系统首页'
@@ -25,7 +31,7 @@ export const constantRouterMap = [
                 component: resolve => require(['../components/views/Dashboard.vue'], resolve),
             },
             {
-                path: '/info',
+                path: 'info',
                 component: resolve => require(['../components/views/ChangeInfo.vue'], resolve),
                 meta: {title: '信息维护'}
             }

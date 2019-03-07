@@ -1,8 +1,8 @@
 import Vue from 'vue';
 import App from './App.vue';
 import store from './config/store';
-import router from './config/router';
 import axios from './config/axios';
+import router from './config/router';
 import './config/permission';
 import ELEMENT from 'element-ui';
 import './assets/css/icon.css';
