@@ -44,16 +44,17 @@ export default new Vuex.Store({
     state: {
         user: null,
         token: null,
-        hasrouter: false,
+        norouter: true,
         routers: constantRouterMap,
         addRouters: []
     },
     mutations: {
         [types.LOGIN]: (state, data) => {
-            localStorage.token = data.token;
-            // localStorage.user = JSON.stringify(data.user);
             state.token = data.token;
-            // state.user = data.user;
+            state.user = data.user;
+            localStorage.token = data.token;
+            localStorage.user = JSON.stringify(data.user);
+            console.log("mutations:" + state.user)
         },
         [types.LOGOUT]: (state) => {
             localStorage.removeItem('token');
@@ -61,33 +62,13 @@ export default new Vuex.Store({
             state.token = null;
             state.user = null;
         },
-        [types.SETUSER]: (state, data) => {
-            localStorage.user = JSON.stringify(data.user);
-            state.user = data.user;
-        },
         [types.SET_ROUTERS]: (state, routers) => {
             state.addRouters = routers;
             state.routers = constantRouterMap.concat(routers);
-            state.hasrouter = true;
+            state.norouter = false;
         }
     },
     actions: {
-        // 获取用户信息
-        GetUserInfo({commit}) {
-            return new Promise((resolve, reject) => {
-                axios({
-                    method: 'POST',
-                    url: '/users/getInfo',
-                }).then(response => {
-                    var resdata = response.data;
-                    var jsonuser = eval('(' + resdata.user + ')');
-                    commit(types.SETUSER, jsonuser);
-                    resolve(response);
-                }).catch(error => {
-                    reject(error)
-                })
-            })
-        },
         //生成路由
         GenerateRoutes({commit}, data) {
             return new Promise(resolve => {
@@ -98,7 +79,7 @@ export default new Vuex.Store({
                 } else {
                     accessedRouters = filterAsyncRouter(asyncRouterMap, roles)
                 }
-                commit(types.SETUSER, accessedRouters);
+                commit(types.SET_ROUTERS, accessedRouters);
                 resolve()
             })
         },

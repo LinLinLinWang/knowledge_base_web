@@ -92,7 +92,7 @@
                                 this.$router.push({
                                     path: redirect
                                 });
-                                console.log("get token finsh")
+                                console.log("get token finsh" + jsonuser)
                             } else {
                                 alert("用户名或密码错误");
                             }
