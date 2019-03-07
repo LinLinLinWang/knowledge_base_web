@@ -2,27 +2,17 @@ import * as types from './types';
 import store from "./store";
 import Router from 'vue-router';
 
-export const constantRouterMap = [
-    {
-        path: '/login',
-        name: 'login',
-        component: resolve => require(['../components/views/Login.vue'], resolve)
-    }, {
-        path: '/registe',
-        name: 'registe',
-        component: resolve => require(['../components/views/Registe.vue'], resolve)
-    },
-    {
-        path: '/404',
-        component: resolve => require(['../components/views/404.vue'], resolve),
-        meta: {title: '404'}
-    }
-]
-
-
 const router = new Router({
     routes: [
-
+        {
+            path: '/login',
+            name: 'login',
+            component: resolve => require(['../components/views/Login.vue'], resolve)
+        }, {
+            path: '/registe',
+            name: 'registe',
+            component: resolve => require(['../components/views/Registe.vue'], resolve)
+        },
         {
             path: '/',
             component: resolve => require(['../components/views/Home.vue'], resolve),
