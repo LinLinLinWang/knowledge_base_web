@@ -23,19 +23,25 @@ router.beforeEach((to, from, next) => {
 
     //不需要登录
     if (whiteList.indexOf(to.path) !== -1) { // 在免登录白名单，直接进入
-        next()
+        console.log("to - whiteList ");
+
+        next();
+        return;
     }
 
     //判断token
     if (store.state.token == null) {
+        console.log("to - login ");
         next({
             path: '/login',
             query: {redirect: to.fullPath}  // 将跳转的路由path作为参数，登录成功后跳转到该路由
-        })
+        });
+        return;
     }
 
     //判断用户信息
     if (store.state.user == null) {
+        console.log("to - getuser ");
         store.dispatch('GetUserInfo').then(res => { //获取用户信息
             const roles = ['' + res.data.user.type];
             store.dispatch('GenerateRoutes', {roles}).then(() => { //根据roles权限生成可访问的路由表
