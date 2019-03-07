@@ -2,22 +2,50 @@
     <div class="login-wrap">
         <div class="ms-login">
             <div class="ms-title">后台管理系统</div>
-            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="0px" class="ms-content">
-                <el-form-item prop="username">
-                    <el-input v-model="ruleForm.username" placeholder="username">
-                        <el-button slot="prepend" icon="el-icon-lx-people"></el-button>
-                    </el-input>
-                </el-form-item>
-                <el-form-item prop="password">
-                    <el-input type="password" placeholder="password" v-model="ruleForm.password">
-                        <el-button slot="prepend" icon="el-icon-lx-lock"></el-button>
-                    </el-input>
-                </el-form-item>
-                <div class="login-btn">
-                    <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
-                </div>
-                <p class="login-tips">Tips : 用户名1，密码2。</p>
-            </el-form>
+
+
+            <el-tabs type="border-card">
+                <el-tab-pane>
+                    <span slot="label"><i class="el-icon-date"></i> 验证码登录</span>
+                    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="0px" class="ms-content">
+                        <el-form-item prop="username">
+                            <el-input v-model="ruleForm.username" placeholder="username">
+                                <el-button slot="prepend" icon="el-icon-lx-people"></el-button>
+                            </el-input>
+                        </el-form-item>
+                        <el-form-item prop="password">
+                            <el-input type="password" placeholder="password" v-model="ruleForm.password">
+                                <el-button slot="prepend" icon="el-icon-lx-lock"></el-button>
+                            </el-input>
+                        </el-form-item>
+                        <div class="login-btn">
+                            <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
+                        </div>
+                        <p class="login-tips">Tips : 用户名1，密码2。</p>
+                    </el-form>
+                </el-tab-pane>
+                <el-tab-pane>
+                    <span slot="label"><i class="el-icon-date"></i> 密码登录</span>
+                    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="0px" class="ms-content">
+                        <el-form-item prop="username">
+                            <el-input v-model="ruleForm.username" placeholder="username">
+                                <el-button slot="prepend" icon="el-icon-lx-people"></el-button>
+                            </el-input>
+                        </el-form-item>
+                        <el-form-item prop="password">
+                            <el-input type="password" placeholder="password" v-model="ruleForm.password">
+                                <el-button slot="prepend" icon="el-icon-lx-lock"></el-button>
+                            </el-input>
+                        </el-form-item>
+                        <div class="login-btn">
+                            <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
+                        </div>
+                        <p class="login-tips">Tips : 用户名1，密码2。</p>
+                    </el-form>
+                </el-tab-pane>
+            </el-tabs>
+
+
         </div>
     </div>
 </template>
@@ -43,7 +71,6 @@
                     ]
                 }
             }
-
         },
         methods: {
             submitForm(formName) {

@@ -14,18 +14,18 @@
                         show-icon>
                 </el-alert>
                 <br>
-                <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+                <el-form ref="ruleform" :model="form" :rules="rules" label-width="80px">
                     <el-form-item label="邮箱">
                         <el-input v-model="form.email"></el-input>
                     </el-form-item>
                     <el-form-item label="新密码">
                         <el-input v-model="form.newpassword" placeholder="请输入新密码"></el-input>
                     </el-form-item>
-                    <el-form-item label="确认密码" prop="newpassword">
+                    <el-form-item label="确认密码" prop="pwdrule">
                         <el-input v-model="form.newpassword2" placeholder="请再次输入新密码"></el-input>
                     </el-form-item>
                     <el-form-item>
-                        <el-button type="primary" @click="SubmitInfo">确认修改</el-button>
+                        <el-button type="primary" @click="submitInfo('ruleform')">确认修改</el-button>
                     </el-form-item>
                 </el-form>
             </div>
@@ -35,46 +35,69 @@
 </template>
 
 <script>
+    import * as types from '../../config/types'
+
     export default {
-        name: 'baseform',
         data: function () {
             var validatePass = (rule, value, callback) => {
-                if (value === '') {
+                if (this.form.newpassword === '') {
+                    callback();
+                } else if (this.form.newpassword2 === '') {
                     callback(new Error('请再次输入密码'));
-                } else if (value !== this.form.newpassword) {
+                } else if (this.form.newpassword2 !== this.form.newpassword) {
                     callback(new Error('两次输入密码不一致!'));
                 } else {
                     callback();
                 }
             };
             return {
+                pwdrule: '',
                 form: {
                     email: this.$store.state.user.email,
                     newpassword: '',
                     newpassword2: '',
                 },
                 rules: {
-                    newpassword: [
+                    pwdrule: [
                         {validator: validatePass, trigger: 'blur'}
                     ]
                 }
             }
         },
         methods: {
-            SubmitInfo() {
-                this.$axios({
-                    method: 'POST',
-                    url: '/users/changeInfo',
-                    data: {
-                        email: this.form.email,
-                        password: this.form.newpassword
-                    }
-                }).then(response => {
-                    var resdata = response.data;
-                    if (resdata.state === "200") {
-                        this.$message.success('修改成功!');
+            submitInfo(formName) {
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        this.$axios({
+                            method: 'POST',
+                            url: '/users/changeInfo',
+                            data: {
+                                email: this.form.email,
+                                password: this.form.newpassword
+                            }
+                        }).then(response => {
+                            var resdata = response.data;
+                            if (resdata.state === "200") {
+                                this.$alert('修改成功!', '修改', {
+                                    confirmButtonText: '确定',
+                                    callback: action => {
+                                        if (action) {
+                                            this.$store.commit(types.LOGOUT);
+                                            this.$router.push('/login');
+                                        }
+                                    }
+                                });
+                            } else {
+                                this.$alert('修改失败!请检查密码!', '修改', {
+                                    confirmButtonText: '确定'
+                                });
+                            }
+                        });
                     } else {
-                        this.$message.error('修改失败!请检查密码');
+                        console.log("valid" + valid);
+                        this.$alert(' 两次输入密码不一致!!', '修改', {
+                            confirmButtonText: '确定'
+                        });
                     }
                 });
             }

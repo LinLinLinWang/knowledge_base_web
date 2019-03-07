@@ -153,6 +153,8 @@
                             }
                             if (resdata.state === "200") {
                                 this.promot = "该手机号可以注册使用";
+                                this.changecodedisabled = false;
+                                this.changecodeopacity = "1";
                             } else {
                                 this.promot = "手机号已经注册";
                                 this.changecodedisabled = true;
