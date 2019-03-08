@@ -43,6 +43,9 @@
                         <p class="login-tips">Tips : 用户名1，密码2。</p>
                     </el-form>
                 </el-tab-pane>
+                <el-tab-pane>
+                    <span slot="label" @click="toRegiste()"><i class="el-icon-date"></i> 新用户注册</span>
+                </el-tab-pane>
             </el-tabs>
 
 
@@ -64,15 +67,20 @@
                 },
                 rules: {
                     username: [
-                        // {required: true, message: '请输入用户名', trigger: 'blur'}
+                        {required: true, message: '请输入用户名', trigger: }
                     ],
                     password: [
-                        // {required: true, message: '请输入密码', trigger: 'blur'}
+                        {required: true, message: '请输入密码', trigger: 'blur'}
                     ]
                 }
             }
         },
         methods: {
+            //新用户注册
+            toRegiste() {
+                this.$router.push('/registe')
+            },
+            //提交登录
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
@@ -92,7 +100,6 @@
                                 this.$router.push({
                                     path: redirect
                                 });
-                                console.log("get token finsh" + jsonuser)
                             } else {
                                 alert("用户名或密码错误");
                             }
@@ -114,7 +121,7 @@
         position: relative;
         width: 100%;
         height: 100%;
-        background-image: url(../../assets/img/login-bg.jpg);
+        background-image: url(../../assets/img/bg.jpg);
         background-size: 100%;
     }
 
@@ -131,7 +138,7 @@
         position: absolute;
         left: 50%;
         top: 50%;
-        width: 350px;
+        /*width: 420px;*/
         margin: -190px 0 0 -175px;
         border-radius: 5px;
         background: rgba(255, 255, 255, 0.3);
