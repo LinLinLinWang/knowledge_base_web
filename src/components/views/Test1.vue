@@ -1,6 +1,6 @@
 <template>
     <el-alert
-            :title="usertype"
+            :title=usertype
             type="info"
             center
             show-icon>
@@ -12,7 +12,7 @@
         name: "Test",
         data() {
             return {
-                usertype: this.$store.state.user.type,
+                usertype: "user type : "+this.$store.state.user.type,
             }
         }
     }

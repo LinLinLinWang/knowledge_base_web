@@ -2,7 +2,6 @@ import Vuex from 'vuex'
 import app from './app'
 import * as types from './types'
 import {asyncRouterMap, constantRouterMap} from './router'
-import getters from './getters'
 
 /**
  * 通过meta.role判断是否与当前用户权限匹配

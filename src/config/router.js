@@ -1,4 +1,6 @@
 import Router from 'vue-router';
+import Layout from '../components/views/Home.vue'
+
 
 export const constantRouterMap = [
     {
@@ -12,26 +14,27 @@ export const constantRouterMap = [
         hidden: true,
         component: resolve => require(['../components/views/Registe.vue'], resolve)
     },
-    // {
-    //     path: '/',
-    //     redirect:'dashboard',
-    //     hidden: true,
-    // },
     {
         path: '/',
-        redirect:'/dashboard',
-        component: resolve => require(['../components/views/Home.vue'], resolve),
+        redirect: '/dashboard',
+        component: Layout,
         children: [
             {
                 path: '/dashboard',
                 meta: {
-                    requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
                     title: '系统首页'
                 },
                 component: resolve => require(['../components/views/Dashboard.vue'], resolve),
-            },
+            }
+        ]
+    },
+    {
+        path: '/info',
+        redirect: '/info/index',
+        component: Layout,
+        children: [
             {
-                path: '/info',
+                path: '/index',
                 component: resolve => require(['../components/views/ChangeInfo.vue'], resolve),
                 meta: {title: '信息维护'}
             }
@@ -53,25 +56,32 @@ export default new Router({
 
 export const asyncRouterMap = [
     {
-        path: '/test1',
-        component: resolve => require(['../components/views/Test1.vue'], resolve),
-        // alwaysShow: true, // will always show the root menu
+        path: '/test',
+        component: Layout,
         meta: {
-            title: 'test1',
-            // icon: 'lock',
-            roles: ['1'] // you can set roles in root nav
-        }
+            roles: ['1', '2']
+        },
+        children: [
+            {
+                path: '/test1',
+                // name: 'test1',
+                component: resolve => require(['../components/views/Test1.vue'], resolve),
+                meta: {
+                    title: 'test1',
+                    roles: ['1']
+                }
+            },
+            {
+                path: '/test2',
+                component: resolve => require(['../components/views/Test2.vue'], resolve),
+                meta: {
+                    title: 'test2',
+                    roles: ['2']
+                }
+            }
+        ]
     },
-    {
-        path: '/test2',
-        component: resolve => require(['../components/views/Test2.vue'], resolve),
-        // alwaysShow: true, // will always show the root menu
-        meta: {
-            title: 'test2',
-            // icon: 'lock',
-            roles: ['2'] // you can set roles in root nav
-        }
-    },
+
     {
         path: '*',
         redirect: '/404',
