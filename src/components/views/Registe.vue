@@ -12,14 +12,14 @@
                     </el-alert>
 
                     <el-form-item prop="username">
-                        <el-input v-model="ruleForm.username" placeholder="姓名" @input="validateUsername">
+                        <el-input v-model="ruleForm.username" placeholder="姓名" v-on:input="validateUsername()">
                             <el-button slot="prepend" icon="el-icon-lx-people"></el-button>
                         </el-input>
                     </el-form-item>
 
                     <el-form-item prop="userphone">
                         <el-input v-model="ruleForm.userphone" v-bind:disabled="phoneinputdisabled" placeholder="手机号"
-                                  @input="getRealTimePhone">
+                                  v-on:input="getRealTimePhone">
                             <el-button slot="prepend" icon="el-icon-lx-people"></el-button>
                         </el-input>
                     </el-form-item>
@@ -92,49 +92,33 @@
             },
             //检测名字
             validateUsername() {
-                this.promot = "用户昵称仅支持中文（长度2--20个字符）";
-                this.promotType="info";
+                this.promot = "用户姓名仅支持中文";
+                this.promotType = "info";
+                let uname = this.ruleForm.username;
                 var reg = /^[\u4E00-\u9FA5]+$/;
-                if (this.username.length > 1 && this.username.length < 21) {
-
-                    if (!reg.test(this.username)) {
-                        alert("含有非中文");
-                        this.username = this.username.substring(0, this.username.length - 1);
-
-                    } else {
-                        this.promot = "名字符合规范";
-                    }
+                if (!reg.test(uname)) {
+                    this.promot = "姓名含有非中文";
+                    this.promotType = "warning";
+                    this.ruleForm.username = uname.substring(0, uname.length - 1);
                 } else {
-
-                    if (this.username.length === 1) {
-
-                        if (!reg.test(this.username)) {
-                            alert("含有非中文");
-                            this.username = "";
-                        }
-
-                    } else {
-                        if (this.username.length > 20) {
-                            this.promot = "用户昵称长度至多20个字符";
-                            this.username = this.username.substring(0, 19);
-
-
-                        }
-
-                    }
-
+                    this.promot = "姓名符合规范";
+                    this.promotType = "info";
+                    return true;
                 }
 
+                if (uname.length > 20) {
+                    this.promot = "用户姓名长度不可超过20";
+                    this.promotType = "warning";
+                    this.ruleForm.username = uname.substring(0, 19);
+                }
+
+                return false;
             },
 
-
             //实时获取用户输入的手机号
-
             getRealTimePhone() {
                 this.promot = "请填写手机号";
-
                 var userphone = this.userphone;
-
                 if (userphone.length === 11 || userphone.length > 11) {
                     if (userphone.length > 11) {
                         this.promot = "手机号只有11位！";
@@ -143,17 +127,12 @@
                     if (!(/^1[3|4|5|7|8][0-9]\d{8,11}$/.test(userphone))) {
                         this.promot = "手机号格式错误！";
                         this.userphone = "";
-
                     } else {
-
-
                         this.$axios({
                             method: 'POST',
                             url: '/usersRegiste/phoneIsOrNotExist',
                             data: {
-
                                 userphone: this.userphone,
-
                             }
                         }).then(response => {
                             var resdata = response.data;
@@ -170,25 +149,17 @@
                                 this.changeCodeOpacity = "0.6";
                             }
                         })
-
-
                     }
-
-
                 }
             },
             //获取验证码
             getPhoneValidateCode() {
-
                 this.phoneinputdisabled = "true";
                 this.$axios({
                     method: 'POST',
                     url: '/usersRegiste/getValidatecode',
                     data: {
-
                         userphone: this.userphone,
-
-
                     }
                 }).then(response => {
                     this.changeGetCodeButtonStyle();
@@ -201,95 +172,48 @@
                         alert(resdata.msg);
                     }
                 })
-
-
             },
+            //提交注册
             submitForm() {
-                var reg = /^[\u4E00-\u9FA5]+$/;
-                if (this.username.length > 1 && this.username.length < 21) {
-
-                    if (!reg.test(this.username)) {
-                        alert("含有非中文");
-
-                        return;
-
-                    } else {
-                        this.promot = "名字符合规范";
-                    }
-                } else {
-
-                    if (this.username.length == 1) {
-
-                        if (!reg.test(this.username)) {
-                            alert("含有非中文");
-                            return;
+                if (this.validateUsername()) {
+                    this.$axios({
+                        method: 'POST',
+                        url: '/users/registe',
+                        data: {
+                            username: this.ruleForm.username,
+                            userphone: this.ruleForm.userphone,
+                            validatecode: this.ruleForm.validatecode
                         }
-
-                    } else {
-                        if (this.username.length > 20) {
-                            this.promot = "用户昵称长度至多20个字符"
-                            this.username = this.username.substring(0, 19);
-                            return;
-
-
+                    }).then(response => {
+                        var resdata = response.data;
+                        if (resdata.state === "200") {
+                            alert("注册成功");
+                            this.$router.push('/login');
+                        } else {
+                            alert(resdata.msg);
                         }
-
-                    }
-
+                    })
                 }
-
-
-                this.$axios({
-                    method: 'POST',
-                    url: '/users/registe',
-                    data: {
-                        username: this.username,
-
-                        userphone: this.userphone,
-                        validatecode: this.validatecode
-
-                    }
-                }).then(response => {
-                    var resdata = response.data;
-                    //      var jsonuser = eval('(' + resdata.user + ')');
-                    if (resdata.state === "200") {
-                        alert("注册成功");
-                    } else {
-                        alert("注册失败");
-                    }
-                })
-
             },
             //改变获取验证码按钮样式
             changeGetCodeButtonStyle() {
-                var that = this
                 this.changeCodeDisabled = true;
                 setTimeout(function () {
-
-                    that.changeCodeOpacity = "0.6";
-
+                    this.changeCodeOpacity = "0.6";
                 }, 1000);
-
                 var time = 60;
                 var set = setInterval(function () {
-
-                    that.codemsg = "(" + --time + ")" + "秒后获取";
+                    this.codemsg = "(" + --time + ")" + "秒后获取";
                 }, 1000);
                 setTimeout(function () {
-                    that.codemsg = "重新获取验证码";
-                    that.changeCodeOpacity = "1";
-                    that.changeCodeDisabled = false;
+                    this.codemsg = "重新获取验证码";
+                    this.changeCodeOpacity = "1";
+                    this.changeCodeDisabled = false;
                     clearInterval(set);
                 }, 60000);
-
-
             }
         }
-
-
     }
-
-
 </script>
 <style scoped>
 
@@ -318,7 +242,7 @@
         /*width: 420px;*/
         margin: -190px 0 0 -175px;
         border-radius: 5px;
-        background: rgba(255, 255, 255, 0.3);
+        background: rgba(200, 200, 200, 0.7);
         overflow: hidden;
     }
 
