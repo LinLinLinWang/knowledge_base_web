@@ -18,7 +18,9 @@
                     </el-form-item>
 
                     <el-form-item prop="userphone">
-                        <el-input v-model="ruleForm.userphone" v-bind:disabled="phoneinputdisabled" placeholder="手机号"
+                        <el-input v-model="ruleForm.userphone"
+                                  v-bind:disabled="phoneinputdisabled"
+                                  placeholder="手机号"
                                   v-on:input="getRealTimePhone">
                             <el-button slot="prepend" icon="el-icon-lx-people"></el-button>
                         </el-input>
@@ -102,7 +104,7 @@
                     this.ruleForm.username = uname.substring(0, uname.length - 1);
                 } else {
                     this.promot = "姓名符合规范";
-                    this.promotType = "info";
+                    this.promotType = "success";
                     return true;
                 }
 

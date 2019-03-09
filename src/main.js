@@ -1,14 +1,15 @@
 import Vue from 'vue';
-import App from './App.vue';
-import store from './config/store';
-import axios from './config/axios';
-import router from './config/router';
-import './config/permission';
-import ELEMENT from 'element-ui';
-import './assets/css/icon.css';
+import App from './App.vue'; //首页
+import store from './config/store'; //状态管理
+import axios from './config/axios'; //网络请求
+import router from './config/router'; //路由
+import './config/permission'; //权限验证
+import ELEMENT from 'element-ui'; //ui
+import './assets/css/icon.css'; //icon
+import './components/icon/svg-icons' // icon
 
 //去除警告
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 
 //启用Element
 // Vue.use(ELEMENT, {

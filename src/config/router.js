@@ -22,7 +22,8 @@ export const constantRouterMap = [
             {
                 path: '/dashboard',
                 meta: {
-                    title: '系统首页'
+                    title: '系统首页',
+                    icon: 'dashboard',
                 },
                 component: resolve => require(['../components/views/Dashboard.vue'], resolve),
             }
@@ -36,7 +37,10 @@ export const constantRouterMap = [
             {
                 path: '/index',
                 component: resolve => require(['../components/views/ChangeInfo.vue'], resolve),
-                meta: {title: '信息维护'}
+                meta: {
+                    title: '信息维护',
+                    icon: 'documentation',
+                }
             }
         ]
     },
