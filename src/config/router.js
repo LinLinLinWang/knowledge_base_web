@@ -72,6 +72,7 @@ export const asyncRouterMap = [
                 component: resolve => require(['../components/views/student/MyClass.vue'], resolve),
                 meta: {
                     title: '我的班级',
+                    icon: '班级'
                 }
             }
         ]
@@ -89,6 +90,7 @@ export const asyncRouterMap = [
                 component: resolve => require(['../components/views/student/MyInfo.vue'], resolve),
                 meta: {
                     title: '我的考勤',
+                    icon: '考勤'
                 }
             }
         ]
@@ -106,6 +108,7 @@ export const asyncRouterMap = [
                 component: resolve => require(['../components/views/student/MyVacate.vue'], resolve),
                 meta: {
                     title: '我的请假',
+                    icon: '请假'
                 }
             }
         ]

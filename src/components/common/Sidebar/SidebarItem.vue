@@ -97,3 +97,8 @@
         }
     }
 </script>
+<style>
+    .svg-icon {
+        margin-right: 16px;
+    }
+</style>
