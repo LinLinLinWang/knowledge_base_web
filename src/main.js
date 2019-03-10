@@ -6,7 +6,7 @@ import router from './config/router'; //路由
 import './config/permission'; //权限验证
 import ELEMENT from 'element-ui'; //ui
 import './assets/css/icon.css'; //icon
-import './components/icon/svg-icons' // icon
+import './components/icon' // icon
 
 //去除警告
 Vue.config.productionTip = false;

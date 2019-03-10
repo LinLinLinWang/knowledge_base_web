@@ -18,21 +18,21 @@ module.exports = {
         disableHostCheck: true
         //关闭域名检查
     },
-    chainWebpack: (config) => {
-        config.resolve.alias
-            .set('@', resolve('src'))
-        config.module.rules.delete("svg");
+    chainWebpack: config => {
         config.module
-            .rule('svg-smart')
+            .rule('svg')
+            .uses.clear();
+        config.module
+            .rule('svg1')
             .test(/\.svg$/)
+            .use('svg-sprite')
+            .loader('svg-sprite-loader')
+            .options({
+                symbolId: 'icon-[name]'
+            })
+            .end()
             .include
             .add(resolve('src/components/icon/svg'))
             .end()
-            .use('svg-sprite-loader')
-            .loader('svg-sprite-loader')
-            .options({
-                symbolId: '[name]'
-            })
     }
-
-}
+};
