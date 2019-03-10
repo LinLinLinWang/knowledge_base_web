@@ -30,12 +30,12 @@ export const constantRouterMap = [
         ]
     },
     {
-        path: '/info',
-        redirect: '/info/index',
+        path: '/',
+        redirect: '/information',
         component: Layout,
         children: [
             {
-                path: '/index',
+                path: '/information',
                 component: resolve => require(['../components/views/ChangeInfo.vue'], resolve),
                 meta: {
                     title: '信息维护',
@@ -60,32 +60,56 @@ export default new Router({
 
 export const asyncRouterMap = [
     {
-        path: '/test',
+        path: '/',
         component: Layout,
+        redirect: '/myclass',
         meta: {
-            roles: ['1', '2']
+            roles: ['2']
         },
         children: [
             {
-                path: '/test1',
-                // name: 'test1',
-                component: resolve => require(['../components/views/Test1.vue'], resolve),
+                path: '/myclass',
+                component: resolve => require(['../components/views/student/MyClass.vue'], resolve),
                 meta: {
-                    title: 'test1',
-                    roles: ['1']
-                }
-            },
-            {
-                path: '/test2',
-                component: resolve => require(['../components/views/Test2.vue'], resolve),
-                meta: {
-                    title: 'test2',
-                    roles: ['2']
+                    title: '我的班级',
                 }
             }
         ]
     },
-
+    {
+        path: '/',
+        component: Layout,
+        redirect: '/myinfo',
+        meta: {
+            roles: ['2']
+        },
+        children: [
+            {
+                path: '/myinfo',
+                component: resolve => require(['../components/views/student/MyInfo.vue'], resolve),
+                meta: {
+                    title: '我的考勤',
+                }
+            }
+        ]
+    },
+    {
+        path: '/',
+        component: Layout,
+        redirect: '/vacate',
+        meta: {
+            roles: ['2']
+        },
+        children: [
+            {
+                path: '/vacate',
+                component: resolve => require(['../components/views/student/MyVacate.vue'], resolve),
+                meta: {
+                    title: '我的请假',
+                }
+            }
+        ]
+    },
     {
         path: '*',
         redirect: '/404',
