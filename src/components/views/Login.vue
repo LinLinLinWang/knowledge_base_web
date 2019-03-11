@@ -18,7 +18,7 @@
                             </el-input>
                         </el-form-item>
                         <el-row>
-                            <el-col :span="16">
+                            <el-col :span="15">
                                 <el-input v-model="ruleForm.validatecode"
                                           v-bind:disabled="phoneinputdisabled"
                                           placeholder="输入验证码">

@@ -26,14 +26,7 @@ export const constantRouterMap = [
                     icon: 'dashboard',
                 },
                 component: resolve => require(['../components/views/Dashboard.vue'], resolve),
-            }
-        ]
-    },
-    {
-        path: '/',
-        redirect: '/information',
-        component: Layout,
-        children: [
+            },
             {
                 path: '/information',
                 component: resolve => require(['../components/views/ChangeInfo.vue'], resolve),
@@ -60,9 +53,8 @@ export default new Router({
 
 export const asyncRouterMap = [
     {
-        path: '/',
+        path: '/student',
         component: Layout,
-        redirect: '/myclass',
         meta: {
             roles: ['2']
         },
@@ -74,17 +66,7 @@ export const asyncRouterMap = [
                     title: '我的班级',
                     icon: '班级'
                 }
-            }
-        ]
-    },
-    {
-        path: '/',
-        component: Layout,
-        redirect: '/myinfo',
-        meta: {
-            roles: ['2']
-        },
-        children: [
+            },
             {
                 path: '/myinfo',
                 component: resolve => require(['../components/views/student/MyInfo.vue'], resolve),
@@ -92,17 +74,7 @@ export const asyncRouterMap = [
                     title: '我的考勤',
                     icon: '考勤'
                 }
-            }
-        ]
-    },
-    {
-        path: '/',
-        component: Layout,
-        redirect: '/vacate',
-        meta: {
-            roles: ['2']
-        },
-        children: [
+            },
             {
                 path: '/vacate',
                 component: resolve => require(['../components/views/student/MyVacate.vue'], resolve),

@@ -201,7 +201,7 @@
         },
         computed: {
             role() {
-                return this.user.type === '1' ? '老师' : '学生';
+                return this.user.type === 1 ? '老师' : '学生';
             }
         },
         created() {

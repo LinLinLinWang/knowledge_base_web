@@ -43,5 +43,10 @@
 
     .el-menu {
         height: 100% !important;
+        /*font-size: 35px;*/
+    }
+
+    .el-menu-item{
+        font-size: 22px !important;
     }
 </style>

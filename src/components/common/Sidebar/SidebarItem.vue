@@ -1,41 +1,13 @@
 <template>
     <div v-if="!item.hidden&&item.children" class="menu-wrapper">
 
-        <template
-                v-if="hasOneShowingChild(item.children,item) && (!onlyOneChild.children||onlyOneChild.noShowingChildren)&&!item.alwaysShow">
-            <app-link :to="onlyOneChild.path">
-                <el-menu-item :index="onlyOneChild.path" :class="{'submenu-title-noDropdown':!isNest}">
-                    <item v-if="onlyOneChild.meta"
-                          :icon="onlyOneChild.meta.icon||item.meta.icon"
-                          :title="onlyOneChild.meta.title"/>
+        <template v-for="child in item.children">
+            <app-link :to="child.path" :key="child.name">
+                <el-menu-item :index="child.path">
+                    <item v-if="child.meta" :icon="child.meta.icon" :title="child.meta.title"/>
                 </el-menu-item>
             </app-link>
         </template>
-
-        <el-submenu v-else ref="submenu" :index="item.path">
-            <template slot="title">
-                <item v-if="item.meta"
-                      :icon="item.meta.icon"
-                      :title="item.meta.title"/>
-            </template>
-
-            <template v-for="child in item.children">
-                <sidebar-item
-                        v-if="(!child.hidden)&&child.children&&child.children.length>0"
-                        :icon="child.meta.icon"
-                        :is-nest="true"
-                        :item="child"
-                        :key="child.path"
-                        :base-path="child.path"
-                        class="nest-menu"/>
-
-                <app-link v-else :to="child.path" :key="child.name">
-                    <el-menu-item :index="child.path">
-                        <item v-if="child.meta" :icon="child.meta.icon" :title="child.meta.title"/>
-                    </el-menu-item>
-                </app-link>
-            </template>
-        </el-submenu>
 
     </div>
 </template>
@@ -65,40 +37,13 @@
             }
         },
         data() {
-            return {
-                onlyOneChild: null
-            }
+            return {}
         },
-        methods: {
-            hasOneShowingChild(children, parent) {
-                const showingChildren = children.filter(item => {
-                    if (item.hidden) {
-                        return false
-                    } else {
-                        // Temp set(will be used if only has one showing child)
-                        this.onlyOneChild = item;
-                        return true
-                    }
-                });
-
-                // When there is only one child router, the child router is displayed by default
-                if (showingChildren.length === 1) {
-                    return true
-                }
-
-                // Show parent if there are no child router to display
-                if (showingChildren.length === 0) {
-                    this.onlyOneChild = {...parent, path: '', noShowingChildren: true};
-                    return true
-                }
-
-                return false
-            }
-        }
+        methods: {}
     }
 </script>
 <style>
-    .svg-icon {
+    .menu-wrapper .svg-icon {
         margin-right: 16px;
     }
 </style>
