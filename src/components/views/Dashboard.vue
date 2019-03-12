@@ -170,11 +170,11 @@
                 data: [
                     {
                         name: '2018/09/04',
-                        value: 1083
+                        value: 998
                     },
                     {
                         name: '2018/09/05',
-                        value: 941
+                        value: 999
                     }
                 ],
                 options: {
