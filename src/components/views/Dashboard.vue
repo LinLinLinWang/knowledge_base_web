@@ -159,11 +159,11 @@
                 user: null,
                 todoList: [
                     {
-                        title: '今天要修复100个bug',
+                        title: '今天王林写了3个bug',
                         status: false,
                     },
                     {
-                        title: '今天要新增100个bug',
+                        title: '今天重构了过滤器,过滤了users.flag!=0的情况',
                         status: false,
                     },
                 ],
