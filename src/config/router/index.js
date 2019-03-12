@@ -1,6 +1,7 @@
 import Router from 'vue-router';
 import Layout from '../../components/views/Home.vue'
 import studentRouter from './student'
+import teacherRouter from "./teacher";
 
 export const constantRouterMap = [
     {
@@ -53,6 +54,7 @@ export default new Router({
 
 export const asyncRouterMap = [
     studentRouter,
+    teacherRouter,
     {
         path: '*',
         redirect: '/404',

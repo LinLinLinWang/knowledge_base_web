@@ -24,20 +24,14 @@ axios.interceptors.response.use(
         return response;
     },
     error => {
-        console.log(" error" + error.message);
-        // console.log(" error response" + error.response);
-        // if (error.response || error === 'Network Error') {
-        // switch (error.response.status) {
-        //     case 401:
-        // 返回 401 清除token信息并跳转到登录页面
-        store.commit(types.LOGOUT);
-        router.replace({
-            path: '/login',
-            // query: {redirect: router.currentRoute.fullPath}
-        })
-        // }
-        // }
-        // return Promise.reject('401')   // 返回接口返回的错误信息
+        if (error.response.status === 401) {
+            store.commit(types.LOGOUT);
+            router.replace({
+                path: '/login',
+                // query: {redirect: router.currentRoute.fullPath}
+            });
+            return Promise.reject('401')   // 返回接口返回的错误信息
+        }
     }
 )
 ;
@@ -46,6 +40,17 @@ if (process.env.NODE_ENV === "production") {
     axios.defaults.baseURL = 'http://dm.aloli.cn/api';
 } else {
     axios.defaults.baseURL = 'http://127.0.0.1:8888';
+    axios({
+        method: 'POST',
+        url: '/alive',
+        data: {}
+    }).then(response => {
+        var resdata = response.data;
+        if (resdata !== 200) {
+            axios.defaults.baseURL = 'http://dm.aloli.cn/api';
+        }
+    })
+
 }
 
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'; //改为表单提交

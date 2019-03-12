@@ -56,8 +56,7 @@
         computed: {
             getuname() {
                 let user = eval("(" + localStorage.getItem('user') + ")");
-                let uanme = user.uname;
-                return this.$store.state.user ? this.$store.state.user.uname : uanme;
+                return this.$store.state.user ? this.$store.state.user.uname : user.uname;
             }
         },
         components: {

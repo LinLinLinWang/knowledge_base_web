@@ -1,14 +1,14 @@
 <template>
     <el-table
-            :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
+            :data="tableData.filter(data => !search || data.cname.toLowerCase().includes(search.toLowerCase()))"
             style="width: 100%">
         <el-table-column
-                label="Date"
-                prop="date">
+                label="cid"
+                prop="cid">
         </el-table-column>
         <el-table-column
-                label="Name"
-                prop="name">
+                label="cname"
+                prop="cname">
         </el-table-column>
         <el-table-column
                 align="right">
@@ -21,11 +21,14 @@
             <template slot-scope="scope">
                 <el-button
                         size="mini"
-                        @click="handleEdit(scope.$index, scope.row)">Edit</el-button>
+                        type="primary"
+                        @click="handleEdit(scope.$index, scope.row)">加入
+                </el-button>
                 <el-button
                         size="mini"
                         type="danger"
-                        @click="handleDelete(scope.$index, scope.row)">Delete</el-button>
+                        @click="handleDelete(scope.$index, scope.row)">删除
+                </el-button>
             </template>
         </el-table-column>
     </el-table>
@@ -35,29 +38,39 @@
     export default {
         data() {
             return {
-                tableData: [{
-                    date: '2016-05-02',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                }, {
-                    date: '2016-05-04',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1517 弄'
-                }, {
-                    date: '2016-05-01',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1519 弄'
-                }, {
-                    date: '2016-05-03',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1516 弄'
-                }],
+                tableData: [],
                 search: ''
             }
         },
+        created() {
+            this.getAllClass();
+        },
         methods: {
+            getAllClass() {
+                this.$axios({
+                    method: 'POST',
+                    url: '/class/getAllClass',
+                    data: {}
+                }).then(response => {
+                    var resdata = response.data;
+                    var jsondata = eval('(' + resdata.data + ')');
+                    this.tableData = jsondata;
+                    console.log("jsonuser: " + jsondata)
+                })
+            },
             handleEdit(index, row) {
-                console.log(index, row);
+                this.$axios({
+                    method: 'POST',
+                    url: '/classstudents/joinClass',
+                    data: {
+                        cid: row.cid,
+                    }
+                }).then(response => {
+                    var resdata = response.data;
+                    this.$alert(resdata.msg, '操作结果', {
+                        confirmButtonText: '确定',
+                    });
+                })
             },
             handleDelete(index, row) {
                 console.log(index, row);
