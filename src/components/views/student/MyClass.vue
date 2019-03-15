@@ -3,12 +3,16 @@
             :data="tableData.filter(data => !search || data.cname.toLowerCase().includes(search.toLowerCase()))"
             style="width: 100%">
         <el-table-column
-                label="cid"
+                label="班级号"
                 prop="cid">
         </el-table-column>
         <el-table-column
-                label="cname"
+                label="班级名"
                 prop="cname">
+        </el-table-column>
+        <el-table-column
+                label="任课老师"
+                prop="uname">
         </el-table-column>
         <el-table-column
                 align="right">
@@ -27,7 +31,7 @@
                 <el-button
                         size="mini"
                         type="danger"
-                        @click="handleDelete(scope.$index, scope.row)">删除
+                        @click="handleDelete(scope.$index, scope.row)">查看
                 </el-button>
             </template>
         </el-table-column>
