@@ -221,7 +221,7 @@
         position: relative;
         width: 100%;
         height: 100%;
-        background-image: url(../../assets/img/bg.jpg);
+        background-image: url(http://img.aloli.cn/blog/20190322/kGPBTSpGgUru.jpg);
         background-size: 100%;
     }
 
