@@ -12,7 +12,7 @@
             </el-form-item>
             <el-form-item label="请假时间" required>
                 <el-date-picker
-                        v-model="ruleForm.date1"
+                        v-model="ruleForm.vdatetime"
                         type="datetimerange"
                         range-separator="至"
                         start-placeholder="开始日期"
@@ -66,36 +66,17 @@
                 ruleForm: {
                     name: '',
                     region: '',
-                    date1: '',
-                    date2: '',
+                    vdatetime: '',
                     delivery: false,
                     type: [],
-                    resource: '',
-                    desc: ''
                 },
                 rules: {
-                    name: [
-                        {required: true, message: '请输入活动名称', trigger: 'blur'},
-                        {min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur'}
-                    ],
-                    region: [
-                        {required: true, message: '请选择活动区域', trigger: 'change'}
-                    ],
-                    date1: [
+                    vdatetime: [
                         {type: 'date', required: true, message: '请选择日期', trigger: 'change'}
-                    ],
-                    date2: [
-                        {type: 'date', required: true, message: '请选择时间', trigger: 'change'}
                     ],
                     type: [
                         {type: 'array', required: true, message: '请至少选择一个活动性质', trigger: 'change'}
                     ],
-                    resource: [
-                        {required: true, message: '请选择活动资源', trigger: 'change'}
-                    ],
-                    desc: [
-                        {required: true, message: '请填写活动形式', trigger: 'blur'}
-                    ]
                 }
             };
         },
@@ -103,9 +84,31 @@
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        alert('submit!');
+                        this.$axios({
+                            method: 'POST',
+                            url: '/vacate/appleVacate',
+                            data: {
+                                phone: this.ruleForm.phone,
+                                password: this.ruleForm.password
+                            }
+                        }).then(response => {
+                            var resdata = response.data;
+                            var jsonuser = eval('(' + resdata.user + ')');
+                            if (resdata.state === "200") {
+                                this.$store.commit(types.LOGIN, {token: resdata.token, user: jsonuser});
+                                let redirect = decodeURIComponent(this.$route.query.redirect || '/');
+                                this.$router.push({
+                                    path: redirect
+                                });
+                            } else {
+                                alert("手机号或密码错误");
+                            }
+                        })
                     } else {
-                        console.log('error submit!!');
+                        this.$alert("请检查信息完整性", '操作结果', {
+                            confirmButtonText: '确定',
+                        });
+
                         return false;
                     }
                 });
