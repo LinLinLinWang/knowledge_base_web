@@ -151,7 +151,7 @@
     }
 </script>
 
-<style>
+<style scoped>
     .el-tabs__item{
         height: 50px !important;
         font-size: 25px;
