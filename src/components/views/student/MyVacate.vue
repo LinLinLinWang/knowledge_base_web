@@ -1,9 +1,7 @@
 <template>
     <div class="app">
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-            <!--<el-form-item label="活动名称" prop="name">-->
-            <!--<el-input v-model="ruleForm.name"></el-input>-->
-            <!--</el-form-item>-->
+
             <el-form-item label="请假类型" prop="region">
                 <el-select v-model="ruleForm.region" placeholder="请选择请假类型">
                     <el-option label="事假" value="shanghai"></el-option>
@@ -21,6 +19,13 @@
                         :picker-options="pickerOptions"
                         :default-time="['08:00:00', '21:30:00']">
                 </el-date-picker>
+            </el-form-item>
+
+            <el-form-item label="请假原因" prop="name" class="reason">
+                <el-input v-model="ruleForm.reason"
+                          type="textarea"
+                          autosize>
+                </el-input>
             </el-form-item>
 
             <el-form-item>
@@ -64,7 +69,7 @@
                     }]
                 },
                 ruleForm: {
-                    name: '',
+                    reason: '',
                     region: '',
                     vdatetime: '',
                     delivery: false,
@@ -123,5 +128,8 @@
 <style scoped>
     .app {
         background-color: white
+    }
+    .reason{
+        width: 50%;
     }
 </style>
