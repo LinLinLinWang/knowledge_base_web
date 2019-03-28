@@ -9,11 +9,6 @@ export const constantRouterMap = [
         name: 'login',
         hidden: true,
         component: resolve => require(['../../components/views/Login.vue'], resolve)
-    }, {
-        path: '/registe',
-        name: 'registe',
-        hidden: true,
-        component: resolve => require(['../../components/views/Registe.vue'], resolve)
     },
     {
         path: '/',

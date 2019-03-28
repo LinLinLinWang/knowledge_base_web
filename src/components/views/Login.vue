@@ -1,22 +1,27 @@
 <template>
     <div class="login-wrap">
         <div class="ms-login">
-            <div class="ms-title">后台管理系统</div>
-            <el-tabs type="border-card">
+            <div class="ms-title">点名系统</div>
+            <el-tabs
+                    type="border-card"
+                    :stretch=true
+            >
                 <el-tab-pane>
                     <span slot="label"><i class="el-icon-date"></i> 验证码登录</span>
                     <el-form :model="ruleFormCode" :rules="rulesCode" ref="ruleFormCode" label-width="0px"
                              class="ms-content">
                         <el-form-item prop="phone">
-                            <el-input v-model="ruleFormCode.phone" placeholder="手机号">
+                            <el-input v-model="ruleFormCode.phone" placeholder="请输入手机号">
                                 <el-button slot="prepend" icon="el-icon-lx-people"></el-button>
                             </el-input>
                         </el-form-item>
                         <el-row>
                             <el-col :span="15">
                                 <el-input v-model="ruleFormCode.code"
-                                          placeholder="输入验证码">
-                                    <el-button slot="prepend" icon="el-icon-lx-people"></el-button>
+                                          placeholder="请输入验证码">
+                                    <el-button slot="prepend">
+                                        <svg-icon icon-class="验证码"/>
+                                    </el-button>
                                 </el-input>
                             </el-col>
                             <el-col :span="5">
@@ -39,23 +44,72 @@
                     <span slot="label"><i class="el-icon-date"></i> 密码登录</span>
                     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="0px" class="ms-content">
                         <el-form-item prop="phone">
-                            <el-input v-model="ruleForm.phone" placeholder="phone">
+                            <el-input v-model="ruleForm.phone" placeholder="请输入手机号">
                                 <el-button slot="prepend" icon="el-icon-lx-people"></el-button>
                             </el-input>
                         </el-form-item>
                         <el-form-item prop="password">
-                            <el-input type="password" placeholder="password" v-model="ruleForm.password">
+                            <el-input type="password" placeholder="请输入密码" v-model="ruleForm.password">
                                 <el-button slot="prepend" icon="el-icon-lx-lock"></el-button>
                             </el-input>
                         </el-form-item>
                         <div class="login-btn">
                             <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
                         </div>
-                        <p class="login-tips">Tips : 用户名1，密码1。</p>
                     </el-form>
                 </el-tab-pane>
                 <el-tab-pane>
-                    <span slot="label" @click="toRegiste()"><i class="el-icon-date"></i> 新用户注册</span>
+                    <span slot="label"><i class="el-icon-date"></i> 新用户注册</span>
+                    <el-form :model="registerRuleForm" label-width="0px" class="ms-content">
+                        <el-alert
+                                :title="promot"
+                                :type="promotType"
+                                center
+                                :closable="false"
+                                show-icon>
+                        </el-alert>
+
+                        <el-form-item prop="username">
+                            <el-input v-model="registerRuleForm.username" placeholder="请输入姓名"
+                                      v-on:input="validateUsername()">
+                                <el-button slot="prepend" icon="el-icon-lx-people"></el-button>
+                            </el-input>
+                        </el-form-item>
+
+                        <el-form-item prop="userphone">
+                            <el-input v-model="registerRuleForm.userphone"
+                                      placeholder="请输入手机号"
+                                      v-on:input="getRealTimePhone">
+                                <el-button slot="prepend" icon="el-icon-lx-people"></el-button>
+                            </el-input>
+                        </el-form-item>
+
+                        <el-form-item prop="validatecode">
+                            <el-row>
+                                <el-col :span="15">
+                                    <el-input v-model="registerRuleForm.validatecode"
+                                              placeholder="请输入验证码">
+                                        <el-button slot="prepend" icon="el-icon-lx-people"></el-button>
+                                    </el-input>
+                                </el-col>
+                                <el-col :span="5">
+                                    <el-button
+                                            type="primary"
+                                            round
+                                            @click="registerGetPhoneValidateCode"
+                                            v-bind:disabled="registerChangeCodeDisabled"
+                                            v-bind:style="{opacity:registerChangeCodeOpacity}">{{registerCodemsg}}
+                                    </el-button>
+                                </el-col>
+                            </el-row>
+
+                        </el-form-item>
+                        <div class="login-btn">
+                            <el-button type="primary" @click="submitRegisterForm('registerRuleForm')">注册</el-button>
+                        </div>
+
+                    </el-form>
+
                 </el-tab-pane>
             </el-tabs>
 
@@ -72,6 +126,7 @@
         data() {
             return {
                 msg: '',
+                //密码登录
                 ruleForm: {
                     phone: '',
                     password: ''
@@ -84,6 +139,7 @@
                         {required: true, message: '请输入密码', trigger: 'blur'}
                     ]
                 },
+                //验证码登录
                 ruleFormCode: {
                     phone: '',
                     code: ''
@@ -99,14 +155,24 @@
                 changeCodeDisabled: false,
                 changeCodeOpacity: "1",
                 codemsg: "获取验证码",
+
+                //注册
+                registerRuleForm: {
+                    username: '',
+                    userphone: '',
+                    validatecode: '',
+                },
+
+                promot: "请确保信息的准确性,姓名注册后不可修改",
+                promotType: 'warning',
+                registerCodemsg: "获取验证码",
+
+                registerChangeCodeDisabled: false,
+                registerChangeCodeOpacity: "1"
             }
         },
         methods: {
-            //新用户注册
-            toRegiste() {
-                this.$router.push('/registe')
-            },
-            //获取验证码
+            //获取登录验证码
             getPhoneValidateCode() {
                 this.$axios({
                     method: 'POST',
@@ -134,7 +200,7 @@
                     that.codemsg = "(" + --time + ")" + "秒后重新获取";
                 }, 1000);
                 setTimeout(function () {
-                    that.codemsg = "重新获取验证码";
+                    that.codemsg = "获取验证码";
                     that.changeCodeOpacity = "1";
                     that.changeCodeDisabled = false;
                     clearInterval(set);
@@ -207,8 +273,126 @@
                         return false;
                     }
                 });
+            },
+
+            //注册部分
+            //检测名字
+            validateUsername() {
+                this.promot = "用户姓名仅支持中文";
+                this.promotType = "info";
+                let uname = this.registerRuleForm.username;
+                var reg = /^[\u4E00-\u9FA5]+$/;
+                if (!reg.test(uname)) {
+                    this.promot = "姓名含有非中文";
+                    this.promotType = "warning";
+                    this.registerRuleForm.username = uname.substring(0, uname.length - 1);
+                } else {
+                    this.promot = "姓名符合规范";
+                    this.promotType = "success";
+                    return true;
+                }
+
+                if (uname.length > 20) {
+                    this.promot = "用户姓名长度不可超过20";
+                    this.promotType = "warning";
+                    this.registerRuleForm.username = uname.substring(0, 19);
+                }
+
+                return false;
+            },
+
+            //实时获取用户输入的手机号
+            getRealTimePhone() {
+                this.promot = "请填写手机号";
+                let userphone = this.registerRuleForm.userphone;
+                console.log("length=" + userphone.length)
+                if (userphone.length === 11) {
+                    if (!(/^1[3|4|5|7|8][0-9]\d{8,11}$/.test(userphone))) {
+                        this.promot = "手机号格式错误！";
+                        this.promotType = "warning";
+                        this.registerRuleForm.userphone = "";
+                    } else {
+                        this.$axios({
+                            method: 'POST',
+                            url: '/usersRegiste/phoneIsOrNotExist',
+                            data: {
+                                userphone: this.registerRuleForm.userphone,
+                            }
+                        }).then(response => {
+                            var resdata = response.data;
+                            if (null == resdata) {
+                                this.promot = "请检查网络连接状况";
+                            }
+                            if (resdata.state === "200") {
+                                this.promot = "该手机号可以注册使用";
+                                this.registerChangeCodeDisabled = false;
+                                this.registerChangeCodeOpacity = "1";
+                            } else {
+                                this.promot = "手机号已经注册";
+                                this.registerChangeCodeDisabled = true;
+                                this.registerChangeCodeOpacity = "0.6";
+                            }
+                        })
+                    }
+                }
+            },
+            //获取验证码
+            registerGetPhoneValidateCode() {
+                this.$axios({
+                    method: 'POST',
+                    url: '/validatecode/getValidatecode',
+                    data: {
+                        userphone: this.registerRuleForm.userphone,
+                    }
+                }).then(response => {
+                    this.registerChangeGetCodeButtonStyle();
+                    this.$alert(response.data.msg, '', {
+                        confirmButtonText: '确定'
+                    });
+                })
+            },
+            //提交注册
+            submitRegisterForm() {
+                if (this.validateUsername()) {
+                    this.$axios({
+                        method: 'POST',
+                        url: '/users/registe',
+                        data: {
+                            username: this.registerRuleForm.username,
+                            userphone: this.registerRuleForm.userphone,
+                            validatecode: this.registerRuleForm.validatecode
+                        }
+                    }).then(response => {
+                        var resdata = response.data;
+                        this.$alert(response.data.msg, '', {
+                            confirmButtonText: '确定'
+                        });
+                        if (resdata.state === "200") {
+                            this.$router.push('/');
+                        }
+                    })
+                }
+            },
+            //改变获取验证码按钮样式
+            registerChangeGetCodeButtonStyle() {
+                let that = this;
+                that.registerChangeCodeDisabled = true;
+                setTimeout(function () {
+                    this.registerChangeCodeOpacity = "0.6";
+                }, 1000);
+                var time = 60;
+                var set = setInterval(function () {
+                    that.registerCodemsg = "(" + --time + ")" + "秒后获取";
+                }, 1000);
+                setTimeout(function () {
+                    that.registerCodemsg = "获取验证码";
+                    that.registerChangeCodeOpacity = "1";
+                    that.registerChangeCodeDisabled = false;
+                    clearInterval(set);
+                }, 60000);
             }
         }
+
     }
 
 </script>
@@ -250,7 +434,6 @@
     .login-btn {
         text-align: center;
         margin-top: 35px;
-        /*height: 10px;*/
     }
 
     .login-btn button {
@@ -259,9 +442,4 @@
         margin-bottom: 10px;
     }
 
-    .login-tips {
-        font-size: 12px;
-        line-height: 30px;
-        color: #fff;
-    }
 </style>
