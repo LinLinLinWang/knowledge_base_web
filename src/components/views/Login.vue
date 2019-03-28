@@ -12,15 +12,9 @@
                                 <el-button slot="prepend" icon="el-icon-lx-people"></el-button>
                             </el-input>
                         </el-form-item>
-                        <el-form-item prop="code">
-                            <el-input type="password" placeholder="验证码" v-model="ruleFormCode.code">
-                                <el-button slot="prepend" icon="el-icon-lx-lock"></el-button>
-                            </el-input>
-                        </el-form-item>
                         <el-row>
                             <el-col :span="15">
-                                <el-input v-model="ruleForm.validatecode"
-                                          v-bind:disabled="phoneinputdisabled"
+                                <el-input v-model="ruleFormCode.code"
                                           placeholder="输入验证码">
                                     <el-button slot="prepend" icon="el-icon-lx-people"></el-button>
                                 </el-input>
@@ -31,14 +25,14 @@
                                         round
                                         @click="getPhoneValidateCode"
                                         v-bind:disabled="changeCodeDisabled"
-                                        v-bind:style="{opacity:changeCodeOpacity}">{{codemsg}}
+                                        v-bind:style="{opacity:changeCodeOpacity}"
+                                >{{codemsg}}
                                 </el-button>
                             </el-col>
                         </el-row>
                         <div class="login-btn">
-                            <el-button type="primary" @click="submitForm('ruleFormCode')">登录</el-button>
+                            <el-button type="primary" @click="submitCodeForm('ruleFormCode')">登录</el-button>
                         </div>
-                        <p class="login-tips">Tips : 用户名1，密码1。</p>
                     </el-form>
                 </el-tab-pane>
                 <el-tab-pane>
@@ -87,7 +81,7 @@
                         {required: true, message: '请输入手机号', trigger: 'blur'}
                     ],
                     password: [
-                        {required: true, message: '请输入验证码', trigger: 'blur'}
+                        {required: true, message: '请输入密码', trigger: 'blur'}
                     ]
                 },
                 ruleFormCode: {
@@ -102,7 +96,6 @@
                         {required: true, message: '请输入验证码', trigger: 'blur'}
                     ]
                 },
-                phoneinputdisabled: false,
                 changeCodeDisabled: false,
                 changeCodeOpacity: "1",
                 codemsg: "获取验证码",
@@ -115,38 +108,35 @@
             },
             //获取验证码
             getPhoneValidateCode() {
-                this.phoneinputdisabled = "true";
                 this.$axios({
                     method: 'POST',
-                    url: '/users/getLoginValidatecode',
+                    url: '/validatecode/getLoginValidatecode',
                     data: {
-                        userphone: this.ruleFormCode.userphone,
+                        userphone: this.ruleFormCode.phone,
                     }
                 }).then(response => {
                     this.changeGetCodeButtonStyle();
-                    var resdata = response.data;
-                    if (resdata.state === "200") {
-                        this.promot = "请注意接收验证码";
-                        //进行按钮倒计时
-                    } else {
-                        alert(resdata.msg);
-                    }
+                    this.$alert(response.data.msg, '', {
+                        confirmButtonText: '确定'
+                    });
                 })
             },
             //改变获取验证码按钮样式
             changeGetCodeButtonStyle() {
-                this.changeCodeDisabled = true;
+                let that = this;
+                that.codemsg = "60秒后重新获取";
+                that.changeCodeDisabled = true;
                 setTimeout(function () {
-                    this.changeCodeOpacity = "0.6";
+                    that.changeCodeOpacity = "0.6";
                 }, 1000);
                 let time = 60;
                 let set = setInterval(function () {
-                    this.codemsg = "(" + --time + ")" + "秒后获取";
+                    that.codemsg = "(" + --time + ")" + "秒后重新获取";
                 }, 1000);
                 setTimeout(function () {
-                    this.codemsg = "重新获取验证码";
-                    this.changeCodeOpacity = "1";
-                    this.changeCodeDisabled = false;
+                    that.codemsg = "重新获取验证码";
+                    that.changeCodeOpacity = "1";
+                    that.changeCodeDisabled = false;
                     clearInterval(set);
                 }, 60000);
             },
@@ -156,7 +146,7 @@
                     if (valid) {
                         this.$axios({
                             method: 'POST',
-                            url: '/users/loginByCode',
+                            url: '/validatecode/loginByCode',
                             data: {
                                 phone: this.ruleFormCode.phone,
                                 code: this.ruleFormCode.code
@@ -171,11 +161,15 @@
                                     path: redirect
                                 });
                             } else {
-                                alert("手机号或验证码错误");
+                                this.$alert('手机号或验证码错误', '', {
+                                    confirmButtonText: '确定'
+                                });
                             }
                         })
                     } else {
-                        alert("请输入用户名和密码");
+                        this.$alert('请输入用户名和验证码', '', {
+                            confirmButtonText: '确定'
+                        });
                         return false;
                     }
                 });
@@ -201,11 +195,15 @@
                                     path: redirect
                                 });
                             } else {
-                                alert("手机号或密码错误");
+                                this.$alert('手机号或密码错误', '', {
+                                    confirmButtonText: '确定'
+                                });
                             }
                         })
                     } else {
-                        alert("请输入用户名和密码");
+                        this.$alert('请输入用户名和密码', '', {
+                            confirmButtonText: '确定'
+                        });
                         return false;
                     }
                 });

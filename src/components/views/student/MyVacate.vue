@@ -36,7 +36,7 @@
                 </el-select>
             </el-form-item>
 
-            <el-form-item label="请假原因" required>
+            <el-form-item label="请假原因" required class="reason">
                 <el-input v-model="ruleForm.vreason"
                           type="textarea"
                           autosize>

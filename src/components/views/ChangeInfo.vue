@@ -76,7 +76,7 @@
                                 password: this.form.newpassword
                             }
                         }).then(response => {
-                            var resdata = response.data;
+                            let resdata = response.data;
                             if (resdata.state === "200") {
                                 this.$alert('修改成功!', '修改', {
                                     confirmButtonText: '确定',
@@ -94,7 +94,6 @@
                             }
                         });
                     } else {
-                        console.log("valid" + valid);
                         this.$alert(' 两次输入密码不一致!!', '修改', {
                             confirmButtonText: '确定'
                         });
