@@ -4,8 +4,9 @@
 
             <el-form-item label="请假类型" required>
                 <el-select v-model="ruleForm.vtype" placeholder="请选择请假类型">
-                    <el-option label="事假" value="shanghai"></el-option>
-                    <el-option label="病假" value="beijing"></el-option>
+                    <el-option label="事假" value="0"></el-option>
+                    <el-option label="病假" value="1"></el-option>
+                    <el-option label="其他" value="2"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="请假时间" required>
@@ -31,7 +32,7 @@
                             v-for="item in myCourse"
                             :key="item.cname"
                             :label="item.cname"
-                            :value="item.cname">
+                            :value="item.courseid">
                     </el-option>
                 </el-select>
             </el-form-item>
@@ -43,8 +44,23 @@
                 </el-input>
             </el-form-item>
 
+            <el-form-item label="附件上传" required>
+                <el-upload
+                        ref="upload"
+                        class="upload"
+                        drag
+                        action="Need but not use"
+                        :before-upload="beforeUpload"
+                        :http-request="uploadfile"
+                        :auto-upload="false"
+                        multiple>
+                    <i class="el-icon-upload"></i>
+                    <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+                </el-upload>
+            </el-form-item>
+
             <el-form-item>
-                <el-button type="primary" @click="submitForm('ruleForm')">提交请假</el-button>
+                <el-button type="primary" @click="callSubmit">提交请假</el-button>
                 <el-button @click="resetForm('ruleForm')">重置</el-button>
             </el-form-item>
         </el-form>
@@ -117,9 +133,14 @@
                     this.myCourse = jsondata;
                 })
             },
-            submitForm(formName) {
+            submitForm(formName, param) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
+
+                        //提交附件
+                        console.log(param.file);
+                        console.log("file" + param.file);
+
                         this.$axios({
                             method: 'POST',
                             url: '/vacate/createVacate',
@@ -144,6 +165,22 @@
             },
             resetForm(formName) {
                 this.$refs[formName].resetFields();
+            },
+            //上传图片
+            beforeUpload(file) {
+                if (file.size / 1024 / 1024 > 20) {
+                    this.common.errorTip('上传附件大小不能超过 20MB!');
+                    return false;
+                }
+                return true;
+            },
+            //传递给submitForm来提交数据
+            uploadfile(param) {
+                this.submitForm('ruleForm', param);
+            },
+            //开始提交
+            callSubmit() {
+                this.$refs.upload.submit();
             }
         }
     }
