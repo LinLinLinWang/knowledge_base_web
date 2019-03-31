@@ -128,8 +128,8 @@
                 msg: '',
                 //密码登录
                 ruleForm: {
-                    phone: '',
-                    password: ''
+                    phone: '2',
+                    password: '2'
                 },
                 rules: {
                     phone: [

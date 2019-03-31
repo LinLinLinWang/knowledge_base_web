@@ -50,8 +50,9 @@
                         class="upload"
                         drag
                         action="Need but not use"
+                        :on-change="OnChange"
+                        :http-request="uploadFile"
                         :before-upload="beforeUpload"
-                        :http-request="uploadfile"
                         :auto-upload="false"
                         multiple>
                     <i class="el-icon-upload"></i>
@@ -60,7 +61,7 @@
             </el-form-item>
 
             <el-form-item>
-                <el-button type="primary" @click="callSubmit">提交请假</el-button>
+                <el-button type="primary" @click="submitForm('ruleForm')">提交请假</el-button>
                 <el-button @click="resetForm('ruleForm')">重置</el-button>
             </el-form-item>
         </el-form>
@@ -101,10 +102,10 @@
                     }]
                 },
                 ruleForm: {
-                    vreason: '',
-                    vcourse: '',
+                    vreason: '3',
+                    vcourse: '2',
                     vdatetime: '',
-                    vtype: '',
+                    vtype: '1',
                 },
                 rules: {
                     vdatetime: [
@@ -116,7 +117,9 @@
                 },
                 //已加入的班级
                 myCourse: '',
-                param: "",
+                //附件列表
+                fileList: [],
+                param: new FormData(),
             };
         },
         created() {
@@ -130,56 +133,21 @@
                     data: {}
                 }).then(response => {
                     var resdata = response.data;
-                    var jsondata = eval('(' + resdata.data + ')');
+                    // var jsondata = eval('(' + resdata.data + ')');
+                    var jsondata = JSON.parse(resdata.data);
                     this.myCourse = jsondata;
                 })
             },
-            submitForm(formName, vfile) {
-                this.$refs[formName].validate((valid) => {
-                    if (valid) {
-
-                        //提交附件
-                        console.log(vfile.file);
-                        console.log("file" + vfile.file);
-
-                        let param = new FormData();
-                        param.append('files', vfile.file);
-                        console.log("tepe:" + this.ruleForm.vtype)
-                        param.append('vtype', this.ruleForm.vtype);
-                        param.append('vreason', this.ruleForm.vreason);
-                        param.append('vcourse', this.ruleForm.vcourse);
-
-                        this.$axios({
-                            method: 'POST',
-                            url: '/vacate/createVacate',
-                            headers: {
-                                'Content-Type': 'multipart/form-data;boundary = ' + new Date().getTime()
-                            },
-                            // data: param
-                            data: {
-                                vtype: this.ruleForm.vtype,
-                                vreason: this.ruleForm.vreason,
-                                vcourse: this.ruleForm.vcourse,
-                                files: vfile.file,
-                            }
-                        }).then(response => {
-                            var resdata = response.data;
-                            this.$alert(resdata.msg, '操作结果', {
-                                confirmButtonText: '确定',
-                            });
-                        })
-                    } else {
-                        this.$alert("请检查信息完整性", '操作结果', {
-                            confirmButtonText: '确定',
-                        });
-                        return false;
-                    }
-                });
-            },
+            //重置表单
             resetForm(formName) {
                 this.$refs[formName].resetFields();
             },
-            //上传图片
+            //获取附件列表
+            OnChange(file, fileList) {
+                this.fileList = fileList
+
+            },
+            //上传附件前的检查
             beforeUpload(file) {
                 if (null == file)
                     return true;
@@ -189,14 +157,64 @@
                 }
                 return true;
             },
-            //传递给submitForm来提交数据
-            uploadfile(file) {
-                this.submitForm('ruleForm', file);
+            uploadFile(vfile) {
+                this.param.append('files', vfile.file)
             },
-            //开始提交
-            callSubmit() {
-                this.$refs.upload.submit();
-            }
+            uploadFiles(vid) {
+
+                //此处使用原生js，避免拦截器影响multipart/form-data
+                let url = this.$axios.defaults.baseURL + "/vacate/createVacateFile";
+                let data = this.param;
+                //附加表单id
+                data.append('id', vid);
+
+                let xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                        let resdata = JSON.parse(xhr.responseText);
+                        this.$alert(resdata.msg, '操作结果', {
+                            confirmButtonText: '确定',
+                        });
+                    }
+                };
+
+                xhr.open('POST', url);
+                xhr.send(data)
+            },
+            submitForm(formName) {
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        let havafile = this.fileList.length >= 1;
+                        this.$axios({
+                            method: 'POST',
+                            url: '/vacate/createVacate',
+                            data: {
+                                vtype: this.ruleForm.vtype,
+                                vreason: this.ruleForm.vreason,
+                                vcourse: this.ruleForm.vcourse,
+                                vhavefile: havafile
+                            },
+                        }).then(response => {
+                            var resdata = response.data;
+                            if (resdata.state === "200" && havafile) {
+                                // this.uploadFiles();
+                                this.$refs.upload.submit();
+                                this.uploadFiles(resdata.vid);
+                            } else {
+                                this.$alert(resdata.msg, '操作结果', {
+                                    confirmButtonText: '确定',
+                                });
+                            }
+                        });
+                    } else {
+                        this.$alert("请检查信息完整性", '操作结果', {
+                            confirmButtonText: '确定',
+                        });
+                        return false;
+                    }
+                });
+            },
+
         }
     }
 </script>

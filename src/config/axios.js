@@ -40,23 +40,11 @@ if (process.env.NODE_ENV === "production") {
     axios.defaults.baseURL = 'http://dm.aloli.cn/api';
 } else {
     axios.defaults.baseURL = 'http://127.0.0.1:8888';
-    axios({
-        method: 'POST',
-        url: '/alive',
-        data: {}
-    }).then(response => {
-        var resdata = response.data;
-        if (resdata !== 200) {
-            axios.defaults.baseURL = 'http://dm.aloli.cn/api';
-        }
-    })
-
 }
 
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'; //改为表单提交
 axios.defaults.withCredentials = true; //携带cookie
 axios.interceptors.request.use(function (config) {
-    // 在发送请求之前,格式化参数，增加token
     let data = config.data;
     let params = new URLSearchParams() //将参数转换为url的形式
     for (var key in config.data) {
