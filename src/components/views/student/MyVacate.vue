@@ -44,7 +44,7 @@
                 </el-input>
             </el-form-item>
 
-            <el-form-item label="附件上传" required>
+            <el-form-item label="附件上传">
                 <el-upload
                         ref="upload"
                         class="upload"
@@ -116,6 +116,7 @@
                 },
                 //已加入的班级
                 myCourse: '',
+                param: "",
             };
         },
         created() {
@@ -133,21 +134,33 @@
                     this.myCourse = jsondata;
                 })
             },
-            submitForm(formName, param) {
+            submitForm(formName, vfile) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
 
                         //提交附件
-                        console.log(param.file);
-                        console.log("file" + param.file);
+                        console.log(vfile.file);
+                        console.log("file" + vfile.file);
+
+                        let param = new FormData();
+                        param.append('files', vfile.file);
+                        console.log("tepe:" + this.ruleForm.vtype)
+                        param.append('vtype', this.ruleForm.vtype);
+                        param.append('vreason', this.ruleForm.vreason);
+                        param.append('vcourse', this.ruleForm.vcourse);
 
                         this.$axios({
                             method: 'POST',
                             url: '/vacate/createVacate',
+                            headers: {
+                                'Content-Type': 'multipart/form-data;boundary = ' + new Date().getTime()
+                            },
+                            // data: param
                             data: {
                                 vtype: this.ruleForm.vtype,
                                 vreason: this.ruleForm.vreason,
                                 vcourse: this.ruleForm.vcourse,
+                                files: vfile.file,
                             }
                         }).then(response => {
                             var resdata = response.data;
@@ -168,6 +181,8 @@
             },
             //上传图片
             beforeUpload(file) {
+                if (null == file)
+                    return true;
                 if (file.size / 1024 / 1024 > 20) {
                     this.common.errorTip('上传附件大小不能超过 20MB!');
                     return false;
@@ -175,8 +190,8 @@
                 return true;
             },
             //传递给submitForm来提交数据
-            uploadfile(param) {
-                this.submitForm('ruleForm', param);
+            uploadfile(file) {
+                this.submitForm('ruleForm', file);
             },
             //开始提交
             callSubmit() {
