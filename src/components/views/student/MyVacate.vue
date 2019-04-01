@@ -1,6 +1,6 @@
 <template>
     <div class="app">
-        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+        <el-form :model="ruleForm" ref="ruleForm" label-width="100px" class="demo-ruleForm">
 
             <el-form-item label="请假类型" required>
                 <el-select v-model="ruleForm.vtype" placeholder="请选择请假类型">
@@ -107,14 +107,6 @@
                     vdatetime: '',
                     vtype: '1',
                 },
-                rules: {
-                    vdatetime: [
-                        {type: 'date', required: true, message: '请选择日期', trigger: 'change'}
-                    ],
-                    type: [
-                        {type: 'array', required: true, message: '请至少选择一个活动性质', trigger: 'change'}
-                    ],
-                },
                 //已加入的班级
                 myCourse: '',
                 //附件列表
@@ -161,6 +153,7 @@
                 this.param.append('files', vfile.file)
             },
             uploadFiles(vid) {
+                let that = this;
 
                 //此处使用原生js，避免拦截器影响multipart/form-data
                 let url = this.$axios.defaults.baseURL + "/vacate/createVacateFile";
@@ -172,7 +165,7 @@
                 xhr.onreadystatechange = function () {
                     if (xhr.readyState === 4 && xhr.status === 200) {
                         let resdata = JSON.parse(xhr.responseText);
-                        this.$alert(resdata.msg, '操作结果', {
+                        that.$alert(resdata.msg, '操作结果', {
                             confirmButtonText: '确定',
                         });
                     }
@@ -182,37 +175,40 @@
                 xhr.send(data)
             },
             submitForm(formName) {
-                this.$refs[formName].validate((valid) => {
-                    if (valid) {
-                        let havafile = this.fileList.length >= 1;
-                        this.$axios({
-                            method: 'POST',
-                            url: '/vacate/createVacate',
-                            data: {
-                                vtype: this.ruleForm.vtype,
-                                vreason: this.ruleForm.vreason,
-                                vcourse: this.ruleForm.vcourse,
-                                vhavefile: havafile
-                            },
-                        }).then(response => {
-                            var resdata = response.data;
-                            if (resdata.state === "200" && havafile) {
-                                // this.uploadFiles();
-                                this.$refs.upload.submit();
-                                this.uploadFiles(resdata.vid);
-                            } else {
-                                this.$alert(resdata.msg, '操作结果', {
-                                    confirmButtonText: '确定',
-                                });
-                            }
-                        });
+                // this.$refs[formName].validate((valid) => {
+                // if (valid) {
+                console.log("time");
+                console.log(this.ruleForm.vdatetime);
+                let havafile = this.fileList.length >= 1;
+                this.$axios({
+                    method: 'POST',
+                    url: '/vacate/createVacate',
+                    data: {
+                        vtype: this.ruleForm.vtype,
+                        vreason: this.ruleForm.vreason,
+                        vcourse: this.ruleForm.vcourse,
+                        vdatetime: this.ruleForm.vdatetime,
+                        vhavefile: havafile
+                    },
+                }).then(response => {
+                    var resdata = response.data;
+                    if (resdata.state === "200" && havafile) {
+                        // this.uploadFiles();
+                        this.$refs.upload.submit();
+                        this.uploadFiles(resdata.vid);
                     } else {
-                        this.$alert("请检查信息完整性", '操作结果', {
+                        this.$alert(resdata.msg, '操作结果', {
                             confirmButtonText: '确定',
                         });
-                        return false;
                     }
                 });
+                // } else {
+                //     this.$alert("请检查信息完整性", '操作结果', {
+                //         confirmButtonText: '确定',
+                //     });
+                //     return false;
+                // }
+                // });
             },
 
         }
