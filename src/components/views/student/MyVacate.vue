@@ -16,6 +16,8 @@
                         range-separator="至"
                         start-placeholder="开始日期"
                         end-placeholder="结束日期"
+                        value-format="yyyy-MM-dd HH:mm"
+                        format="yyyy-MM-dd HH:mm"
                         align="left"
                         :picker-options="pickerOptions"
                         :default-time="['08:00:00', '21:30:00']">
@@ -104,7 +106,7 @@
                 ruleForm: {
                     vreason: '3',
                     vcourse: '2',
-                    vdatetime: '',
+                    vdatetime: new Date(),
                     vtype: '1',
                 },
                 //已加入的班级
@@ -174,11 +176,7 @@
                 xhr.open('POST', url);
                 xhr.send(data)
             },
-            submitForm(formName) {
-                // this.$refs[formName].validate((valid) => {
-                // if (valid) {
-                console.log("time");
-                console.log(this.ruleForm.vdatetime);
+            submitForm() {
                 let havafile = this.fileList.length >= 1;
                 this.$axios({
                     method: 'POST',
@@ -187,7 +185,8 @@
                         vtype: this.ruleForm.vtype,
                         vreason: this.ruleForm.vreason,
                         vcourse: this.ruleForm.vcourse,
-                        vdatetime: this.ruleForm.vdatetime,
+                        vdatetimeBegin: this.ruleForm.vdatetime[0],
+                        vdatetimeEnd: this.ruleForm.vdatetime[1],
                         vhavefile: havafile
                     },
                 }).then(response => {
@@ -202,13 +201,6 @@
                         });
                     }
                 });
-                // } else {
-                //     this.$alert("请检查信息完整性", '操作结果', {
-                //         confirmButtonText: '确定',
-                //     });
-                //     return false;
-                // }
-                // });
             },
 
         }
