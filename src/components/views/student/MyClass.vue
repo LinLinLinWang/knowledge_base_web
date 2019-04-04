@@ -31,11 +31,11 @@
                                     placeholder="输入关键字搜索"/>
                         </template>
                         <template slot-scope="scope">
-                            <el-button
-                                    size="mini"
-                                    type="primary"
-                                    @click="joinClassButton(scope.$index, scope.row)">加入
-                            </el-button>
+                            <!--                            <el-button-->
+                            <!--                                    size="mini"-->
+                            <!--                                    type="primary"-->
+                            <!--                                    @click="joinClassButton(scope.$index, scope.row)">加入-->
+                            <!--                            </el-button>-->
                             <el-button
                                     size="mini"
                                     type="danger"

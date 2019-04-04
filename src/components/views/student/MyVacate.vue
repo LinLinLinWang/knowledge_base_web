@@ -1,209 +1,129 @@
 <template>
     <div class="app">
-        <el-form :model="ruleForm" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+                <span slot="label" class="tabs-span">
+                    <svg-icon icon-class="我的请假"/>
+                    我的请假记录
+                </span>
+        <el-table
+                :data="tableData.filter(data => !search || data.cname.toLowerCase().includes(search.toLowerCase()))"
+                style="width: 100%">
 
-            <el-form-item label="请假类型" required>
-                <el-select v-model="ruleForm.vtype" placeholder="请选择请假类型">
-                    <el-option label="事假" value="0"></el-option>
-                    <el-option label="病假" value="1"></el-option>
-                    <el-option label="其他" value="2"></el-option>
-                </el-select>
-            </el-form-item>
-            <el-form-item label="请假时间" required>
-                <el-date-picker
-                        v-model="ruleForm.vdatetime"
-                        type="datetimerange"
-                        range-separator="至"
-                        start-placeholder="开始日期"
-                        end-placeholder="结束日期"
-                        value-format="yyyy-MM-dd HH:mm"
-                        format="yyyy-MM-dd HH:mm"
-                        align="left"
-                        :picker-options="pickerOptions"
-                        :default-time="['08:00:00', '21:30:00']">
-                </el-date-picker>
-            </el-form-item>
+            <el-table-column
+                    label="课程"
+                    prop="cname">
+            </el-table-column>
+            <el-table-column
+                    label="请假原因"
+                    prop="vname">
+            </el-table-column>
+            <el-table-column
+                    label="请假类型"
+                    prop="vtype"
+                    :formatter="vtypedirection"
+            >
+            </el-table-column>
+            <el-table-column
+                    label="请假时间范围"
+                    prop="vtime">
+            </el-table-column>
+            <el-table-column
+                    label="课程老师"
+                    prop="uname">
+            </el-table-column>
+            <el-table-column
+                    label="状态"
+                    prop="state"
+                    :formatter="statedirection"
+            >
+            </el-table-column>
 
-            <el-form-item label="请假课程" required>
-                <el-select
-                        v-model="ruleForm.vcourse"
-                        filterable
-                        placeholder="请选择要请假的课程"
-                        no-data-text="您还没有课程">
-                    <el-option
-                            v-for="item in myCourse"
-                            :key="item.cname"
-                            :label="item.cname"
-                            :value="item.courseid">
-                    </el-option>
-                </el-select>
-            </el-form-item>
+            <el-table-column
+                    align="right">
+                <template slot="header" slot-scope="scope">
+                    <el-input
+                            v-model="search"
+                            size="mini"
+                            placeholder="输入课程名搜索"/>
+                </template>
+                <template slot-scope="scope">
+                    <!--                    <el-button-->
+                    <!--                            size="mini"-->
+                    <!--                            type="primary"-->
+                    <!--                            @click="joinClassButton(scope.$index, scope.row)">加入-->
+                    <!--                    </el-button>-->
+                    <!--                    <el-button-->
+                    <!--                            size="mini"-->
+                    <!--                            type="danger"-->
+                    <!--                            @click="handleDelete(scope.$index, scope.row)">查看-->
+                    <!--                    </el-button>-->
+                </template>
+            </el-table-column>
+        </el-table>
 
-            <el-form-item label="请假原因" required class="reason">
-                <el-input v-model="ruleForm.vreason"
-                          type="textarea"
-                          autosize>
-                </el-input>
-            </el-form-item>
-
-            <el-form-item label="附件上传">
-                <el-upload
-                        ref="upload"
-                        class="upload"
-                        drag
-                        action="Need but not use"
-                        :on-change="OnChange"
-                        :http-request="uploadFile"
-                        :before-upload="beforeUpload"
-                        :auto-upload="false"
-                        multiple>
-                    <i class="el-icon-upload"></i>
-                    <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-                </el-upload>
-            </el-form-item>
-
-            <el-form-item>
-                <el-button type="primary" @click="submitForm('ruleForm')">提交请假</el-button>
-                <el-button @click="resetForm('ruleForm')">重置</el-button>
-            </el-form-item>
-        </el-form>
     </div>
 </template>
 
 <script>
     export default {
-        name: "MyVacate",
         data() {
             return {
-                //时间选择器快捷选项
-                pickerOptions: {
-                    shortcuts: [{
-                        text: '最近一天',
-                        onClick(picker) {
-                            const end = new Date();
-                            const start = new Date();
-                            end.setTime(start.getTime() + 3600 * 1000 * 24);
-                            picker.$emit('pick', [start, end]);
-                        }
-                    }, {
-                        text: '最近一周',
-                        onClick(picker) {
-                            const end = new Date();
-                            const start = new Date();
-                            end.setTime(start.getTime() + 3600 * 1000 * 24 * 7);
-                            picker.$emit('pick', [start, end]);
-                        }
-                    }, {
-                        text: '最近一个月',
-                        onClick(picker) {
-                            const end = new Date();
-                            const start = new Date();
-                            end.setTime(start.getTime() + 3600 * 1000 * 24 * 30);
-                            picker.$emit('pick', [start, end]);
-                        }
-                    }]
-                },
-                ruleForm: {
-                    vreason: '3',
-                    vcourse: '2',
-                    vdatetime: new Date(),
-                    vtype: '1',
-                },
-                //已加入的班级
-                myCourse: '',
-                //附件列表
-                fileList: [],
-                param: new FormData(),
-            };
+                tableData: [],
+                search: '',
+            }
         },
         created() {
-            this.getJoinedClass();
+            this.getMyVacate();
         },
         methods: {
-            getJoinedClass() {
+            getMyVacate() {
                 this.$axios({
                     method: 'POST',
-                    url: '/course/getMyCourse',
+                    url: '/vacate/myVacate',
                     data: {}
                 }).then(response => {
                     var resdata = response.data;
-                    // var jsondata = eval('(' + resdata.data + ')');
-                    var jsondata = JSON.parse(resdata.data);
-                    this.myCourse = jsondata;
+                    var jsondata = eval('(' + resdata.data + ')');
+                    this.tableData = jsondata;
                 })
             },
-            //重置表单
-            resetForm(formName) {
-                this.$refs[formName].resetFields();
-            },
-            //获取附件列表
-            OnChange(file, fileList) {
-                this.fileList = fileList
-
-            },
-            //上传附件前的检查
-            beforeUpload(file) {
-                if (null == file)
-                    return true;
-                if (file.size / 1024 / 1024 > 20) {
-                    this.common.errorTip('上传附件大小不能超过 20MB!');
-                    return false;
+            vtypedirection(row) {
+                switch (row.vtype) {
+                    case 0:
+                        return "事假";
+                    case 1:
+                        return "病假";
+                    case 2:
+                        return "其他"
                 }
-                return true;
             },
-            uploadFile(vfile) {
-                this.param.append('files', vfile.file)
+            statedirection(row) {
+                switch (row.state) {
+                    case 0:
+                        return "已申请";
+                    case 1:
+                        return "未批准";
+                    case 2:
+                        return "已批准"
+                }
             },
-            uploadFiles(vid) {
-                let that = this;
-
-                //此处使用原生js，避免拦截器影响multipart/form-data
-                let url = this.$axios.defaults.baseURL + "/vacate/createVacateFile";
-                let data = this.param;
-                //附加表单id
-                data.append('id', vid);
-
-                let xhr = new XMLHttpRequest();
-                xhr.onreadystatechange = function () {
-                    if (xhr.readyState === 4 && xhr.status === 200) {
-                        let resdata = JSON.parse(xhr.responseText);
-                        that.$alert(resdata.msg, '操作结果', {
-                            confirmButtonText: '确定',
-                        });
-                    }
-                };
-
-                xhr.open('POST', url);
-                xhr.send(data)
-            },
-            submitForm() {
-                let havafile = this.fileList.length >= 1;
-                this.$axios({
-                    method: 'POST',
-                    url: '/vacate/createVacate',
-                    data: {
-                        vtype: this.ruleForm.vtype,
-                        vreason: this.ruleForm.vreason,
-                        vcourse: this.ruleForm.vcourse,
-                        vdatetimeBegin: this.ruleForm.vdatetime[0],
-                        vdatetimeEnd: this.ruleForm.vdatetime[1],
-                        vhavefile: havafile
-                    },
-                }).then(response => {
-                    var resdata = response.data;
-                    if (resdata.state === "200" && havafile) {
-                        // this.uploadFiles();
-                        this.$refs.upload.submit();
-                        this.uploadFiles(resdata.vid);
-                    } else {
-                        this.$alert(resdata.msg, '操作结果', {
-                            confirmButtonText: '确定',
-                        });
-                    }
-                });
-            },
-
-        }
+            // joinClassButton(index, row) {
+            //     this.$axios({
+            //         method: 'POST',
+            //         url: '/classstudents/joinClass',
+            //         data: {
+            //             cid: row.cid,
+            //         }
+            //     }).then(response => {
+            //         var resdata = response.data;
+            //         this.$alert(resdata.msg, '操作结果', {
+            //             confirmButtonText: '确定',
+            //         });
+            //     })
+            // },
+            // handleDelete(index, row) {
+            //     console.log(index, row);
+            // }
+        },
     }
 </script>
 

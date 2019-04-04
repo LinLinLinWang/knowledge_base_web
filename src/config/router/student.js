@@ -8,7 +8,7 @@ const studentRouter = {
     },
     children: [
         {
-            path: '/myclass',
+            path: '/myClass',
             component: resolve => require(['../../components/views/student/MyClass.vue'], resolve),
             meta: {
                 title: '我的班级',
@@ -16,7 +16,7 @@ const studentRouter = {
             }
         },
         {
-            path: '/myinfo',
+            path: '/myInfo',
             component: resolve => require(['../../components/views/student/MyInfo.vue'], resolve),
             meta: {
                 title: '我的考勤',
@@ -25,10 +25,18 @@ const studentRouter = {
         },
         {
             path: '/vacate',
+            component: resolve => require(['../../components/views/student/NewVacate.vue'], resolve),
+            meta: {
+                title: '请假申请',
+                icon: '请假'
+            }
+        },
+        {
+            path: '/myVacate',
             component: resolve => require(['../../components/views/student/MyVacate.vue'], resolve),
             meta: {
                 title: '我的请假',
-                icon: '请假'
+                icon: '请假列表'
             }
         }
     ]
