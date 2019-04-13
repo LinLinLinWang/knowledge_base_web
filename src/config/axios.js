@@ -37,7 +37,7 @@ axios.interceptors.response.use(
 ;
 
 if (process.env.NODE_ENV === "production") {
-    axios.defaults.baseURL = 'http://dm.aloli.cn/api';
+    axios.defaults.baseURL = 'http://vue.aloli.cn/api';
 } else {
     axios.defaults.baseURL = 'http://127.0.0.1:8888';
 }
