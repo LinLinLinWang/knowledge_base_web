@@ -46,18 +46,19 @@
                             placeholder="输入课程名搜索"/>
                 </template>
                 <template slot-scope="scope">
-                                        <el-button
-                                                v-if="scope.row.state!==-1"
-                                                size="mini"
-                                                type="primary"
-                                                @click="cancel(scope.$index, scope.row)">取消
-                                        </el-button>
+                    <el-button
+                            size="mini"
+                            type="danger"
+                            @click="showDetails(scope.$index, scope.row)">查看详情
+                    </el-button>
+                    <el-button
+                            v-if="scope.row.state!==-1"
+                            size="mini"
+                            type="primary"
+                            @click="cancel(scope.$index, scope.row)">取消
+                    </el-button>
 
-                    <!--                    <el-button-->
-                    <!--                            size="mini"-->
-                    <!--                            type="danger"-->
-                    <!--                            @click="handleDelete(scope.$index, scope.row)">查看-->
-                    <!--                    </el-button>-->
+
                 </template>
             </el-table-column>
         </el-table>
@@ -125,9 +126,9 @@
                     this.getMyVacate();
                 })
             },
-            // handleDelete(index, row) {
-            //     console.log(index, row);
-            // }
+            showDetails(index, row) {
+                this.$router.push({path: '/showVacateDetails', query: {vid:row.vid}});
+            }
         },
     }
 </script>

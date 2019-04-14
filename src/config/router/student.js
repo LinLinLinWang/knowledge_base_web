@@ -38,6 +38,11 @@ const studentRouter = {
                 title: '我的请假',
                 icon: '请假列表'
             }
+        },
+        {
+            path: '/showVacateDetails',
+            component: resolve => require(['../../components/views/student/showVacateDetails.vue'], resolve),
+            hidden: true,
         }
     ]
 };
