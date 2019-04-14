@@ -46,11 +46,13 @@
                             placeholder="输入课程名搜索"/>
                 </template>
                 <template slot-scope="scope">
-                    <!--                    <el-button-->
-                    <!--                            size="mini"-->
-                    <!--                            type="primary"-->
-                    <!--                            @click="joinClassButton(scope.$index, scope.row)">加入-->
-                    <!--                    </el-button>-->
+                                        <el-button
+                                                v-if="scope.row.state!==-1"
+                                                size="mini"
+                                                type="primary"
+                                                @click="cancel(scope.$index, scope.row)">取消
+                                        </el-button>
+
                     <!--                    <el-button-->
                     <!--                            size="mini"-->
                     <!--                            type="danger"-->
@@ -98,6 +100,8 @@
             },
             statedirection(row) {
                 switch (row.state) {
+                    case -1:
+                        return "已取消";
                     case 0:
                         return "已申请";
                     case 1:
@@ -106,20 +110,21 @@
                         return "已批准"
                 }
             },
-            // joinClassButton(index, row) {
-            //     this.$axios({
-            //         method: 'POST',
-            //         url: '/classstudents/joinClass',
-            //         data: {
-            //             cid: row.cid,
-            //         }
-            //     }).then(response => {
-            //         var resdata = response.data;
-            //         this.$alert(resdata.msg, '操作结果', {
-            //             confirmButtonText: '确定',
-            //         });
-            //     })
-            // },
+            cancel(index, row) {
+                this.$axios({
+                    method: 'POST',
+                    url: '/vacate/cancelVacate',
+                    data: {
+                        vid: row.vid,
+                    }
+                }).then(response => {
+                    var resdata = response.data;
+                    this.$alert(resdata.msg, '操作结果', {
+                        confirmButtonText: '确定',
+                    });
+                    this.getMyVacate();
+                })
+            },
             // handleDelete(index, row) {
             //     console.log(index, row);
             // }
