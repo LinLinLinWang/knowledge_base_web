@@ -228,6 +228,7 @@
                             method: 'POST',
                             url: '/validatecode/loginByCode',
                             data: {
+                                loginType: 1,
                                 phone: this.ruleFormCode.phone,
                                 code: this.ruleFormCode.code
                             }
@@ -262,6 +263,7 @@
                             method: 'POST',
                             url: '/users/login',
                             data: {
+                                loginType: 1,
                                 phone: this.ruleForm.phone,
                                 password: this.ruleForm.password
                             }
@@ -295,7 +297,7 @@
                 this.promot = "用户姓名仅支持中文";
                 this.promotType = "info";
                 let uname = this.registerRuleForm.username;
-                var reg = /^[\u4E00-\u9FA5]+$/;
+                let reg = /^[\u4E00-\u9FA5]+$/;
                 if (!reg.test(uname)) {
                     this.promot = "姓名含有非中文";
                     this.promotType = "warning";
@@ -319,7 +321,6 @@
             getRealTimePhone() {
                 this.promot = "请填写手机号";
                 let userphone = this.registerRuleForm.userphone;
-                console.log("length=" + userphone.length)
                 if (userphone.length === 11) {
                     if (!(/^1[3|4|5|7|8][0-9]\d{8,11}$/.test(userphone))) {
                         this.promot = "手机号格式错误！";
