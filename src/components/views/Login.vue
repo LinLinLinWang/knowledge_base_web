@@ -12,7 +12,9 @@
                              class="ms-content">
                         <el-form-item prop="phone">
                             <el-input v-model="ruleFormCode.phone" placeholder="请输入手机号">
-                                <el-button slot="prepend" icon="el-icon-lx-people"></el-button>
+                                <el-button slot="prepend">
+                                    <svg-icon icon-class="手机号"/>
+                                </el-button>
                             </el-input>
                         </el-form-item>
                         <el-row>
@@ -75,12 +77,21 @@
                                 <el-button slot="prepend" icon="el-icon-lx-people"></el-button>
                             </el-input>
                         </el-form-item>
+                        <el-form-item prop="username">
+                            <el-input v-model="registerRuleForm.idnumber" placeholder="请输入学号" required>
+                                <el-button slot="prepend">
+                                    <svg-icon icon-class="证件"/>
+                                </el-button>
+                            </el-input>
+                        </el-form-item>
 
                         <el-form-item prop="userphone">
                             <el-input v-model="registerRuleForm.userphone"
                                       placeholder="请输入手机号"
                                       v-on:input="getRealTimePhone">
-                                <el-button slot="prepend" icon="el-icon-lx-people"></el-button>
+                                <el-button slot="prepend">
+                                    <svg-icon icon-class="手机号"/>
+                                </el-button>
                             </el-input>
                         </el-form-item>
 
@@ -89,7 +100,9 @@
                                 <el-col :span="15">
                                     <el-input v-model="registerRuleForm.validatecode"
                                               placeholder="请输入验证码">
-                                        <el-button slot="prepend" icon="el-icon-lx-people"></el-button>
+                                        <el-button slot="prepend">
+                                            <svg-icon icon-class="验证码"/>
+                                        </el-button>
                                     </el-input>
                                 </el-col>
                                 <el-col :span="5">
@@ -161,9 +174,10 @@
                     username: '',
                     userphone: '',
                     validatecode: '',
+                    idnumber: '',
                 },
 
-                promot: "请确保信息的准确性,姓名注册后不可修改",
+                promot: "请确保信息的准确性,姓名学号注册后不可修改",
                 promotType: 'warning',
                 registerCodemsg: "获取验证码",
 
@@ -360,7 +374,8 @@
                         data: {
                             username: this.registerRuleForm.username,
                             userphone: this.registerRuleForm.userphone,
-                            validatecode: this.registerRuleForm.validatecode
+                            validatecode: this.registerRuleForm.validatecode,
+                            idnumber: this.registerRuleForm.idnumber,
                         }
                     }).then(response => {
                         var resdata = response.data;

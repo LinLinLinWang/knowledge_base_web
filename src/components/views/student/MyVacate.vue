@@ -48,17 +48,15 @@
                 <template slot-scope="scope">
                     <el-button
                             size="mini"
-                            type="danger"
+                            type="primary"
                             @click="showDetails(scope.$index, scope.row)">查看详情
                     </el-button>
                     <el-button
                             v-if="scope.row.state!==-1"
                             size="mini"
-                            type="primary"
+                            type="danger"
                             @click="cancel(scope.$index, scope.row)">取消
                     </el-button>
-
-
                 </template>
             </el-table-column>
         </el-table>
@@ -127,7 +125,7 @@
                 })
             },
             showDetails(index, row) {
-                this.$router.push({path: '/showVacateDetails', query: {vid:row.vid}});
+                this.$router.push({path: '/showVacateDetails', query: {vid: row.vid}});
             }
         },
     }

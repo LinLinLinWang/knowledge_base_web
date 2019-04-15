@@ -12,7 +12,7 @@ const teacherRouter = {
             component: resolve => require(['../../components/views/Dashboard.vue'], resolve),
             meta: {
                 title: 'example role 1',
-                icon: '班级'
+                icon: '班级管理'
             }
         },
 
