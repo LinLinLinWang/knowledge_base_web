@@ -187,7 +187,6 @@
                 xhr.open('POST', url);
 
                 xhr.setRequestHeader("Authorization", that.$store.state.token);
-                console.log(that.$store.state.token);
                 xhr.send(data)
             },
             submitForm(formName) {

@@ -1,10 +1,10 @@
 <template>
-    <div v-if="!item.hidden&&item.children" class="menu-wrapper">
+    <div v-if="!item.hidden" class="menu-wrapper">
 
         <template v-for="child in item.children">
-            <app-link :to="child.path" :key="child.name">
+            <app-link :to="child.path" :key="child.name" v-if="!child.hidden" >
                 <el-menu-item :index="child.path">
-                    <item v-if="child.meta" :icon="child.meta.icon" :title="child.meta.title"/>
+                    <item v-if="!child.hidden" :icon="child.meta.icon" :title="child.meta.title"/>
                 </el-menu-item>
             </app-link>
         </template>

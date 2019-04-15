@@ -41,8 +41,11 @@ const studentRouter = {
         },
         {
             path: '/showVacateDetails',
-            component: resolve => require(['../../components/views/student/showVacateDetails.vue'], resolve),
+            component: resolve => require(['../../components/views/student/ShowVacateDetails.vue'], resolve),
             hidden: true,
+            meta: {
+                title: '请假详情',
+            }
         }
     ]
 };
