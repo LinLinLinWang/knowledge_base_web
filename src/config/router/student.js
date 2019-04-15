@@ -16,6 +16,14 @@ const studentRouter = {
             }
         },
         {
+            path: '/myCourse',
+            component: resolve => require(['../../components/views/student/MyCourse.vue'], resolve),
+            meta: {
+                title: '我的课程',
+                icon: '课程'
+            }
+        },
+        {
             path: '/myInfo',
             component: resolve => require(['../../components/views/student/MyInfo.vue'], resolve),
             meta: {
