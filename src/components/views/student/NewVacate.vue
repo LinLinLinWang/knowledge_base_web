@@ -24,7 +24,7 @@
                 </el-date-picker>
             </el-form-item>
 
-            <el-form-item label="请假课程" required prop="vcourse" :show-message="false">
+            <el-form-item label="请假课程" prop="vcourse">
                 <el-select
                         v-model="ruleForm.vcourse"
                         filterable
@@ -39,7 +39,7 @@
                 </el-select>
             </el-form-item>
 
-            <el-form-item label="请假原因" required class="reason" prop="vreason">
+            <el-form-item label="请假原因" class="reason" prop="vreason">
                 <el-input v-model="ruleForm.vreason"
                           type="textarea"
                           autosize
@@ -113,10 +113,10 @@
                 },
                 formRules: {
                     vreason: [
-                        {required: true, message: '请输入手机号', trigger: 'blur'}
+                        {required: true, message: '请输入请假原因', trigger: 'blur'}
                     ],
                     vcourse: [
-                        {required: true, message: '请输入验证码', trigger: 'blur'}
+                        {required: true, message: '请选择课程', trigger: 'blur'}
                     ]
                 },
                 //已加入的班级
