@@ -24,7 +24,7 @@
                 </el-date-picker>
             </el-form-item>
 
-            <el-form-item label="请假课程" required prop="vcourse">
+            <el-form-item label="请假课程" required prop="vcourse" :show-message="false">
                 <el-select
                         v-model="ruleForm.vcourse"
                         filterable
@@ -107,7 +107,7 @@
                 },
                 ruleForm: {
                     vreason: '',
-                    vcourse: '',
+                    vcourse: [],
                     vdatetime: new Date(),
                     vtype: '1',
                 },
@@ -139,6 +139,7 @@
                     var resdata = response.data;
                     // var jsondata = eval('(' + resdata.data + ')');
                     var jsondata = JSON.parse(resdata.data);
+                    console.log(jsondata);
                     this.myCourse = jsondata;
                 })
             },
