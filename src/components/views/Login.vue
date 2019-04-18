@@ -47,12 +47,16 @@
                     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="0px" class="ms-content">
                         <el-form-item prop="phone">
                             <el-input v-model="ruleForm.phone" placeholder="请输入手机号">
-                                <el-button slot="prepend" icon="el-icon-lx-people"></el-button>
+                                <el-button slot="prepend">
+                                    <svg-icon icon-class="people"/>
+                                </el-button>
                             </el-input>
                         </el-form-item>
                         <el-form-item prop="password">
                             <el-input type="password" placeholder="请输入密码" v-model="ruleForm.password">
-                                <el-button slot="prepend" icon="el-icon-lx-lock"></el-button>
+                                <el-button slot="prepend">
+                                    <svg-icon icon-class="密码"/>
+                                </el-button>
                             </el-input>
                         </el-form-item>
                         <div class="login-btn">
@@ -74,7 +78,9 @@
                         <el-form-item prop="username">
                             <el-input v-model="registerRuleForm.username" placeholder="请输入姓名"
                                       v-on:input="validateUsername()">
-                                <el-button slot="prepend" icon="el-icon-lx-people"></el-button>
+                                <el-button slot="prepend">
+                                    <svg-icon icon-class="people"/>
+                                </el-button>
                             </el-input>
                         </el-form-item>
                         <el-form-item prop="username">
