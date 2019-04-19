@@ -59,6 +59,9 @@ export default new Vuex.Store({
             localStorage.removeItem('user');
             state.token = null;
             state.user = null;
+            state.routers = null;
+            state.addRouters = null;
+            state.norouter = true;
         },
         [types.SET_ROUTERS]: (state, routers) => {
             state.addRouters = routers;
@@ -89,7 +92,7 @@ export default new Vuex.Store({
             })
         },
     },
-    getters:{
+    getters: {
         sidebar: state => state.app.sidebar,
         language: state => state.app.language,
         size: state => state.app.size,

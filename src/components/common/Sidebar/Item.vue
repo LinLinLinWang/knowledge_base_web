@@ -16,13 +16,27 @@
             const {icon, title} = context.props;
             const vnodes = [];
 
+            // console.log(icon);
+
             if (icon) {
-                vnodes.push(<svg-icon icon-class={icon}/>)
+                let si =
+            <
+                svg - icon
+                icon - class = {icon}
+                />;
+                vnodes.push(si);
             }
 
             if (title) {
                 vnodes.push(<span slot='title'>{(title)}</span>)
             }
+
+            // console.log("vnodes:");
+            console.log( < svg - icon
+            icon - class = {icon}
+            />);
+            // console.log("end");
+
             return vnodes
         }
     }
