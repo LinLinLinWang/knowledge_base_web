@@ -9,10 +9,10 @@ const teacherRouter = {
     children: [
         {
             path: '/createClass',
-            component: resolve => require(['../../components/views/Dashboard.vue'], resolve),
+            component: resolve => require(['../../components/views/teacher/CreateClass.vue'], resolve),
             meta: {
                 title: '创建班级',
-                icon: '班级管理'
+                icon: '班级'
             }
         },
         {
