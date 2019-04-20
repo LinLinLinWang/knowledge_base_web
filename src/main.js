@@ -23,6 +23,9 @@ Vue.prototype.$axios = axios;
 //启用浏览器的devtools拓展
 Vue.config.devtools = true;
 
+//设置客户端标识
+process.env.UserTypeEnv = 'vue';
+
 new Vue({
     store,
     axios,
