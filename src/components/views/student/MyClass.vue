@@ -142,7 +142,9 @@
                     this.$alert(resdata.msg, '操作结果', {
                         confirmButtonText: '确定',
                     });
-                })
+                });
+                this.getJoinedClass();
+                this.getAllClass();
             },
             handleDelete(index, row) {
                 console.log(index, row);
@@ -152,7 +154,7 @@
 </script>
 
 <style scoped>
-    .el-tabs__item{
+    .el-tabs__item {
         height: 50px !important;
         font-size: 25px;
     }
