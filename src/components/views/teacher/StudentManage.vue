@@ -4,7 +4,7 @@
             <el-tab-pane>
                 <span slot="label" class="tabs-span">
                     <svg-icon icon-class="我的班级学生列表"/>
-                    该班级里的学生
+                    已加入的学生
                 </span>
                 <el-table
                         :data="tableData"
@@ -21,18 +21,15 @@
                     <el-table-column
                             label="学生手机号"
                             prop="phone"
-                            :formatter="courseTime">
+                    >
                     </el-table-column>
                     <el-table-column
                             label="学生状态"
-                            prop="state"
-                            :formatter="courseState">
+                            prop="flag"
+                            :formatter="studentselfstate"
+                    >
                     </el-table-column>
-                    <el-table-column
-                            label="审核状态"
-                            prop="state"
-                            :formatter="courseState">
-                    </el-table-column>
+
                     <el-table-column
                             align="right">
                         <template slot="header" slot-scope="scope">
@@ -46,7 +43,7 @@
                             <el-button
                                     size="mini"
                                     type="danger"
-                                    @click="changCourse(scope.$index, scope.row)">更改审批状态
+                                    @click="deleteClassStudent(scope.$index, scope.row)">删除
                             </el-button>
 
 
@@ -57,46 +54,61 @@
             <el-tab-pane>
                 <span slot="label" class="tabs-span">
                     <svg-icon icon-class="创建班级"/>
-                    创建课程
+                    待审核的学生
                 </span>
 
-                <el-form :inline="true" :model="formInline" class="demo-form-inline">
+                <el-table
+                        :data="tableData1"
+                        style="width: 100%">
 
-                    <el-form-item>
-                        <label>点击按钮 跳转到班级列表</label>>
-                        <el-button type="primary" @click="createCourse()">创建课程</el-button>
-                    </el-form-item>
-                </el-form>
+                    <el-table-column
+                            label="学生id"
+                            prop="uid">
+                    </el-table-column>
+                    <el-table-column
+                            label="学生名字"
+                            prop="uname">
+                    </el-table-column>
+                    <el-table-column
+                            label="学生手机号"
+                            prop="phone"
+                    >
+                    </el-table-column>
+                    <el-table-column
+                            label="学生状态"
+                            prop="flag"
+                            :formatter="studentselfstate"
+                    >
+                    </el-table-column>
+
+                    <el-table-column
+                            align="right">
+                        <template slot="header" slot-scope="scope">
+                            <el-input
+                                    v-model="search"
+                                    size="mini"
+                                    placeholder="输入关键字搜索"/>
+                        </template>
+                        <template slot-scope="scope">
+
+                            <el-button
+                                    size="mini"
+                                    type="primary"
+                                    @click="apply(scope.$index, scope.row)">同意申请
+                            </el-button>
+                            <el-button
+                                    size="mini"
+                                    type="danger"
+                                    @click="refuse(scope.$index, scope.row)">拒绝申请
+                            </el-button>
+
+
+                        </template>
+                    </el-table-column>
+                </el-table>
             </el-tab-pane>
         </el-tabs>
-        <el-dialog
-                title="提示"
-                :visible.sync="dialogVisible"
-                width="30%"
-                :before-close="handleClose">
-            <el-form :model="ruleForm" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-                <el-form-item label="课程名称" prop="cname">
-                    <el-input v-model="ruleForm.cname"></el-input>
-                </el-form-item>
-                <el-form-item label="课程安排" prop="ctime">
-                    <el-select v-model="ruleForm.ctime" placeholder="请选择上课时间">
-                        <el-option label="周一" value="1"></el-option>
-                        <el-option label="周二" value="2"></el-option>
-                        <el-option label="周三" value="3"></el-option>
-                        <el-option label="周四" value="4"></el-option>
-                        <el-option label="周五" value="5"></el-option>
-                        <el-option label="周六" value="6"></el-option>
-                        <el-option label="周日" value="7"></el-option>
-                    </el-select>
-                </el-form-item>
 
-
-            </el-form>
-            <span slot="footer" class="dialog-footer">
-    <el-button @click="dialogVisible = false">取 消</el-button>
-    <el-button type="primary" @click="updateCourse">确 定</el-button>
-  </span>
-        </el-dialog>
 
     </div>
     <!-- 对话框-->
@@ -109,6 +121,7 @@
         data() {
             return {
                 tableData: [],
+                tableData1: [],
                 search: '',
 
                 formInline: {
@@ -123,15 +136,151 @@
 
                 },
                 cid: '',
-                courseid: ''
+                courseid: '',
+                uid: ''
             }
         },
 
         created() {
             this.cid = this.$route.params.cid
-            this.getAllCourseByCid();
+            this.getjoinedStudent();
+            this.getnotjoinedStudent();
         },
         methods: {
+            //同意申请
+            apply(index, row) {
+
+
+                this.$axios({
+                    method: 'POST',
+                    url: '/classstudents/agreeApply',
+                    data: {
+                        cid: this.cid,
+                        uid: row.uid
+
+                    }
+                }).then(response => {
+                    var resdata = response.data;
+
+                    if (resdata.state == 200) {
+
+                        this.$message({
+                            type: 'success',
+                            message: '该同学成功进入班级'
+                        });
+                        this.getjoinedStudent();
+                        this.getnotjoinedStudent();
+                    } else {
+                        this.$message({
+                            type: 'info',
+                            message: '操作失败'
+                        });
+
+                    }
+
+
+                })
+
+
+            },
+            refuse(index, row) {
+                this.deleteClassStudent(index, row.uid)
+            },
+            deleteClassStudent(index, row) {
+                this.uid = row.uid;
+                this.$confirm('此操作将拒绝用户加入, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.$axios({
+                        method: 'POST',
+                        url: '/classstudents/deleteStudent',
+                        data: {
+                            cid: this.cid,
+                            uid: this.uid
+
+                        }
+                    }).then(response => {
+                        var resdata = response.data;
+
+                        if (resdata.state == 200) {
+
+                            this.$message({
+                                type: 'success',
+                                message: '修改成功'
+                            });
+                            this.getjoinedStudent();
+                            this.getnotjoinedStudent();
+                        } else {
+                            this.$message({
+                                type: 'info',
+                                message: '修改失败'
+                            });
+
+                        }
+
+
+                    })
+
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
+
+
+            },
+            studentselfstate(row) {
+                switch (row.flag) {
+
+                    case 0:
+                        return "账号正常";
+                    case 1:
+                        return "账号被冻结";
+
+                }
+            },
+            getjoinedStudent() {
+                this.$axios({
+                    method: 'POST',
+                    url: '/classstudents/getStudents',
+                    data: {
+                        cid: this.cid,
+                        state: 1//已加入的
+
+                    }
+                }).then(response => {
+                    var resdata = response.data;
+                    var jsondata = eval('(' + resdata.data + ')');
+
+                    this.tableData = jsondata;
+                })
+
+
+            },
+            getnotjoinedStudent() {
+
+                this.$axios({
+                    method: 'POST',
+                    url: '/classstudents/getStudents',
+                    data: {
+                        cid: this.cid,
+                        state: 0//待审核
+
+                    }
+                }).then(response => {
+                    var resdata = response.data;
+                    var jsondata = eval('(' + resdata.data + ')');
+
+                    this.tableData1 = jsondata;
+                })
+
+
+            },
+
+
             handleClose(done) {
                 this.$confirm('确认关闭？')
                     .then(_ => {
