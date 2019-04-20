@@ -32,7 +32,7 @@
                         no-data-text="您还没有课程">
                     <el-option
                             v-for="item in myCourse"
-                            :key="item.cname"
+                            :key="item.courseid"
                             :label="item.cname"
                             :value="item.courseid">
                     </el-option>
@@ -137,10 +137,7 @@
                     data: {}
                 }).then(response => {
                     var resdata = response.data;
-                    // var jsondata = eval('(' + resdata.data + ')');
-                    var jsondata = JSON.parse(resdata.data);
-                    console.log(jsondata);
-                    this.myCourse = jsondata;
+                    this.myCourse = JSON.parse(resdata.data);
                 })
             },
             //重置表单
