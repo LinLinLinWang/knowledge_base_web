@@ -462,12 +462,8 @@
         margin: 0 auto;
         border-radius: 5px;
         background: rgba(255, 255, 255, 0.3);
-        overflow: hidden;
-        transform: translate(0, 50%);
-    }
-
-    .ms-content {
-        padding: 30px 30px;
+        overflow: visible;
+        transform: translate(0, 20%);
     }
 
     .login-btn {
