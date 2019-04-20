@@ -25,18 +25,27 @@ const teacherRouter = {
         },
 
         {
-            path: '/auditCourse',
+            path: '/rollCall',
             component: resolve => require(['../../components/views/Dashboard.vue'], resolve),
             meta: {
                 title: '考勤管理',
                 icon: '考勤'
             }
         }, {
-            path: '/auditCourse',
-            component: resolve => require(['../../components/views/Dashboard.vue'], resolve),
+            path: '/studentManagement',
+            component: resolve => require(['../../components/views/teacher/ShowCreateClassForManageMentStudent.vue'], resolve),
             meta: {
                 title: '人员管理',
-                icon: '加入班级'
+                icon: '班级'
+            }
+        },
+
+        {
+            path: '/vacateManagement',
+            component: resolve => require(['../../components/views/Dashboard.vue'], resolve),
+            meta: {
+                title: '请假管理',
+                icon: '课程'
             }
         },
         {
@@ -45,6 +54,17 @@ const teacherRouter = {
             hidden: true,
 
             component: resolve => require(['../../components/views/teacher/ShowCreateCourse.vue'], resolve),
+            meta: {
+                title: '按班级管理课程',
+
+            }
+        },
+        {
+            path: '/showStudentById',
+            name: 'showStudentById',
+            hidden: true,
+
+            component: resolve => require(['../../components/views/teacher/StudentManage.vue'], resolve),
             meta: {
                 title: '按班级管理课程',
 

@@ -3,32 +3,36 @@
         <el-tabs tab-position="top" :stretch="true">
             <el-tab-pane>
                 <span slot="label" class="tabs-span">
-                    <svg-icon icon-class="我的班级"/>
-                    该班级下的你所创建的课程
+                    <svg-icon icon-class="我的班级学生列表"/>
+                    该班级里的学生
                 </span>
                 <el-table
                         :data="tableData"
                         style="width: 100%">
 
                     <el-table-column
-                            label="课程号"
-                            prop="courseid">
+                            label="学生id"
+                            prop="uid">
                     </el-table-column>
                     <el-table-column
-                            label="课程名"
-                            prop="cname">
+                            label="学生名字"
+                            prop="uname">
                     </el-table-column>
                     <el-table-column
-                            label="课程时间"
-                            prop="cday"
+                            label="学生手机号"
+                            prop="phone"
                             :formatter="courseTime">
                     </el-table-column>
                     <el-table-column
-                            label="课程状态"
+                            label="学生状态"
                             prop="state"
                             :formatter="courseState">
                     </el-table-column>
-
+                    <el-table-column
+                            label="审核状态"
+                            prop="state"
+                            :formatter="courseState">
+                    </el-table-column>
                     <el-table-column
                             align="right">
                         <template slot="header" slot-scope="scope">
@@ -42,14 +46,10 @@
                             <el-button
                                     size="mini"
                                     type="danger"
-                                    @click="changCourse(scope.$index, scope.row)">编辑课程信息
+                                    @click="changCourse(scope.$index, scope.row)">更改审批状态
                             </el-button>
 
-                            <el-button
-                                    size="mini"
-                                    type="danger"
-                                    @click="changeCourseState(scope.$index, scope.row)">更改课程状态
-                            </el-button>
+
                         </template>
                     </el-table-column>
                 </el-table>
