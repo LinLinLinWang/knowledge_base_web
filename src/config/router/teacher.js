@@ -11,32 +11,43 @@ const teacherRouter = {
             path: '/createClass',
             component: resolve => require(['../../components/views/teacher/CreateClass.vue'], resolve),
             meta: {
-                title: '创建班级',
+                title: '班级维护',
                 icon: '班级'
             }
         },
         {
-            path: '/auditClass',
-            component: resolve => require(['../../components/views/Dashboard.vue'], resolve),
+            path: '/showCreatedClass',
+            component: resolve => require(['../../components/views/teacher/ShowCreatedClass.vue'], resolve),
             meta: {
-                title: '修改班级',
-                icon: '班级管理'
+                title: '课程维护',
+                icon: '课程'
             }
         },
-        {
-            path: '/createCourse',
-            component: resolve => require(['../../components/views/Dashboard.vue'], resolve),
-            meta: {
-                title: '创建课程',
-                icon: '班级管理'
-            }
-        },
+
         {
             path: '/auditCourse',
             component: resolve => require(['../../components/views/Dashboard.vue'], resolve),
             meta: {
-                title: '修改课程',
-                icon: '班级管理'
+                title: '考勤管理',
+                icon: '考勤'
+            }
+        }, {
+            path: '/auditCourse',
+            component: resolve => require(['../../components/views/Dashboard.vue'], resolve),
+            meta: {
+                title: '人员管理',
+                icon: '加入班级'
+            }
+        },
+        {
+            path: '/showCourseByCid',
+            name: 'showCourse',
+            hidden: true,
+
+            component: resolve => require(['../../components/views/teacher/ShowCreateCourse.vue'], resolve),
+            meta: {
+                title: '按班级管理课程',
+
             }
         },
     ]
