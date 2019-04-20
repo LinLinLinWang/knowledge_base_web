@@ -458,14 +458,12 @@
     }
 
     .ms-login {
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        width: 410px;
-        margin: -190px 0 0 -175px;
+        max-width: 410px;
+        margin: 0 auto;
         border-radius: 5px;
         background: rgba(255, 255, 255, 0.3);
         overflow: hidden;
+        transform: translate(0, 50%);
     }
 
     .ms-content {
