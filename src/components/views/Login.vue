@@ -206,6 +206,9 @@
                     case 'electron':
                         this.UserTypeEnv = 3;
                         return;
+                    default:
+                        this.UserTypeEnv = 1;
+                        return;
                 }
             },
             //获取登录验证码
