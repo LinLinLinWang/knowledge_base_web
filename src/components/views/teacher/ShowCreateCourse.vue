@@ -180,7 +180,6 @@
             },
             courseTime(row) {
                 switch (row.cday) {
-
                     case 1:
                         return "周一";
                     case 2:
@@ -195,8 +194,6 @@
                         return "周六";
                     case 7 :
                         return "周日";
-
-
                 }
             },
             courseState(row) {
