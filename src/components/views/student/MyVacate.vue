@@ -125,7 +125,7 @@
                 })
             },
             showDetails(index, row) {
-                this.$router.push({path: '/showVacateDetails', query: {vid: row.vid}});
+                this.$router.push({name: 'showVacateDetails', params: {vid: row.vid}});
             }
         },
     }

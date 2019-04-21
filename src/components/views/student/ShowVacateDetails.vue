@@ -53,7 +53,7 @@
 </template>
 <script>
     export default {
-        name: "MyVacate",
+        name: "showVacateDetails",
         data() {
             return {
                 vacate: {
@@ -95,7 +95,14 @@
                 },
             };
         },
-        created() {
+        watch: {
+            '$route'(to, from) { //监听路由是否变化
+                if (this.$route.params.vid) {
+                    this.getDetails();
+                }
+            }
+        },
+        mounted() {
             this.getDetails();
         },
         methods: {
@@ -104,7 +111,7 @@
                     method: 'POST',
                     url: '/vacate/alterVacate',
                     data: {
-                        vid: this.$route.query.vid,
+                        vid: this.$route.params.vid,
                         vreason: this.vacate.vname,
                         vdatetimeBegin: this.vacate.vtime[0],
                         vdatetimeEnd: this.vacate.vtime[1],
@@ -125,7 +132,7 @@
                     method: 'POST',
                     url: '/vacate/getDetails',
                     data: {
-                        vid: this.$route.query.vid,
+                        vid: this.$route.params.vid,
                     }
                 }).then(response => {
                     let datajson = JSON.parse(response.data.data);
