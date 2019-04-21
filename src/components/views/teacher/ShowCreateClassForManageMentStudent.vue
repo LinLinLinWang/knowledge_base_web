@@ -36,7 +36,7 @@
 
                             <el-button
                                     size="mini"
-                                    type="danger"
+                                    type="primary"
                                     @click="handleDelete(scope.$index, scope.row)">查看学生
                             </el-button>
 

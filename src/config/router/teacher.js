@@ -42,7 +42,7 @@ const teacherRouter = {
 
         {
             path: '/vacateManagement',
-            component: resolve => require(['../../components/views/Dashboard.vue'], resolve),
+            component: resolve => require(['../../components/views/teacher/ShowRoughVacate.vue'], resolve),
             meta: {
                 title: '请假管理',
                 icon: '课程'

@@ -4,25 +4,33 @@
             <el-tab-pane>
                 <span slot="label" class="tabs-span">
                     <svg-icon icon-class="我的班级"/>
-                    我创建的班级
+                      <h style="color: black">   未审批的请假</h>
                 </span>
                 <el-table
                         :data="tableData"
                         style="width: 100%">
 
                     <el-table-column
-                            label="班级号"
-                            prop="cid">
+                            label="请假编号"
+                            prop="vid">
+                    </el-table-column>
+
+                    <el-table-column
+                            label="请假班级名"
+                            prop="cname"
+                            >
                     </el-table-column>
                     <el-table-column
-                            label="班级名"
-                            prop="cname">
+                            label="学生id"
+                            prop="uid"
+                           >
                     </el-table-column>
                     <el-table-column
-                            label="班级状态"
-                            prop="cstate"
-                            :formatter="statedirection">
+                            label="学生名"
+                            prop="uname"
+                           >
                     </el-table-column>
+
 
                     <el-table-column
                             align="right">
@@ -37,14 +45,10 @@
                             <el-button
                                     size="mini"
                                     type="primary"
-                                    @click="handleDelete(scope.$index, scope.row)">编辑班级
+                                    @click="handleDelete(scope.$index, scope.row)">查看详情
                             </el-button>
 
-                            <el-button
-                                    size="mini"
-                                    type="primary"
-                                    @click="addCourse(scope.$index, scope.row)">添加课程
-                            </el-button>
+
                         </template>
                     </el-table-column>
                 </el-table>
@@ -52,18 +56,108 @@
             <el-tab-pane>
                 <span slot="label" class="tabs-span">
                     <svg-icon icon-class="创建班级"/>
-                    创建班级
+
+                       <h style="color: red">   已拒绝的请假</h>
                 </span>
 
-                <el-form :inline="true" :model="formInline" class="demo-form-inline">
-                    <el-form-item label="班级名">
-                        <el-input v-model="formInline.name" placeholder="新建班级名字"></el-input>
-                    </el-form-item>
+                <el-table
+                        :data="tableData1"
+                        style="width: 100%">
 
-                    <el-form-item>
-                        <el-button type="primary" @click="createClass()">创建新班级</el-button>
-                    </el-form-item>
-                </el-form>
+                    <el-table-column
+                            label="请假编号"
+                            prop="vid">
+                    </el-table-column>
+
+                    <el-table-column
+                            label="请假班级名"
+                            prop="cname"
+                            >
+                    </el-table-column>
+                    <el-table-column
+                            label="学生id"
+                            prop="uid"
+                          >
+                    </el-table-column>
+                    <el-table-column
+                            label="学生名"
+                            prop="uname"
+                           >
+                    </el-table-column>
+
+
+                    <el-table-column
+                            align="right">
+                        <template slot="header" slot-scope="scope">
+                            <el-input
+                                    v-model="search"
+                                    size="mini"
+                                    placeholder="输入关键字搜索"/>
+                        </template>
+                        <template slot-scope="scope">
+
+                            <el-button
+                                    size="mini"
+                                    type="primary"
+                                    @click="handleDelete(scope.$index, scope.row)">查看详情
+                            </el-button>
+
+
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </el-tab-pane>
+            <el-tab-pane>
+                <span slot="label" class="tabs-span">
+                    <svg-icon icon-class="我的班级"/>
+                    <h style="color: deepskyblue"> 同意的请假</h>
+                </span>
+                <el-table
+                        :data="tableData2"
+                        style="width: 100%">
+
+                    <el-table-column
+                            label="请假编号"
+                            prop="vid">
+                    </el-table-column>
+
+                    <el-table-column
+                            label="请假班级名"
+                            prop="cname"
+                            >
+                    </el-table-column>
+                    <el-table-column
+                            label="学生id"
+                            prop="uid"
+                          >
+                    </el-table-column>
+                    <el-table-column
+                            label="学生名"
+                            prop="uname"
+                            >
+                    </el-table-column>
+
+
+                    <el-table-column
+                            align="right">
+                        <template slot="header" slot-scope="scope">
+                            <el-input
+                                    v-model="search"
+                                    size="mini"
+                                    placeholder="输入关键字搜索"/>
+                        </template>
+                        <template slot-scope="scope">
+
+                            <el-button
+                                    size="mini"
+                                    type="primary"
+                                    @click="handleDelete(scope.$index, scope.row)">查看详情
+                            </el-button>
+
+
+                        </template>
+                    </el-table-column>
+                </el-table>
             </el-tab-pane>
         </el-tabs>
         <el-dialog
@@ -106,6 +200,8 @@
         data() {
             return {
                 tableData: [],
+                tableData1: [],
+                tableData2: [],
                 search: '',
 
                 formInline: {
@@ -169,28 +265,50 @@
                 })
 
             },
-            statedirection(row) {
-                switch (row.cstate) {
 
-                    case 0:
-                        return "该班级未有课程安排";
-                    case 1:
-                        return "该班级存在课程";
-                    case 2:
-                        return "该班级已被冻结"
-                }
-            },
-
-            getAllClass() {
+// 已经申请的
+            getAllVacateStateIsZero() {
                 this.$axios({
                     method: 'POST',
-                    url: '/class/getTeacherClass',
-                    data: {}
+                    url: '/vacate/VacateList',
+                    data: {
+                        state:0
+                    }
                 }).then(response => {
                     var resdata = response.data;
                     var jsondata = eval('(' + resdata.data + ')');
 
                     this.tableData = jsondata;
+                })
+            },
+            //已经拒绝的
+            getAllVacateStateIsOne() {
+                this.$axios({
+                    method: 'POST',
+                    url: '/vacate/VacateList',
+                    data: {
+                        state:1
+                    }
+                }).then(response => {
+                    var resdata = response.data;
+                    var jsondata = eval('(' + resdata.data + ')');
+
+                    this.tableData1 = jsondata;
+                })
+            },
+            //深情通过的
+            getAllVacateStateIsTwo() {
+                this.$axios({
+                    method: 'POST',
+                    url: '/vacate/VacateList',
+                    data: {
+                        state:2
+                    }
+                }).then(response => {
+                    var resdata = response.data;
+                    var jsondata = eval('(' + resdata.data + ')');
+
+                    this.tableData2 = jsondata;
                 })
             },
             auditClass(cid, cname) {

@@ -41,7 +41,7 @@
 
                             <el-button
                                     size="mini"
-                                    type="danger"
+                                    type="primary"
                                     @click="changCourse(scope.$index, scope.row)">编辑课程信息
                             </el-button>
 
