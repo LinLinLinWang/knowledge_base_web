@@ -4,7 +4,7 @@
             <el-tab-pane>
                 <span slot="label" class="tabs-span">
                     <svg-icon icon-class="我的班级"/>
-                      <h style="color: black">   未审批的请假</h>
+                       未审批的请假
                 </span>
                 <el-table
                         :data="tableData"
@@ -45,8 +45,9 @@
                             <el-button
                                     size="mini"
                                     type="primary"
-                                    @click="handleDelete(scope.$index, scope.row)">查看详情
+                                    @click="showDetail(scope.$index, scope.row)">查看详情
                             </el-button>
+
 
 
                         </template>
@@ -57,7 +58,7 @@
                 <span slot="label" class="tabs-span">
                     <svg-icon icon-class="创建班级"/>
 
-                       <h style="color: red">   已拒绝的请假</h>
+                已拒绝的请假
                 </span>
 
                 <el-table
@@ -99,9 +100,8 @@
                             <el-button
                                     size="mini"
                                     type="primary"
-                                    @click="handleDelete(scope.$index, scope.row)">查看详情
+                                    @click="showDetail(scope.$index, scope.row)">查看详情
                             </el-button>
-
 
                         </template>
                     </el-table-column>
@@ -110,7 +110,7 @@
             <el-tab-pane>
                 <span slot="label" class="tabs-span">
                     <svg-icon icon-class="我的班级"/>
-                    <h style="color: deepskyblue"> 同意的请假</h>
+       同意的请假
                 </span>
                 <el-table
                         :data="tableData2"
@@ -151,8 +151,9 @@
                             <el-button
                                     size="mini"
                                     type="primary"
-                                    @click="handleDelete(scope.$index, scope.row)">查看详情
+                                    @click="showDetail(scope.$index, scope.row)">查看详情
                             </el-button>
+
 
 
                         </template>
@@ -160,35 +161,7 @@
                 </el-table>
             </el-tab-pane>
         </el-tabs>
-        <el-dialog
-                title="提示"
-                :visible.sync="dialogVisible"
-                width="30%"
-                :before-close="handleClose">
-            <el-form :model="ruleForm" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-                <el-form-item label="课程名称" prop="cname">
-                    <el-input v-model="ruleForm.cname"></el-input>
-                </el-form-item>
-                <el-form-item label="课程安排" prop="ctime">
-                    <el-select v-model="ruleForm.ctime" placeholder="请选择上课时间">
-                        <el-option label="周一" value="1"></el-option>
-                        <el-option label="周二" value="2"></el-option>
-                        <el-option label="周三" value="3"></el-option>
-                        <el-option label="周四" value="4"></el-option>
-                        <el-option label="周五" value="5"></el-option>
-                        <el-option label="周六" value="6"></el-option>
-                        <el-option label="周日" value="7"></el-option>
 
-                    </el-select>
-                </el-form-item>
-
-
-            </el-form>
-            <span slot="footer" class="dialog-footer">
-    <el-button @click="dialogVisible = false">取 消</el-button>
-    <el-button type="primary" @click="updateAddCourse">确 定</el-button>
-  </span>
-        </el-dialog>
     </div>
     <!-- 对话框-->
 
@@ -221,50 +194,13 @@
 
         created() {
 
-            this.getAllClass();
+            this.getAllVacateStateIsZero();
+            this.getAllVacateStateIsOne();
+            this.getAllVacateStateIsTwo();
         },
         methods: {
-            handleClose(done) {
-                this.$confirm('确认关闭？')
-                    .then(_ => {
 
-                        done();
-                    })
-                    .catch(_ => {
-                    });
 
-            },
-            updateAddCourse() {
-                this.$axios({
-                    method: 'POST',
-                    url: '/course/createCourse',
-                    data: {
-                        cname: this.ruleForm.cname,
-                        ctime: this.ruleForm.ctime,
-                        cid: this.cid
-                    }
-                }).then(response => {
-                    var resdata = response.data;
-
-                    if (resdata.state == 200) {
-
-                        this.$message({
-                            type: 'success',
-                            message: '添加成功'
-                        });
-                        this.dialogVisible = false;
-                        this.getAllClass();
-
-                    } else {
-                        this.$message({
-                            type: 'info',
-                            message: '添加失败'
-                        });
-
-                    }
-                })
-
-            },
 
 // 已经申请的
             getAllVacateStateIsZero() {
@@ -311,49 +247,7 @@
                     this.tableData2 = jsondata;
                 })
             },
-            auditClass(cid, cname) {
-                this.$axios({
-                    method: 'POST',
-                    url: '/class/changeClass',
-                    data: {
-                        cid: cid,
-                        name: cname
-                    }
-                }).then(response => {
-                    var resdata = response.data;
 
-                    if (resdata.state == '200') {
-
-                        return true;
-
-                    } else {
-                        return false;
-                    }
-
-                })
-            },
-
-            createClass() {
-
-                this.$axios({
-                    method: 'POST',
-                    url: '/class/createClass',
-                    data: {
-                        name: this.formInline.name,
-                    }
-                }).then(response => {
-                    var resdata = response.data;
-                    this.$alert(resdata.msg, '操作结果', {
-                        confirmButtonText: '确定', callback: function () {
-                            location.reload();
-
-                        }
-
-                    });
-
-
-                })
-            },
 
             handleDelete(index, row) {
 
@@ -400,11 +294,10 @@
                     });
                 });
             },
-            //添加课程
-            addCourse(index, row) {
+            //路由跳转
+            showDetail(index, row) {
 
-                this.dialogVisible = true;
-                this.cid = row.cid;
+                this.$router.push({name: 'showdetailVacate', params: {vid: row.vid}})
 
 
             }

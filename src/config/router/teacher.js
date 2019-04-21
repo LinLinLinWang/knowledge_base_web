@@ -66,7 +66,18 @@ const teacherRouter = {
 
             component: resolve => require(['../../components/views/teacher/StudentManage.vue'], resolve),
             meta: {
-                title: '按班级管理课程',
+                title: '按班级管理学生',
+
+            }
+        },
+        {
+            path: '/showdetailVacate',
+            name: 'showdetailVacate',
+            hidden: true,
+
+            component: resolve => require(['../../components/views/teacher/ShowDetailVacate.vue'], resolve),
+            meta: {
+                title: '按班级管理学生',
 
             }
         },
