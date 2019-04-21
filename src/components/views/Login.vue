@@ -196,6 +196,10 @@
         created() {
             this.CheckUserTypeEnv();
         },
+        mounted() {
+            // eslint-disable-next-line no-console
+            console.clear();
+        },
         methods: {
             //判断登录类型
             CheckUserTypeEnv() {
