@@ -210,6 +210,10 @@
             this.user = this.$store.state.user;
             this.loginGetLast();
         },
+        mounted(){
+            // eslint-disable-next-line no-console
+            console.clear();
+        },
         activated() {
             this.handleListener();
         },
