@@ -4,7 +4,7 @@
             <el-tab-pane>
                 <span slot="label" class="tabs-span">
                     <svg-icon icon-class="我的班级"/>
-                      <h style="color: black">   未审批的请假</h>
+                       未审批的请假
                 </span>
                 <el-table
                         :data="tableData"
@@ -38,14 +38,14 @@
                             <el-input
                                     v-model="search"
                                     size="mini"
-                                    placeholder="输入关键字搜索"></el-input>
+                                    placeholder="输入关键字搜索"/>
                         </template>
                         <template slot-scope="scope">
 
                             <el-button
                                     size="mini"
                                     type="primary"
-                                    @click="handleDelete(scope.$index, scope.row)">查看详情
+                                    @click="showDetail(scope.$index, scope.row)">查看详情
                             </el-button>
 
 
@@ -57,7 +57,7 @@
                 <span slot="label" class="tabs-span">
                     <svg-icon icon-class="创建班级"/>
 
-                       <h style="color: red">   已拒绝的请假</h>
+                已拒绝的请假
                 </span>
 
                 <el-table
@@ -92,7 +92,7 @@
                             <el-input
                                     v-model="search"
                                     size="mini"
-                                    placeholder="输入关键字搜索"></el-input>
+                                    placeholder="输入关键字搜索"/>
                         </template>
                         <template slot-scope="scope">
 
@@ -110,7 +110,7 @@
             <el-tab-pane>
                 <span slot="label" class="tabs-span">
                     <svg-icon icon-class="我的班级"/>
-                    <h style="color: deepskyblue"> 同意的请假</h>
+                    同意的请假
                 </span>
                 <el-table
                         :data="tableData2"
@@ -144,7 +144,7 @@
                             <el-input
                                     v-model="search"
                                     size="mini"
-                                    placeholder="输入关键字搜索"></el-input>
+                                    placeholder="输入关键字搜索"/>
                         </template>
                         <template slot-scope="scope">
 
@@ -163,7 +163,8 @@
         <el-dialog
                 title="提示"
                 :visible.sync="dialogVisible"
-                width="30%">
+                width="30%"
+                :before-close="handleClose">
             <el-form :model="ruleForm" ref="ruleForm" label-width="100px" class="demo-ruleForm">
                 <el-form-item label="课程名称" prop="cname">
                     <el-input v-model="ruleForm.cname"></el-input>
@@ -180,10 +181,12 @@
 
                     </el-select>
                 </el-form-item>
+
+
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible = false">取 消</el-button>
-                <el-button type="primary">确 定</el-button>
+                <el-button type="primary" @click="updateAddCourse">确 定</el-button>
             </span>
         </el-dialog>
     </div>
@@ -217,11 +220,21 @@
         },
 
         created() {
-            this.getAllVacateStateIsZero();
-            this.getAllVacateStateIsOne();
-            this.getAllVacateStateIsTwo();
+
+            this.getAllClass();
         },
         methods: {
+            handleClose(done) {
+                this.$confirm('确认关闭？')
+                    .then(() => {
+
+                        done();
+                    })
+                    .catch(() => {
+                    });
+
+            },
+
             // 已经申请的
             getAllVacateStateIsZero() {
                 this.$axios({
@@ -232,7 +245,9 @@
                     }
                 }).then(response => {
                     var resdata = response.data;
-                    this.tableData = eval('(' + resdata.data + ')');
+                    var jsondata = eval('(' + resdata.data + ')');
+
+                    this.tableData = jsondata;
                 })
             },
             //已经拒绝的
@@ -245,10 +260,12 @@
                     }
                 }).then(response => {
                     var resdata = response.data;
-                    this.tableData1 = eval('(' + resdata.data + ')');
+                    var jsondata = eval('(' + resdata.data + ')');
+
+                    this.tableData1 = jsondata;
                 })
             },
-            //申请已通过
+            //申请通过的
             getAllVacateStateIsTwo() {
                 this.$axios({
                     method: 'POST',
@@ -261,6 +278,42 @@
                     this.tableData2 = eval('(' + resdata.data + ')');
                 })
             },
+            auditClass(cid, cname) {
+                this.$axios({
+                    method: 'POST',
+                    url: '/class/changeClass',
+                    data: {
+                        cid: cid,
+                        name: cname
+                    }
+                }).then(response => {
+                    var resdata = response.data;
+                    return resdata.state === '200';
+                })
+            },
+
+            createClass() {
+
+                this.$axios({
+                    method: 'POST',
+                    url: '/class/createClass',
+                    data: {
+                        name: this.formInline.name,
+                    }
+                }).then(response => {
+                    var resdata = response.data;
+                    this.$alert(resdata.msg, '操作结果', {
+                        confirmButtonText: '确定', callback: function () {
+                            location.reload();
+
+                        }
+
+                    });
+
+
+                })
+            },
+
             handleDelete(index, row) {
 
                 this.$prompt('请输入班级新名称', '提示', {
@@ -279,9 +332,7 @@
                         }
                     }).then(response => {
                         var resdata = response.data;
-
-                        if (resdata.state == '200') {
-
+                        if (resdata.state === '200') {
                             this.$message({
                                 type: 'success',
                                 message: '修改后的名字是: ' + value
@@ -306,13 +357,9 @@
                     });
                 });
             },
-            //添加课程
-            addCourse(index, row) {
-
-                this.dialogVisible = true;
-                this.cid = row.cid;
-
-
+            //路由跳转
+            showDetail(index, row) {
+                this.$router.push({name: 'showdetailVacate', params: {vid: row.vid}})
             }
         },
 

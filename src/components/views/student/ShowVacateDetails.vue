@@ -102,7 +102,7 @@
                 }
             }
         },
-        mounted() {
+        created() {
             this.getDetails();
         },
         methods: {

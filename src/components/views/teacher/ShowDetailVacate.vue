@@ -26,11 +26,11 @@
                         <el-input v-model="vacate.vtype" :disabled="true"></el-input>
                     </el-form-item>
                     <el-form-item label="请假原因">
-                        <el-input v-model="vacate.vname"></el-input>
+                        <el-input v-model="vacate.vname":disabled="true"></el-input>
                     </el-form-item>
                     <el-form-item label="请假时间">
                         <el-date-picker
-                                v-model="vacate.vtime"
+                                v-model="vacate.vtime":disabled="true"
                                 type="datetimerange"
                                 range-separator="至"
                                 start-placeholder="开始日期"
@@ -38,7 +38,7 @@
                                 value-format="yyyy-MM-dd HH:mm"
                                 format="yyyy-MM-dd HH:mm"
                                 align="left"
-                                :picker-options="pickerOptions">
+                        >
                         </el-date-picker>
                     </el-form-item>
                     <el-form-item label="请假附件">
@@ -46,10 +46,10 @@
                     </el-form-item>
 
                     <el-form-item>
-                        <el-button type="danger" @click="submitInfo" :disabled="vacate.isDisable">拒绝该申请</el-button>
+                        <el-button type="danger" :disabled="vacate.isDisable">拒绝该申请</el-button>
                     </el-form-item>
                     <el-form-item>
-                        <el-button type="primary" @click="submitInfo" :disabled="vacate.isDisable">同意该申请</el-button>
+                        <el-button type="primary" :disabled="vacate.isDisable">同意该申请</el-button>
                     </el-form-item>
                 </el-form>
             </div>
@@ -63,6 +63,7 @@
         data() {
             return {
                 vacate: {
+                    vid: '',
                     cname: '',
                     vtype: '',
                     vname: '',
@@ -70,104 +71,62 @@
                     uname: '',
                     state: '',
                     stateType: '',
-                    isDisable: true,
+                    isDisable: '',
                 },
-                pickerOptions: {
-                    shortcuts: [{
-                        text: '最近一天',
-                        onClick(picker) {
-                            const end = new Date();
-                            const start = new Date();
-                            end.setTime(start.getTime() + 3600 * 1000 * 24);
-                            picker.$emit('pick', [start, end]);
-                        }
-                    }, {
-                        text: '最近一周',
-                        onClick(picker) {
-                            const end = new Date();
-                            const start = new Date();
-                            end.setTime(start.getTime() + 3600 * 1000 * 24 * 7);
-                            picker.$emit('pick', [start, end]);
-                        }
-                    }, {
-                        text: '最近一个月',
-                        onClick(picker) {
-                            const end = new Date();
-                            const start = new Date();
-                            end.setTime(start.getTime() + 3600 * 1000 * 24 * 30);
-                            picker.$emit('pick', [start, end]);
-                        }
-                    }]
-                },
+                vsid: ''
+
             };
         },
+        watch: {
+            '$route'(to, from) { //监听路由是否变化
+
+                if (this.$route.params.vid) {
+                    this.getDetails();
+                }
+            }
+        },
         created() {
+
+
             this.getDetails();
+
         },
         methods: {
-            submitInfo() {
-                this.$axios({
-                    method: 'POST',
-                    url: '/vacate/alterVacate',
-                    data: {
-                        vid: this.$route.query.vid,
-                        vreason: this.vacate.vname,
-                        vdatetimeBegin: this.vacate.vtime[0],
-                        vdatetimeEnd: this.vacate.vtime[1],
-                    },
-                }).then(response => {
-                    var resdata = response.data;
-                    if (resdata.state === "200") {
-                        this.$router.push('/myVacate');
-                    } else {
-                        this.$alert(resdata.msg, '操作结果', {
-                            confirmButtonText: '确定',
-                        });
-                    }
-                });
-            },
             getDetails() {
+
                 this.$axios({
                     method: 'POST',
-                    url: '/vacate/getDetails',
+                    url: '/vacate/getVacateDetailByVid',
                     data: {
-                        vid: this.$route.query.vid,
+                        vid: this.$route.params.vid,
                     }
                 }).then(response => {
                     let datajson = JSON.parse(response.data.data);
                     this.vacate.cname = datajson.cname;
                     this.vacate.vname = datajson.vname;
                     this.vacate.uname = datajson.uname;
-                    this.vacate.state = datajson.state + '';
+                    this.vacate.state = datajson.state;
                     this.vacate.vtime = datajson.vtime.split("至");
-                    this.vacate.isDisable = this.vacate.state !== '0';
                     switch (datajson.vtype) {
-                        case 0:
+                        case '0':
                             this.vacate.vtype = "事假";
                             break;
-                        case 1:
+                        case '1':
                             this.vacate.vtype = "病假";
                             break;
-                        case 2:
+                        case '2':
                             this.vacate.vtype = "其他";
                             break;
                     }
-                    switch (datajson.state) {
-                        case -1:
-                            this.vacate.state = "请假已取消";
-                            this.vacate.stateType = "warning";
+                    switch (datajson.vtype) {
+                        case '0':
+                            this.vacate.vtype = "事假";
                             break;
-                        case 0:
-                            this.vacate.state = "请假申请已发出";
-                            this.vacate.stateType = "info";
+                        case '1':
+                            this.vacate.vtype = "病假";
                             break;
-                        case 1:
-                            this.vacate.state = "请假未被批准";
-                            this.vacate.stateType = "error";
-                            break;
-                        case 2:
-                            this.vacate.state = "请假已被批准";
-                            this.vacate.stateType = "success";
+                        case '2':
+                            this.vacate.vtype = "其他";
                             break;
                     }
 
