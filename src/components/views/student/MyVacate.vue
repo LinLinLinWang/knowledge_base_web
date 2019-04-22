@@ -9,7 +9,7 @@
                 style="width: 100%">
 
             <el-table-column
-                    label="课程"
+                    label="请假课程"
                     prop="cname">
             </el-table-column>
             <el-table-column

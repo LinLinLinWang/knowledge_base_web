@@ -45,7 +45,7 @@ const teacherRouter = {
             component: resolve => require(['../../components/views/teacher/ShowRoughVacate.vue'], resolve),
             meta: {
                 title: '请假管理',
-                icon: '课程'
+                icon: '请假'
             }
         },
         {
@@ -55,7 +55,7 @@ const teacherRouter = {
 
             component: resolve => require(['../../components/views/teacher/ShowCreateCourse.vue'], resolve),
             meta: {
-                title: '按班级管理课程',
+                title: '课程信息',
 
             }
         },
@@ -63,21 +63,19 @@ const teacherRouter = {
             path: '/showStudentById',
             name: 'showStudentById',
             hidden: true,
-
             component: resolve => require(['../../components/views/teacher/StudentManage.vue'], resolve),
             meta: {
-                title: '按班级管理学生',
+                title: '学生信息',
 
             }
         },
         {
-            path: '/showdetailVacate',
-            name: 'showdetailVacate',
+            path: '/showDetailVacate',
+            name: 'showDetailVacate',
             hidden: true,
-
             component: resolve => require(['../../components/views/teacher/ShowDetailVacate.vue'], resolve),
             meta: {
-                title: '按班级管理学生',
+                title: '请假申请详情',
 
             }
         },

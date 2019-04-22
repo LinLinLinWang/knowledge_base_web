@@ -23,8 +23,6 @@ Vue.prototype.$axios = axios;
 //启用浏览器的devtools拓展
 Vue.config.devtools = true;
 
-console.log(process.env.VUE_APP_LOGINTYPE);
-
 new Vue({
     store,
     axios,

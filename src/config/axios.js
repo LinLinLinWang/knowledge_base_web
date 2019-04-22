@@ -20,7 +20,6 @@ axios.interceptors.request.use(
 // http response 拦截器
 axios.interceptors.response.use(
     response => {
-        // console.log("response" + response);
         return response;
     },
     error => {
@@ -28,7 +27,6 @@ axios.interceptors.response.use(
             store.commit(types.LOGOUT);
             router.replace({
                 path: '/login',
-                // query: {redirect: router.currentRoute.fullPath}
             });
             return Promise.reject('401')   // 返回接口返回的错误信息
         }

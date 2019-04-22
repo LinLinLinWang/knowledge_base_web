@@ -146,9 +146,6 @@
                 this.getJoinedClass();
                 this.getAllClass();
             },
-            handleDelete(index, row) {
-                console.log(index, row);
-            }
         },
     }
 </script>
