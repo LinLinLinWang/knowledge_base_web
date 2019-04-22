@@ -18,17 +18,17 @@
                     <el-table-column
                             label="请假班级名"
                             prop="cname"
-                            >
+                    >
                     </el-table-column>
                     <el-table-column
                             label="学生id"
                             prop="uid"
-                           >
+                    >
                     </el-table-column>
                     <el-table-column
                             label="学生名"
                             prop="uname"
-                           >
+                    >
                     </el-table-column>
 
 
@@ -38,7 +38,7 @@
                             <el-input
                                     v-model="search"
                                     size="mini"
-                                    placeholder="输入关键字搜索"/>
+                                    placeholder="输入关键字搜索"></el-input>
                         </template>
                         <template slot-scope="scope">
 
@@ -72,17 +72,17 @@
                     <el-table-column
                             label="请假班级名"
                             prop="cname"
-                            >
+                    >
                     </el-table-column>
                     <el-table-column
                             label="学生id"
                             prop="uid"
-                          >
+                    >
                     </el-table-column>
                     <el-table-column
                             label="学生名"
                             prop="uname"
-                           >
+                    >
                     </el-table-column>
 
 
@@ -92,7 +92,7 @@
                             <el-input
                                     v-model="search"
                                     size="mini"
-                                    placeholder="输入关键字搜索"/>
+                                    placeholder="输入关键字搜索"></el-input>
                         </template>
                         <template slot-scope="scope">
 
@@ -124,17 +124,17 @@
                     <el-table-column
                             label="请假班级名"
                             prop="cname"
-                            >
+                    >
                     </el-table-column>
                     <el-table-column
                             label="学生id"
                             prop="uid"
-                          >
+                    >
                     </el-table-column>
                     <el-table-column
                             label="学生名"
                             prop="uname"
-                            >
+                    >
                     </el-table-column>
 
 
@@ -144,7 +144,7 @@
                             <el-input
                                     v-model="search"
                                     size="mini"
-                                    placeholder="输入关键字搜索"/>
+                                    placeholder="输入关键字搜索"></el-input>
                         </template>
                         <template slot-scope="scope">
 
@@ -163,8 +163,7 @@
         <el-dialog
                 title="提示"
                 :visible.sync="dialogVisible"
-                width="30%"
-                :before-close="handleClose">
+                width="30%">
             <el-form :model="ruleForm" ref="ruleForm" label-width="100px" class="demo-ruleForm">
                 <el-form-item label="课程名称" prop="cname">
                     <el-input v-model="ruleForm.cname"></el-input>
@@ -181,13 +180,11 @@
 
                     </el-select>
                 </el-form-item>
-
-
             </el-form>
             <span slot="footer" class="dialog-footer">
-    <el-button @click="dialogVisible = false">取 消</el-button>
-    <el-button type="primary" @click="updateAddCourse">确 定</el-button>
-  </span>
+                <el-button @click="dialogVisible = false">取 消</el-button>
+                <el-button type="primary">确 定</el-button>
+            </span>
         </el-dialog>
     </div>
     <!-- 对话框-->
@@ -220,65 +217,22 @@
         },
 
         created() {
-
-            this.getAllClass();
+            this.getAllVacateStateIsZero();
+            this.getAllVacateStateIsOne();
+            this.getAllVacateStateIsTwo();
         },
         methods: {
-            handleClose(done) {
-                this.$confirm('确认关闭？')
-                    .then(_ => {
-
-                        done();
-                    })
-                    .catch(_ => {
-                    });
-
-            },
-            updateAddCourse() {
-                this.$axios({
-                    method: 'POST',
-                    url: '/course/createCourse',
-                    data: {
-                        cname: this.ruleForm.cname,
-                        ctime: this.ruleForm.ctime,
-                        cid: this.cid
-                    }
-                }).then(response => {
-                    var resdata = response.data;
-
-                    if (resdata.state == 200) {
-
-                        this.$message({
-                            type: 'success',
-                            message: '添加成功'
-                        });
-                        this.dialogVisible = false;
-                        this.getAllClass();
-
-                    } else {
-                        this.$message({
-                            type: 'info',
-                            message: '添加失败'
-                        });
-
-                    }
-                })
-
-            },
-
-// 已经申请的
+            // 已经申请的
             getAllVacateStateIsZero() {
                 this.$axios({
                     method: 'POST',
                     url: '/vacate/VacateList',
                     data: {
-                        state:0
+                        state: 0
                     }
                 }).then(response => {
                     var resdata = response.data;
-                    var jsondata = eval('(' + resdata.data + ')');
-
-                    this.tableData = jsondata;
+                    this.tableData = eval('(' + resdata.data + ')');
                 })
             },
             //已经拒绝的
@@ -287,74 +241,26 @@
                     method: 'POST',
                     url: '/vacate/VacateList',
                     data: {
-                        state:1
+                        state: 1
                     }
                 }).then(response => {
                     var resdata = response.data;
-                    var jsondata = eval('(' + resdata.data + ')');
-
-                    this.tableData1 = jsondata;
+                    this.tableData1 = eval('(' + resdata.data + ')');
                 })
             },
-            //深情通过的
+            //申请已通过
             getAllVacateStateIsTwo() {
                 this.$axios({
                     method: 'POST',
                     url: '/vacate/VacateList',
                     data: {
-                        state:2
+                        state: 2
                     }
                 }).then(response => {
                     var resdata = response.data;
-                    var jsondata = eval('(' + resdata.data + ')');
-
-                    this.tableData2 = jsondata;
+                    this.tableData2 = eval('(' + resdata.data + ')');
                 })
             },
-            auditClass(cid, cname) {
-                this.$axios({
-                    method: 'POST',
-                    url: '/class/changeClass',
-                    data: {
-                        cid: cid,
-                        name: cname
-                    }
-                }).then(response => {
-                    var resdata = response.data;
-
-                    if (resdata.state == '200') {
-
-                        return true;
-
-                    } else {
-                        return false;
-                    }
-
-                })
-            },
-
-            createClass() {
-
-                this.$axios({
-                    method: 'POST',
-                    url: '/class/createClass',
-                    data: {
-                        name: this.formInline.name,
-                    }
-                }).then(response => {
-                    var resdata = response.data;
-                    this.$alert(resdata.msg, '操作结果', {
-                        confirmButtonText: '确定', callback: function () {
-                            location.reload();
-
-                        }
-
-                    });
-
-
-                })
-            },
-
             handleDelete(index, row) {
 
                 this.$prompt('请输入班级新名称', '提示', {
