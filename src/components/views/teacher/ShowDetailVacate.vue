@@ -1,66 +1,94 @@
 <template>
     <div>
-        <div class="crumbs">
-            <el-breadcrumb separator="/">
-                <el-breadcrumb-item><i class="el-icon-lx-calendar"></i>请假详情</el-breadcrumb-item>
-            </el-breadcrumb>
-        </div>
-        <div class="container">
-            <div class="form-box">
-                <el-alert
-                        :title="vacate.state"
-                        :type="vacate.stateType"
-                        :closable="false"
-                        center
-                        show-icon>
-                </el-alert>
+        <el-container class="container">
+            <el-aside width="700px">
+                <el-row>
+                    <el-container>
+                        <div class="form-box">
+                            <el-alert
+                                    :title="vacate.state"
+                                    :type="vacate.stateType"
+                                    :closable="false"
+                                    center
+                                    show-icon>
+                            </el-alert>
+                            <br>
+                            <el-form label-width="80px">
+                                <el-form-item label="学生姓名">
+                                    <el-input v-model="vacate.uname" :disabled="true"></el-input>
+                                </el-form-item>
+                                <el-form-item label="请假班级">
+                                    <el-input v-model="vacate.classname" :disabled="true"></el-input>
+                                </el-form-item>
+                                <el-form-item label="请假课程">
+                                    <el-input v-model="vacate.coursename" :disabled="true"></el-input>
+                                </el-form-item>
+                                <el-form-item label="请假类型">
+                                    <el-input v-model="vacate.vtype" :disabled="true"></el-input>
+                                </el-form-item>
+                                <el-form-item label="请假原因">
+                                    <el-input v-model="vacate.vname" :disabled="true"></el-input>
+                                </el-form-item>
+                                <el-form-item label="请假时间">
+                                    <el-date-picker
+                                            v-model="vacate.vtime"
+                                            :disabled="true"
+                                            type="datetimerange"
+                                            range-separator="至"
+                                            start-placeholder="开始日期"
+                                            end-placeholder="结束日期"
+                                            value-format="yyyy-MM-dd HH:mm"
+                                            format="yyyy-MM-dd HH:mm"
+                                            align="left"
+                                    >
+                                    </el-date-picker>
+                                </el-form-item>
+
+
+                                <el-form-item label="审批备注">
+                                    <el-input v-model="vacate.remark"
+                                              :disabled="vacate.isDisable"></el-input>
+                                </el-form-item>
+                                <el-form-item>
+                                    <el-button type="primary" :disabled="vacate.isDisable"
+                                               @click="vapply(2)">同意该申请
+                                    </el-button>
+                                    <el-button type="danger" :disabled="vacate.isDisable"
+                                               @click="vapply(1)">拒绝该申请
+                                    </el-button>
+                                </el-form-item>
+                            </el-form>
+
+
+                        </div>
+                    </el-container>
+                </el-row>
+            </el-aside>
+            <el-main>
+                <el-row>
+                    <el-col :span="6" :offset="8">
+                        <el-button type="success" round>打包下载附件</el-button>
+                    </el-col>
+                </el-row>
                 <br>
-                <el-form label-width="80px">
-                    <el-form-item label="学生姓名">
-                        <el-input v-model="vacate.uname" :disabled="true"></el-input>
-                    </el-form-item>
-                    <el-form-item label="请假班级">
-                        <el-input v-model="vacate.classname" :disabled="true"></el-input>
-                    </el-form-item>
-                    <el-form-item label="请假课程">
-                        <el-input v-model="vacate.coursename" :disabled="true"></el-input>
-                    </el-form-item>
-                    <el-form-item label="请假类型">
-                        <el-input v-model="vacate.vtype" :disabled="true"></el-input>
-                    </el-form-item>
-                    <el-form-item label="请假原因">
-                        <el-input v-model="vacate.vname" :disabled="true"></el-input>
-                    </el-form-item>
-                    <el-form-item label="请假时间">
-                        <el-date-picker
-                                v-model="vacate.vtime"
-                                :disabled="true"
-                                type="datetimerange"
-                                range-separator="至"
-                                start-placeholder="开始日期"
-                                end-placeholder="结束日期"
-                                value-format="yyyy-MM-dd HH:mm"
-                                format="yyyy-MM-dd HH:mm"
-                                align="left"
-                        >
-                        </el-date-picker>
-                    </el-form-item>
-                    <el-form-item label="请假附件">
-                        <el-button type="success" plain>下载附件</el-button>
-                    </el-form-item>
-
-
-                    <el-form-item label="审批备注">
-                        <el-input v-model="vacate.remark" :disabled="vacate.isDisable"></el-input>
-                    </el-form-item>
-                    <el-form-item>
-                        <el-button type="primary" :disabled="vacate.isDisable" @click="vapply(2)">同意该申请</el-button>
-                        <el-button type="danger" :disabled="vacate.isDisable" @click="vapply(1)">拒绝该申请</el-button>
-                    </el-form-item>
-                </el-form>
-            </div>
-        </div>
-
+                <el-row>
+                    <el-col :span="8" v-for="(o, index) in vfiles" :key="o" :offset="index > 0 ? 2 : 0">
+                        <el-card :body-style="{ padding: '0px' }">
+                            <!--                            <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"-->
+                            <!--                                 class="image">-->
+                            <svg-icon :icon-class="o.filetype"/>
+                            <div style="padding: 14px;">
+                                <span>o.filename</span>
+                                <div class="bottom clearfix">
+                                    <time class="time">{{ currentDate }}</time>
+                                    <el-button type="text" class="button">操作按钮</el-button>
+                                </div>
+                            </div>
+                        </el-card>
+                    </el-col>
+                </el-row>
+            </el-main>
+        </el-container>
     </div>
 </template>
 <script>
@@ -80,7 +108,8 @@
                     remark: '',
                     isDisable: '',
                 },
-
+                vfiles: [],
+                currentDate: new Date()
             };
         },
         watch: {
@@ -93,6 +122,7 @@
         },
         created() {
             this.getDetails();
+            this.getVacateDetail();
         },
         methods: {
             vapply(bstate) {
@@ -163,9 +193,55 @@
 
                 })
             },
+            getVacateFiles() {
+                this.$axios({
+                    method: 'POST',
+                    url: '/vacate/getVacateFile',
+                    data: {
+                        vid: this.$route.params.vid,
+                    }
+                }).then(response => {
+                    let datajson = JSON.parse(response.data.data);
+                    this.vfiles = datajson;
+                })
+            }
         }
     }
 </script>
 <style scoped>
+    .time {
+        font-size: 13px;
+        color: #999;
+    }
 
+    .bottom {
+        margin-top: 13px;
+        line-height: 12px;
+    }
+
+    .button {
+        padding: 0;
+        float: right;
+    }
+
+    .image {
+        width: 100%;
+        display: block;
+        /*max-width: 50px;*/
+        /*max-height: 80px;*/
+    }
+
+    .clearfix:before,
+    .clearfix:after {
+        display: table;
+        content: "";
+    }
+
+    .clearfix:after {
+        clear: both
+    }
+
+    .elcard {
+        width: 150px;
+    }
 </style>
