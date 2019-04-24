@@ -74,7 +74,7 @@
 
 <script>
     export default {
-        name: "MyVacate",
+        name: "NewVacate",
         data() {
             return {
                 //时间选择器快捷选项
@@ -205,10 +205,8 @@
                         }).then(response => {
                             var resdata = response.data;
                             if (resdata.state === "200" && havafile) {
-                                // this.uploadFiles();
                                 this.$refs.upload.submit();
                                 this.uploadFiles(resdata.vid);
-
                             } else if (resdata.state === "200") {
                                 this.$router.push('/myVacate');
                             } else {

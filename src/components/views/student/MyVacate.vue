@@ -66,6 +66,7 @@
 
 <script>
     export default {
+        name: "MyVacate",
         data() {
             return {
                 tableData: [],

@@ -46,6 +46,7 @@
 
 <script>
     export default {
+        name: "MyCourse",
         data() {
             return {
                 TableData: [],

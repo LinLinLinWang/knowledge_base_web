@@ -248,7 +248,7 @@
                     }
                 })
             },
-            //获取单个附件
+            //获取打包的附件
             getFiles() {
                 this.$axios({
                     method: 'POST',
@@ -275,42 +275,6 @@
     }
 </script>
 <style scoped>
-    .time {
-        font-size: 13px;
-        color: #999;
-    }
-
-    .bottom {
-        margin-top: 13px;
-        line-height: 12px;
-    }
-
-    /*.button {*/
-    /*    padding: 0;*/
-    /*    float: right;*/
-    /*}*/
-
-    .image {
-        width: 100%;
-        display: block;
-        /*max-width: 50px;*/
-        /*max-height: 80px;*/
-    }
-
-    .clearfix:before,
-    .clearfix:after {
-        display: table;
-        content: "";
-    }
-
-    .clearfix:after {
-        clear: both
-    }
-
-    .elcard {
-        width: 250px;
-    }
-
     .svg-icon {
         width: 40px;
         height: 40px;
