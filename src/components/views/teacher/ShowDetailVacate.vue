@@ -67,7 +67,8 @@
             <el-main>
                 <el-row>
                     <el-col :span="6" :offset="8">
-                        <el-button :disabled="vfilesbtn" :type="vfilesbtntype" round>{{vfilesmsg}}</el-button>
+                        <el-button :disabled="vfilesbtn" :type="vfilesbtntype" round @click="getFiles">{{vfilesmsg}}
+                        </el-button>
                     </el-col>
                 </el-row>
                 <br>
@@ -221,7 +222,6 @@
                         this.vfilesbtntype = 'info';
                     } else {
                         this.vfiles = JSON.parse(response.data.data);
-                        console.log(this.vfiles)
                     }
                 })
             },
@@ -241,6 +241,29 @@
                     reader.onload = (e) => {
                         const a = document.createElement('a');
                         a.download = filename;
+                        a.href = e.target.result;
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                    }
+                })
+            },
+            //获取单个附件
+            getFiles() {
+                this.$axios({
+                    method: 'POST',
+                    url: '/vacate/getFiles',
+                    data: {
+                        vid: this.$route.params.vid,
+                    },
+                    responseType: 'blob'
+                }).then(response => {
+                    const blob = response.data;
+                    const reader = new FileReader();
+                    reader.readAsDataURL(blob);
+                    reader.onload = (e) => {
+                        const a = document.createElement('a');
+                        a.download = this.vfiles[0].filename + "等文件.zip";
                         a.href = e.target.result;
                         document.body.appendChild(a);
                         a.click();
