@@ -67,23 +67,26 @@
             <el-main>
                 <el-row>
                     <el-col :span="6" :offset="8">
-                        <el-button type="success" round>打包下载附件</el-button>
+                        <el-button :disabled="vfilesbtn" :type="vfilesbtntype" round>{{vfilesmsg}}</el-button>
                     </el-col>
                 </el-row>
                 <br>
                 <el-row>
-                    <el-col :span="8" v-for="(o, index) in vfiles" :key="o" :offset="index > 0 ? 2 : 0">
-                        <el-card :body-style="{ padding: '0px' }">
-                            <!--                            <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"-->
-                            <!--                                 class="image">-->
-                            <svg-icon :icon-class="o.filetype"/>
-                            <div style="padding: 14px;">
-                                <span>o.filename</span>
-                                <div class="bottom clearfix">
-                                    <time class="time">{{ currentDate }}</time>
-                                    <el-button type="text" class="button">操作按钮</el-button>
+                    <el-col :span="20" v-for="vfile in vfiles" :key="vfile.vfid">
+                        <el-card :body-style="{ padding: '5px' }">
+                            <el-row style="padding: 14px;">
+                                <el-col :span="2">
+                                    <svg-icon :icon-class="vfile.filetype"/>
+                                </el-col>
+                                <el-col :span="18">
+                                    <span>{{vfile.filename}}</span>
+                                </el-col>
+                                <div style="text-align: right">
+                                    <el-button type="primary" class="button"
+                                               @click="getFile(vfile.vfid,vfile.filename)">下载
+                                    </el-button>
                                 </div>
-                            </div>
+                            </el-row>
                         </el-card>
                     </el-col>
                 </el-row>
@@ -109,20 +112,29 @@
                     isDisable: '',
                 },
                 vfiles: [],
-                currentDate: new Date()
+                vfilesbtn: false,
+                vfilesmsg: '打包下载附件',
+                vfilesbtntype: 'primary',
             };
         },
         watch: {
             '$route'(to, from) {
                 //监听路由变化
-                if (this.$route.params.vid) {
+                if (this.$route.params.vid == null) {
+                    this.$router.push('/vacateManagement');
+                } else {
                     this.getDetails();
+                    this.getVacateFiles();
                 }
             }
         },
         created() {
-            this.getDetails();
-            this.getVacateDetail();
+            if (this.$route.params.vid == null) {
+                this.$router.push('/vacateManagement');
+            } else {
+                this.getDetails();
+                this.getVacateFiles();
+            }
         },
         methods: {
             vapply(bstate) {
@@ -193,6 +205,7 @@
 
                 })
             },
+            //获取附件信息
             getVacateFiles() {
                 this.$axios({
                     method: 'POST',
@@ -201,8 +214,38 @@
                         vid: this.$route.params.vid,
                     }
                 }).then(response => {
-                    let datajson = JSON.parse(response.data.data);
-                    this.vfiles = datajson;
+                    //是否有附件
+                    if (response.data.state === '400') {
+                        this.vfilesbtn = true;
+                        this.vfilesmsg = "无附件";
+                        this.vfilesbtntype = 'info';
+                    } else {
+                        this.vfiles = JSON.parse(response.data.data);
+                        console.log(this.vfiles)
+                    }
+                })
+            },
+            //获取单个附件
+            getFile(vfid, filename) {
+                this.$axios({
+                    method: 'POST',
+                    url: '/vacate/getFile',
+                    data: {
+                        vfid: vfid,
+                    },
+                    responseType: 'blob'
+                }).then(response => {
+                    const blob = response.data;
+                    const reader = new FileReader();
+                    reader.readAsDataURL(blob);
+                    reader.onload = (e) => {
+                        const a = document.createElement('a');
+                        a.download = filename;
+                        a.href = e.target.result;
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                    }
                 })
             }
         }
@@ -219,10 +262,10 @@
         line-height: 12px;
     }
 
-    .button {
-        padding: 0;
-        float: right;
-    }
+    /*.button {*/
+    /*    padding: 0;*/
+    /*    float: right;*/
+    /*}*/
 
     .image {
         width: 100%;
@@ -242,6 +285,11 @@
     }
 
     .elcard {
-        width: 150px;
+        width: 250px;
+    }
+
+    .svg-icon {
+        width: 40px;
+        height: 40px;
     }
 </style>
