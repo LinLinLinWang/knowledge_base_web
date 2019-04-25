@@ -2,10 +2,6 @@
     <div style="background-color: white">
         <el-tabs tab-position="top" :stretch="true">
             <el-tab-pane>
-                <span slot="label" class="tabs-span">
-                    <svg-icon icon-class="我的班级"/>
-                    我创建的班级
-                </span>
                 <el-table
                         :data="tableData"
                         style="width: 100%">
@@ -37,7 +33,7 @@
                             <el-button
                                     size="mini"
                                     type="primary"
-                                    @click="handleDelete(scope.$index, scope.row)">查看课程
+                                    @click="showCourse(scope.$index, scope.row)">查看课程
                             </el-button>
 
                         </template>
@@ -68,9 +64,7 @@
                 cid: ''
             }
         },
-
         created() {
-
             this.getAllClass();
         },
         methods: {
@@ -97,13 +91,9 @@
                         return "该班级已被冻结"
                 }
             },
-
-
-            handleDelete(index, row) {
+            showCourse(index, row) {
                 const that = this;
-
                 that.$router.push({name: 'showCourse', params: {cid: row.cid}})
-
             }
 
         }

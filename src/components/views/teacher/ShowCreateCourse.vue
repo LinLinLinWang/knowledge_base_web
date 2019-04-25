@@ -4,7 +4,7 @@
             <el-tab-pane>
                 <span slot="label" class="tabs-span">
                     <svg-icon icon-class="我的班级"/>
-                    该班级下的你所创建的课程
+                    该班级的课程
                 </span>
                 <el-table
                         :data="tableData"
