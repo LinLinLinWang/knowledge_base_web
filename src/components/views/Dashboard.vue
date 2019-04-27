@@ -1,118 +1,25 @@
 <template>
     <div>
-        <el-row :gutter="20">
-            <el-col :span="8">
-                <el-card shadow="hover" class="mgb20" style="height:265px;">
-                    <div class="user-info">
-                        <avatar :username=user.uname :size="100" color="#fff" background-color="#FFC107"></avatar>
-                        <div class="user-info-cont">
-                            <div class="user-info-name">{{user.uname}}</div>
-                            <div>{{role}}</div>
-                        </div>
-                    </div>
-                    <ul class="userlastinfoul">
-                        <div v-if="havelast">
-                            <li class="userlastinfoli">
-                                <div class="user-info-list">上次登录时间：<span>{{beforelogintime}}</span></div>
-                                <div class="user-info-list">上次登录地点：<span>{{beforeloginaddress}}</span></div>
-                                <div class="user-info-list" v-if="beforelogintype==='1'">上次登录类型：<span>网页端</span></div>
-                                <div class="user-info-list" v-else-if="beforelogintype==='2'">上次登录类型：<span>移动端</span>
-                                </div>
-                                <div class="user-info-list" v-else-if="beforelogintype==='3'">上次登录类型：<span>客户端</span>
-                                </div>
-                                <div class="user-info-list" v-else-if="beforelogintype==='4'">上次登录类型：<span>微信端</span>
-                                </div>
-                                <div class="user-info-list" v-else-if="beforelogintype==='4'">上次登录类型：<span>安卓端</span>
-                                </div>
-                            </li>
-                            <div style="float:left;width: 1px;height:80px; background: gray;"></div>
-                        </div>
-                        <li v-else>
-                            欢迎访问，这是您第一次登录
-                        </li>
-                        <li class="userlastinfoli">
-                            <div class="user-info-list">本次登录时间：<span>{{lastlogintime}}</span></div>
-                            <div class="user-info-list">本次登录地点：<span>{{lastloginaddress}}</span></div>
-                            <div class="user-info-list" v-if="lastlogintype==='1'">上次登录类型：<span>网页端</span></div>
-                            <div class="user-info-list" v-else-if="lastlogintype==='2'">上次登录类型：<span>移动端</span>
-                            </div>
-                            <div class="user-info-list" v-else-if="lastlogintype==='3'">上次登录类型：<span>客户端</span>
-                            </div>
-                            <div class="user-info-list" v-else-if="lastlogintype==='4'">上次登录类型：<span>微信端</span>
-                            </div>
-                            <div class="user-info-list" v-else-if="lastlogintype==='4'">上次登录类型：<span>安卓端</span>
-                            </div>
-                        </li>
-                    </ul>
-
-                </el-card>
-            </el-col>
-        </el-row>
-        <el-calendar v-model="calenderdate">
-        </el-calendar>
     </div>
 </template>
 
 <script>
-    import Avatar from 'vue-avatar'
 
     export default {
         name: 'dashboard',
         data() {
-            return {
-                calenderdate: new Date(),
-
-                //上次登录信息
-                beforelogintime: "",
-                beforeloginaddress: "",
-                beforelogintype: "",
-                //本次登录信息
-                lastlogintime: "",
-                lastloginaddress: "",
-                lastlogintype: "",
-                //是否为第一次登录
-                havelast: true,
-
-                user: null,
-            }
-        },
-        components: {
-            Avatar
-        },
-        computed: {
-            role() {
-                return this.user.type === 1 ? '老师' : '学生';
-            }
+            return {}
         },
         created() {
-            this.user = this.$store.state.user;
-            this.loginGetLast();
-        },
-        mounted() {
-            // console.clear();
+            this.checkuser();
         },
         methods: {
-            loginGetLast: function () {
-                //发送get请求
-                this.$axios({
-                    method: 'GET',
-                    url: '/usersLogin/getLast',
-                }).then(response => {
-                        var resdata = response.data;
-                        this.lastloginaddress = resdata.area;
-                        this.lastlogintime = resdata.time;
-                        this.lastlogintype = resdata.lasttype;
-
-                        //用户第一次登录
-                        if (resdata.isfirst === "true") {
-                            this.havelast = false;
-                        } else {
-                            this.beforelogintime = resdata.lasttime;
-                            this.beforeloginaddress = resdata.lastarea;
-                            this.beforelogintype = resdata.type;
-                        }
-                    },
-                )
+            checkuser() {
+                if (this.$store.state.user.type === 1) {
+                    this.$router.push({path: '/teacherDashboard'});
+                } else {
+                    this.$router.push({path: '/dashboardStudent'});
+                }
             }
         }
     }
@@ -121,126 +28,4 @@
 
 
 <style scoped>
-    .el-row {
-        margin-bottom: 20px;
-    }
-
-    .grid-content {
-        display: flex;
-        align-items: center;
-        height: 100px;
-    }
-
-    .grid-cont-right {
-        flex: 1;
-        text-align: center;
-        font-size: 14px;
-        color: #999;
-    }
-
-    .grid-num {
-        font-size: 30px;
-        font-weight: bold;
-    }
-
-    .grid-con-icon {
-        font-size: 50px;
-        width: 100px;
-        height: 100px;
-        text-align: center;
-        line-height: 100px;
-        color: #fff;
-    }
-
-    .grid-con-1 .grid-con-icon {
-        background: rgb(45, 140, 240);
-    }
-
-    .grid-con-1 .grid-num {
-        color: rgb(45, 140, 240);
-    }
-
-    .grid-con-2 .grid-con-icon {
-        background: rgb(100, 213, 114);
-    }
-
-    .grid-con-2 .grid-num {
-        color: rgb(45, 140, 240);
-    }
-
-    .grid-con-3 .grid-con-icon {
-        background: rgb(242, 94, 67);
-    }
-
-    .grid-con-3 .grid-num {
-        color: rgb(242, 94, 67);
-    }
-
-    .user-info {
-        display: flex;
-        align-items: center;
-        padding-bottom: 20px;
-        border-bottom: 2px solid #ccc;
-        margin-bottom: 20px;
-    }
-
-    .user-avator {
-        width: 120px;
-        height: 120px;
-        border-radius: 50%;
-    }
-
-    .user-info-cont {
-        padding-left: 50px;
-        flex: 1;
-        font-size: 14px;
-        color: #999;
-    }
-
-    .user-info-cont div:first-child {
-        font-size: 30px;
-        color: #222;
-    }
-
-    .user-info-list {
-        font-size: 14px;
-        color: #999;
-        line-height: 25px;
-    }
-
-    .userlastinfoul {
-
-        width: 1000px;
-    }
-
-    .userlastinfoli {
-        list-style: none;
-        display: inline-block;
-        margin: 3px;
-        margin-left: 5px;
-        float: left;
-        color: red;
-
-    }
-
-
-    .mgb20 {
-        margin-bottom: 20px;
-        width: 100%;
-    }
-
-    .todo-item {
-        font-size: 14px;
-    }
-
-    .todo-item-del {
-        text-decoration: line-through;
-        color: #999;
-    }
-
-    .schart {
-        width: 100%;
-        height: 300px;
-    }
-
 </style>

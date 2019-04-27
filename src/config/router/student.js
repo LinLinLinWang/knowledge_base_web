@@ -8,6 +8,22 @@ const studentRouter = {
     },
     children: [
         {
+            path: '/dashboardStudent',
+            meta: {
+                title: '系统首页',
+                icon: 'dashboard',
+            },
+            component: resolve => require(['../../components/views/student/StudentDashboard.vue'], resolve),
+        },
+        {
+            path: '/information',
+            component: resolve => require(['../../components/views/ChangeInfo.vue'], resolve),
+            meta: {
+                title: '信息维护',
+                icon: 'documentation',
+            }
+        },
+        {
             path: '/myClass',
             name: 'myClass',
             component: resolve => require(['../../components/views/student/MyClass.vue'], resolve),

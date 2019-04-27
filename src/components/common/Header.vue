@@ -56,7 +56,6 @@
         },
         computed: {
             getuname() {
-                // let user = eval("(" + localStorage.getItem('user') + ")");
                 let user = JSON.parse(localStorage.getItem('user'));
                 return this.$store.state.user ? this.$store.state.user.uname : user.uname;
             }

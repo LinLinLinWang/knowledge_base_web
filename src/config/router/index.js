@@ -17,19 +17,9 @@ export const constantRouterMap = [
         children: [
             {
                 path: '/dashboard',
-                meta: {
-                    title: '系统首页',
-                    icon: 'dashboard',
-                },
                 component: resolve => require(['../../components/views/Dashboard.vue'], resolve),
-            },
-            {
-                path: '/information',
-                component: resolve => require(['../../components/views/ChangeInfo.vue'], resolve),
-                meta: {
-                    title: '信息维护',
-                    icon: 'documentation',
-                }
+                hidden: true,
+                meta: {title: 'dashboard'}
             }
         ]
     },

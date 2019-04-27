@@ -8,6 +8,22 @@ const teacherRouter = {
     },
     children: [
         {
+            path: '/teacherDashboard',
+            meta: {
+                title: '系统首页',
+                icon: 'dashboard',
+            },
+            component: resolve => require(['../../components/views/teacher/TeacherDashboard.vue'], resolve),
+        },
+        {
+            path: '/information',
+            component: resolve => require(['../../components/views/ChangeInfo.vue'], resolve),
+            meta: {
+                title: '信息维护',
+                icon: 'documentation',
+            }
+        },
+        {
             path: '/createClass',
             component: resolve => require(['../../components/views/teacher/CreateClass.vue'], resolve),
             meta: {

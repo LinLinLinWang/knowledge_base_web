@@ -40,8 +40,15 @@
             bus.$on('tags', msg => {
                 let arr = [];
                 for (let i = 0, len = msg.length; i < len; i++) {
-                    if ('showVacateDetails' === msg[i].name)
-                        continue;
+
+                    switch (msg[i].name) {
+                        case 'dashboard':
+                            continue;
+                        case 'TeacherDashboard':
+                            continue;
+                        case 'StudentDashboard':
+                            continue;
+                    }
                     msg[i].name && arr.push(msg[i].name);
                 }
                 this.tagsList = arr;

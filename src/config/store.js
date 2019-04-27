@@ -100,5 +100,6 @@ export default new Vuex.Store({
         token: state => state.user.token,
         permission_routers: state => state.routers,
         addRouters: state => state.addRouters,
+        norouter: state => state.norouter,
     }
 })
