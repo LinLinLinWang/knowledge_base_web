@@ -42,7 +42,7 @@ const teacherRouter = {
 
         {
             path: '/rollCall',
-            component: resolve => require(['../../components/views/Dashboard.vue'], resolve),
+            component: resolve => require(['../../components/views/teacher/ShowRollCallClass.vue'], resolve),
             meta: {
                 title: '考勤管理',
                 icon: '考勤'
