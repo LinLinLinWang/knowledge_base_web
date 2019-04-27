@@ -7,8 +7,29 @@
                     我的考勤列表
                 </el-breadcrumb-item>
             </el-breadcrumb>
+
         </div>
         <div class="container">
+            <el-row :gutter="12" style="text-align: right;">
+                <el-col>
+                    <el-date-picker
+                            style="margin-right: 10px"
+                            v-model="selectdatetime"
+                            type="datetimerange"
+                            range-separator="至"
+                            start-placeholder="开始日期"
+                            end-placeholder="结束日期"
+                            value-format="yyyy-MM-dd HH:mm"
+                            format="yyyy-MM-dd HH:mm"
+                            align="left"
+                            :picker-options="pickerOptions"
+                            :default-time="['08:00:00', '21:30:00']">
+                    </el-date-picker>
+                    <el-button type="primary">搜索此时间内的记录</el-button>
+                    <el-button type="danger">清空条件</el-button>
+                </el-col>
+            </el-row>
+
             <el-table
                     :data="tableData.filter(data => !search || data.cname.toLowerCase().includes(search.toLowerCase()))"
                     style="width: 100%">
@@ -50,6 +71,15 @@
                     </template>
                 </el-table-column>
             </el-table>
+            <div class="pagination">
+                <el-pagination
+                        background
+                        @current-change="handleCurrentChange"
+                        layout="total, prev, pager, next, jumper"
+                        :total="datatotal"
+                >
+                </el-pagination>
+            </div>
         </div>
     </div>
 </template>
@@ -59,8 +89,12 @@
         name: 'basetable',
         data() {
             return {
-
+                //筛选日期
+                selectdatetime: '',
+                currentPage: 1,
+                search: '',
                 tableData: [],
+                datatotal: 0,
 
             }
         },
@@ -69,7 +103,17 @@
         },
         methods: {
             getData() {
+                this.$axios({
+                    method: 'POST',
+                    url: '/rollcalldetails/myAttendance',
+                    data: {
+                        currentPage: this.currentPage,
 
+                    }
+                }).then(response => {
+                    var resdata = response.data;
+                    this.tableData = eval('(' + resdata.data + ')');
+                })
             },
 
         }

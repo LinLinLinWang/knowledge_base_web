@@ -49,19 +49,23 @@
             </el-form-item>
 
             <el-form-item label="附件上传">
-                <el-upload
-                        ref="upload"
-                        class="upload"
-                        drag
-                        action="Need but not use"
-                        :on-change="OnChange"
-                        :http-request="uploadFile"
-                        :before-upload="beforeUpload"
-                        :auto-upload="false"
-                        multiple>
-                    <i class="el-icon-upload"></i>
-                    <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-                </el-upload>
+                <el-row>
+                    <el-col :span="12">
+                        <el-upload
+                                ref="upload"
+                                class="upload"
+                                drag
+                                action="Need but not use"
+                                :on-change="OnChange"
+                                :http-request="uploadFile"
+                                :before-upload="beforeUpload"
+                                :auto-upload="false"
+                                multiple>
+                            <i class="el-icon-upload"></i>
+                            <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+                        </el-upload>
+                    </el-col>
+                </el-row>
             </el-form-item>
 
             <el-form-item>
@@ -147,7 +151,6 @@
             //获取附件列表
             OnChange(file, fileList) {
                 this.fileList = fileList
-
             },
             //上传附件前的检查
             beforeUpload(file) {
