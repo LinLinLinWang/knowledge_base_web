@@ -30,18 +30,6 @@
                                     size="mini"
                                     placeholder="输入关键字搜索"/>
                         </template>
-                        <template slot-scope="scope">
-                            <!--                            <el-button-->
-                            <!--                                    size="mini"-->
-                            <!--                                    type="primary"-->
-                            <!--                                    @click="joinClassButton(scope.$index, scope.row)">加入-->
-                            <!--                            </el-button>-->
-                            <el-button
-                                    size="mini"
-                                    type="danger"
-                                    @click="handleDelete(scope.$index, scope.row)">查看
-                            </el-button>
-                        </template>
                     </el-table-column>
                 </el-table>
             </el-tab-pane>
@@ -79,11 +67,6 @@
                                     size="mini"
                                     type="primary"
                                     @click="joinClassButton(scope.$index, scope.row)">加入
-                            </el-button>
-                            <el-button
-                                    size="mini"
-                                    type="danger"
-                                    @click="handleDelete(scope.$index, scope.row)">查看
                             </el-button>
                         </template>
                     </el-table-column>

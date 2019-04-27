@@ -53,6 +53,10 @@
                         </el-row>
                     </el-container>
                 </el-card>
+                <br>
+                <el-card shadow="hover">
+                    <MyCourse></MyCourse>
+                </el-card>
             </el-col>
             <el-col :span="16">
                 <el-card shadow="hover">
@@ -66,6 +70,7 @@
 <script>
     import Avatar from 'vue-avatar';
     import MyVacate from './MyVacate';
+    import MyCourse from './MyCourse';
 
     export default {
         name: 'StudentDashboard',
@@ -89,7 +94,8 @@
         },
         components: {
             Avatar,
-            MyVacate
+            MyVacate,
+            MyCourse
         },
         computed: {
             role() {

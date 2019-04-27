@@ -42,12 +42,21 @@ const studentRouter = {
             }
         },
         {
-            path: '/myInfo',
-            name: 'myInfo',
-            component: resolve => require(['../../components/views/student/MyInfo.vue'], resolve),
+            path: '/MyVacateInfo',
+            name: 'MyVacateInfo',
+            component: resolve => require(['../../components/views/student/MyVacateInfo.vue'], resolve),
             meta: {
                 title: '我的考勤',
                 icon: '考勤'
+            }
+        },
+        {
+            path: '/MyVacateDetails',
+            name: 'MyVacateDetails',
+            component: resolve => require(['../../components/views/student/MyVacateDetails.vue'], resolve),
+            meta: {
+                title: '考勤列表',
+                icon: '考勤列表'
             }
         },
         {
