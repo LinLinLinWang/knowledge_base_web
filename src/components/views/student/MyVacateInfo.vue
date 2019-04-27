@@ -4,7 +4,7 @@
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>
                     <i class="el-icon-lx-cascades"></i>
-                    我的考勤信息
+                    我的信息
                 </el-breadcrumb-item>
             </el-breadcrumb>
         </div>
@@ -16,7 +16,7 @@
                             <i class="el-icon-lx-people grid-con-icon"></i>
                             <div class="grid-cont-right">
                                 <div class="grid-num">1234</div>
-                                <div>用户访问量</div>
+                                <div>我加入的班级</div>
                             </div>
                         </div>
                     </el-card>
@@ -27,7 +27,7 @@
                             <i class="el-icon-lx-notice grid-con-icon"></i>
                             <div class="grid-cont-right">
                                 <div class="grid-num">321</div>
-                                <div>系统消息</div>
+                                <div>我的课程</div>
                             </div>
                         </div>
                     </el-card>
@@ -38,11 +38,27 @@
                             <i class="el-icon-lx-goods grid-con-icon"></i>
                             <div class="grid-cont-right">
                                 <div class="grid-num">5000</div>
-                                <div>数量</div>
+                                <div>我的请假</div>
                             </div>
                         </div>
                     </el-card>
                 </el-col>
+
+            </el-row>
+
+            <el-row :gutter="20">
+                <el-col :span="8" v-for="info in infos" :key="info.name">
+                    <el-card shadow="hover" :body-style="{padding: '0px'}">
+                        <div class="grid-content grid-con-3">
+                            <i class="el-icon-lx-goods grid-con-icon"></i>
+                            <div class="grid-cont-right">
+                                <div class="grid-num">{{info.number}}</div>
+                                <div>{{info.name}}</div>
+                            </div>
+                        </div>
+                    </el-card>
+                </el-col>
+
             </el-row>
         </div>
     </div>
@@ -53,9 +69,7 @@
         name: 'basetable',
         data() {
             return {
-
-                tableData: [],
-
+                infos: [],
             }
         },
         created() {
@@ -63,7 +77,15 @@
         },
         methods: {
             getData() {
-
+                this.$axios({
+                    method: 'POST',
+                    url: '/rollcalldetails/myInfo',
+                    data: {}
+                }).then(response => {
+                    var resdata = response.data;
+                    this.infos = eval('(' + resdata.data + ')');
+                    console.log(this.infos);
+                })
             },
 
         }

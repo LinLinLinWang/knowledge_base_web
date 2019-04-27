@@ -46,7 +46,7 @@ const studentRouter = {
             name: 'MyVacateInfo',
             component: resolve => require(['../../components/views/student/MyVacateInfo.vue'], resolve),
             meta: {
-                title: '我的考勤',
+                title: '我的信息',
                 icon: '考勤'
             }
         },
