@@ -23,6 +23,7 @@ axios.interceptors.response.use(
         return response;
     },
     error => {
+        if(error.response)
         if (error.response.status === 401) {
             store.commit(types.LOGOUT);
             router.replace({
