@@ -105,7 +105,7 @@
             this.loginGetLast();
         },
         mounted() {
-            // console.clear();
+            console.clear();
         },
         methods: {
             loginGetLast: function () {
