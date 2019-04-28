@@ -131,10 +131,10 @@
             };
         },
         created() {
-            this.getJoinedClass();
+            this.getMyCourse();
         },
         methods: {
-            getJoinedClass() {
+            getMyCourse() {
                 this.$axios({
                     method: 'POST',
                     url: '/course/getMyCourse',
