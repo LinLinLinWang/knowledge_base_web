@@ -3,6 +3,18 @@
         <div class="container">
             <el-row :gutter="12" style="text-align: right;">
                 <el-col>
+                    <el-select
+                            v-model="course"
+                            filterable
+                            placeholder="请选择课程"
+                            no-data-text="您还没有课程">
+                        <el-option
+                                v-for="item in myCourse"
+                                :key="item.courseid"
+                                :label="item.cname"
+                                :value="item.courseid">
+                        </el-option>
+                    </el-select>
                     <el-date-picker
                             style="margin-right: 10px"
                             v-model="selectdatetime"
@@ -16,13 +28,13 @@
                             :picker-options="pickerOptions"
                             :default-time="['08:00:00', '21:30:00']">
                     </el-date-picker>
-                    <el-button type="primary">搜索此时间内的记录</el-button>
-                    <el-button type="danger">清空条件</el-button>
+                    <el-button type="primary" @click="getData">搜索符合条件的记录</el-button>
+                    <el-button type="danger" @click="resetSearchTime">清空条件</el-button>
                 </el-col>
             </el-row>
 
             <el-table
-                    :data="tableData.filter(data => !search || data.cname.toLowerCase().includes(search.toLowerCase()))"
+                    :data="tableData.filter(data => !search || data.coursename.toLowerCase().includes(search.toLowerCase()))"
                     style="width: 100%">
                 <el-table-column
                         label="班级名"
@@ -48,20 +60,13 @@
                 </el-table-column>
 
                 <el-table-column
+                        label="操作"
                         align="right">
-                    <template slot="header" slot-scope="scope">
-                        <el-input
-                                v-model="search"
-                                size="mini"
-                                placeholder="输入关键字搜索"/>
-                    </template>
-                    <template slot-scope="scope">
-                        <el-button
-                                size="mini"
-                                type="primary"
-                                @click="joinClassButton(scope.$index, scope.row)">加入
-                        </el-button>
-                    </template>
+                    <el-button
+                            size="mini"
+                            type="primary"
+                            @click="joinClassButton(scope.$index, scope.row)">??
+                    </el-button>
                 </el-table-column>
             </el-table>
             <div class="pagination">
@@ -84,7 +89,9 @@
         data() {
             return {
                 //筛选日期
-                selectdatetime: '',
+                selectdatetime: [],
+                //筛选课程
+                course: '',
                 //当前页码
                 currentPage: 1,
                 //搜索内容
@@ -93,6 +100,8 @@
                 tableData: [],
                 //总记录数
                 datatotal: 0,
+                //课程数据
+                myCourse: [],
                 //时间选择器快捷选项
                 pickerOptions: {
                     shortcuts: [{
@@ -126,8 +135,20 @@
         },
         created() {
             this.getData();
+            this.getMyCourse();
         },
         methods: {
+            //课程数据
+            getMyCourse() {
+                this.$axios({
+                    method: 'POST',
+                    url: '/course/getMyCourse',
+                    data: {}
+                }).then(response => {
+                    var resdata = response.data;
+                    this.myCourse = JSON.parse(resdata.data);
+                })
+            },
             //加载数据
             getData() {
                 this.$axios({
@@ -135,6 +156,9 @@
                     url: '/rollcalldetails/myAttendance',
                     data: {
                         currentPage: this.currentPage,
+                        datetimeBegin: this.selectdatetime[0],
+                        datetimeEnd: this.selectdatetime[1],
+                        course: this.course,
                     }
                 }).then(response => {
                     this.tableData = JSON.parse(response.data.data);
@@ -161,6 +185,10 @@
                 timestr = timestr.replace(/T/g, '   ');
                 return timestr;
             },
+            resetSearchTime() {
+                this.selectdatetime = [];
+                this.getData();
+            }
         }
     }
 
