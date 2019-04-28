@@ -68,7 +68,7 @@
                 <el-pagination
                         background
                         :current-page="currentPage"
-                        @current-change="getData"
+                        @current-change="handleCurrentChange"
                         layout="total, prev, pager, next, jumper"
                         :total="datatotal"
                 >
@@ -128,8 +128,8 @@
             this.getData();
         },
         methods: {
+            //加载数据
             getData() {
-                console.log(this.currentPage);
                 this.$axios({
                     method: 'POST',
                     url: '/rollcalldetails/myAttendance',
@@ -141,6 +141,12 @@
                     this.datatotal = JSON.parse(response.data.total);
                 })
             },
+            //加载当前页的数据
+            handleCurrentChange(nowpage) {
+                this.currentPage = nowpage;
+                this.getData();
+            },
+            //更改出勤的显示
             statedirection(row) {
                 switch (row.state) {
                     case 0:
@@ -149,6 +155,7 @@
                         return "缺勤";
                 }
             },
+            //更改考勤时间的格式
             rtimedirection(row) {
                 let timestr = row.rtime;
                 timestr = timestr.replace(/T/g, '   ');
