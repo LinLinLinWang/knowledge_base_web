@@ -95,6 +95,16 @@ const teacherRouter = {
 
             }
         },
+        {
+            path: '/Rocall',
+            name: 'RocallUseNormal',
+            hidden: true,
+            component: resolve => require(['../../components/views/teacher/RocallUserNormal.vue'], resolve),
+            meta: {
+                title: '常规点名',
+
+            }
+        },
     ]
 };
 

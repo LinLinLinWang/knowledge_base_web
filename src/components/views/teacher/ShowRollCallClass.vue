@@ -1,51 +1,7 @@
 <template xmlns:el-col="http://www.w3.org/1999/html">
     <div>
         <el-row :gutter="16">
-            <el-row :gutter="16">
-                <el-card :body-style="{ padding: '5px' }">
-                    <el-row style="padding: 14px;">
-
-                        <el-col :span="6" :offset="6">
-                            <svg-icon icon-class="天气"/>
-                            <span>天气</span>
-
-                        </el-col>
-                        <el-col :span="6">
-                            <svg-icon icon-class="周"/>
-                            <span>{{weekday}}</span>
-                        </el-col>
-                        <el-col :span="6">
-                            <svg-icon icon-class="日期"/>
-                            <span>{{date}}</span>
-                        </el-col>
-
-                    </el-row>
-                    <el-row :gutter="10">
-
-
-                        <el-col :span="2" :offset="2">
-                            <svg-icon v-bind:icon-class="weather"/>
-                            <span>{{weathername}}</span>
-
-                        </el-col>
-                        <el-col :span="2">
-                            <svg-icon icon-class="周"/>
-                            <span>{{temperature+"℃"}}</span>
-                        </el-col>
-                        <el-col :span="2">
-                            <svg-icon icon-class="日期"/>
-                            <span>{{humidity+"%"}}</span>
-
-                        </el-col>
-                        <el-col :span="2">
-                            <svg-icon icon-class="日期"/>
-                            <span>{{wind}}</span>
-                        </el-col>
-
-
-                    </el-row>
-                </el-card>
-            </el-row>
+             <WeatherAndWeekDayAndDate> </WeatherAndWeekDayAndDate>
             <el-row :gutter="16">
                 <el-col :span="16">
                     <el-row :gutter="24">
@@ -150,9 +106,10 @@
                 <el-form-item label="点名课程名字" prop="cname">
                     <el-input v-model="ruleForm.cname" :disabled=true></el-input>
                 </el-form-item>
-                <el-form-item label="课程安排" prop="ctime">
-                    <el-select v-model="ruleForm.ctime" placeholder="请选择点名方式" >
-                        <el-option :label="item.rtname" :value="item.rtid+''" v-for="item  in rolltype" v-bind:key="item.rtid"></el-option>
+                <el-form-item label="点名方式" prop="ctime">
+                    <el-select v-model="ruleForm.ctime" placeholder="请选择点名方式">
+                        <el-option :label="item.rtname" :value="item.rtid+''" v-for="item  in rolltype"
+                                   v-bind:key="item.rtid"></el-option>
 
                     </el-select>
                 </el-form-item>
@@ -169,12 +126,17 @@
 </template>
 
 <script>
+    import WeatherAndWeekDayAndDate from './WeatherAndWeekDayAndDate';
+
     export default {
         name: "ShowRollClallClass",
+        components: {
+            WeatherAndWeekDayAndDate
+        },
         data() {
             return {
                 //点名类型
-                rolltype:[],
+                rolltype: [],
                 courseid: '',//点名班级号
                 //对话框选择点名技术
                 dialogVisible: false,
@@ -242,7 +204,7 @@
                     data: {}
                 }).then(response => {
                     var jsondata = eval('(' + response.data.data + ')');
-                    this.rolltype=jsondata;
+                    this.rolltype = jsondata;
                     console.log(jsondata);
 
                 })
@@ -361,9 +323,19 @@
             //开始点名 //选择
             startRoll() {
                 //获取点名的课程
-                var courseid = this.courseid;
-                var rollcalltype = this.ruleForm.ctime;
-                alert(courseid + rollcalltype);
+
+                this.$router.push({
+                    name: 'RocallUseNormal',
+                    params: {
+                        courseid: this.courseid,
+                        rocalltype: this.ruleForm.ctime,
+                        coursename: this.ruleForm.cname,
+
+                        rocalldetail: this.rolltype[this.ruleForm.ctime].rtdescription
+
+                    }
+                })
+
 
             }
         }
