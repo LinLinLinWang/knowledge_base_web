@@ -83,6 +83,9 @@
         created() {
             this.getMyVacate();
         },
+        activated() {
+            this.getMyVacate();
+        },
         methods: {
             getMyVacate() {
                 this.$axios({

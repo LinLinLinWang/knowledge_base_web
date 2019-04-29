@@ -9,7 +9,7 @@
                     <el-option label="其他" value="2"></el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item label="请假时间" prop="vdatetime">
+            <el-form-item label="请假时间" prop="vdatetime" required>
                 <el-date-picker
                         v-model="ruleForm.vdatetime"
                         type="datetimerange"
@@ -19,6 +19,7 @@
                         value-format="yyyy-MM-dd HH:mm"
                         format="yyyy-MM-dd HH:mm"
                         align="left"
+                        :clearable="false"
                         :picker-options="pickerOptions"
                         :default-time="['08:00:00', '21:30:00']">
                 </el-date-picker>
@@ -112,7 +113,7 @@
                 ruleForm: {
                     vreason: '',
                     vcourse: [],
-                    vdatetime: new Date(),
+                    vdatetime: [],
                     vtype: '1',
                 },
                 formRules: {
@@ -191,6 +192,14 @@
                 xhr.send(data)
             },
             submitForm(formName) {
+                console.log(this.ruleForm.vdatetime)
+                if (this.ruleForm.vdatetime == null || this.ruleForm.vdatetime[0] == null || this.ruleForm.vdatetime[1] == null) {
+                    this.$alert('请选择请假日期', '', {
+                        confirmButtonText: '确定'
+                    });
+                    return false;
+                }
+
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         let havafile = this.fileList.length >= 1;
