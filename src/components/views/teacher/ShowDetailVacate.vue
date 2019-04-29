@@ -97,7 +97,7 @@
 </template>
 <script>
     export default {
-        name: "MyVacate",
+        name: "ShowDetailVacate",
         data() {
             return {
                 vacate: {
@@ -130,12 +130,9 @@
             }
         },
         created() {
-            if (this.$route.params.vid == null) {
-                this.$router.push('/vacateManagement');
-            } else {
-                this.getDetails();
-                this.getVacateFiles();
-            }
+            this.getDetails();
+            this.getVacateFiles();
+
         },
         methods: {
             vapply(bstate) {
