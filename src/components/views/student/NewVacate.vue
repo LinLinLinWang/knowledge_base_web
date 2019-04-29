@@ -136,12 +136,6 @@
         },
         methods: {
             getMyCourse() {
-                let end = new Date();
-                let start = new Date();
-                end.setTime(start.getTime() + 3600 * 1000 * 24);
-                this.ruleForm.vdatetime[0] = start;
-                this.ruleForm.vdatetime[1] = end;
-
                 this.$axios({
                     method: 'POST',
                     url: '/course/getMyCourse',
