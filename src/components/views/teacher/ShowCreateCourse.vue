@@ -196,6 +196,7 @@
                         return "周日";
                 }
             },
+
             courseState(row) {
                 switch (row.state) {
 
