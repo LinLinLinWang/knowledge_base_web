@@ -2,40 +2,25 @@
     <div>
         <el-row :gutter="16">
             <WeatherAndWeekDayAndDate></WeatherAndWeekDayAndDate>
-
-
         </el-row>
-
         <el-row>
             <el-row>
                 拖动滑条，按所需要出勤率 筛选未达标的学生
             </el-row>
-
-           <el-row>
-               <el-slider
-                       v-model="value"
-                       show-input
-                          @change="getAttendRateLessThanRate" >
-               </el-slider>
-           </el-row>
-
+            <el-row>
+                <el-slider
+                        v-model="value"
+                        show-input
+                        @change="getAttendRateLessThanRate">
+                </el-slider>
+            </el-row>
         </el-row>
- <el-row>
-
-
- </el-row>
-
         <el-row>
             <el-table
                     :data="tableData.filter(data => !search || data.uname.toLowerCase().includes(search.toLowerCase()))"
                     border
-
                     style="width: 100%">
 
-                <el-table-column
-                        label="学生账号"
-                        prop="uid">
-                </el-table-column>
                 <el-table-column
                         label="学生姓名"
                         prop="uname">
@@ -89,9 +74,8 @@
         name: "ShowRollCallHistory",
         data() {
             return {
-
-                search:'',
-                courseid:'',
+                search: '',
+                courseid: '',
                 tableData: [],
                 value: 60
             }
@@ -103,13 +87,13 @@
         },
         methods: {
             getAttendRateLessThanRate() {
-                console.log(this.value)
+                console.log(this.value);
                 this.$axios({
                     method: 'POST',
                     url: '/rollcall/getStudentRollCallRate',
                     data: {
-                        courseid:this.courseid,
-                        rate:this.value
+                        courseid: this.courseid,
+                        rate: this.value
 
                     }
                 }).then(response => {
