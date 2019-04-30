@@ -64,7 +64,52 @@
             </el-col>
 
             <el-col :span="6">
-                /请假的学生
+
+
+                <el-card :body-style="{ padding: '5px' }">
+                    <el-row>
+                        请假同学信息(点击左侧展开详情)
+                    </el-row>
+                    <el-row :gutter="16">
+
+                        <el-table
+                                :data="tableData1"
+                                style="width: 100%">
+                            <el-table-column type="expand">
+                                <template slot-scope="props">
+                                    <el-form label-position="left" inline class="demo-table-expand">
+                                        <el-form-item label="学生学号">
+                                            <span>{{ props.row.uid}}</span>
+                                        </el-form-item>
+                                        <el-form-item label="学生姓名">
+                                            <span>{{ props.row.uname}}</span>
+                                        </el-form-item>
+                                        <el-form-item label="学生手机号">
+                                            <span>{{ props.row.phone }}</span>
+                                        </el-form-item>
+                                        <el-form-item label="学生请假类型">
+                                            <span>{{showVtype(props.row.vtype)}}</span>
+                                        </el-form-item>
+                                        <el-form-item label="请假时间">
+                                            <span>{{ props.row.vtime }}</span>
+                                        </el-form-item>
+
+                                    </el-form>
+                                </template>
+                            </el-table-column>
+                            <el-table-column
+                                    label="学生姓名"
+                                    prop="uname">
+                            </el-table-column>
+                            <el-table-column
+                                    label="请假类型"
+                                    prop="vtype"
+                                    :formatter="showVtype">
+                            </el-table-column>
+                        </el-table>
+                    </el-row>
+                </el-card>
+
             </el-col>
         </el-row>
 
@@ -84,6 +129,8 @@
         },
         data() {
             return {
+
+                tableData1: [],
                 count: '',
                 tableData: [],
                 //按钮点名
@@ -96,6 +143,7 @@
             }
         },
         created() {
+
             //获取参数值
             this.courseid = this.$route.params.courseid,
                 this.rocalltype = this.$route.params.rocalltype,
@@ -103,13 +151,31 @@
                 this.rocalldetail = this.$route.params.rocalldetail
             //执行函数
             this.getCourseStudentWithoutVacate();
-
+            //获取请假的学生
+            this.getCourseStudentWhoVacate();
 
         },
         methods: {
+            //获取当前课程下的学生请假信息
+            getCourseStudentWhoVacate() {
+
+                this.$axios({
+                    method: 'POST',
+                    url: '/vacate/getCourseStudentWhoVacate',
+                    data: {
+                        courseid: this.courseid
+                    }
+                }).then(response => {
+                    var resdata = response.data;
+                    var jsondata = eval('(' + resdata.data + ')');
+
+                    this.tableData1 = jsondata;
+                })
+
+            },
             //学生状态
             studentState(row) {
-                if(row.state==null){
+                if (row.state == null) {
                     return "未请假";
                 }
                 switch (row.state) {
@@ -121,6 +187,39 @@
                         return "审批中";
                     case '1':
                         return "未批准";
+
+
+                }
+            },
+            //学生请假的类型
+            showVtype(row) {
+             if(row.vtype==undefined){
+
+                 switch (row) {
+
+
+                     case '0':
+                         return "事假";
+                     case '1':
+                         return "病假";
+                     case '2':
+                         return "其他";
+
+
+                 }
+             }
+
+
+
+                switch (row.vtype) {
+
+
+                    case '0':
+                        return "事假";
+                    case '1':
+                        return "病假";
+                    case '2':
+                        return "其他";
 
 
                 }

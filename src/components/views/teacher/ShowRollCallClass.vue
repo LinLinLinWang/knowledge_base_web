@@ -1,7 +1,7 @@
 <template xmlns:el-col="http://www.w3.org/1999/html">
     <div>
         <el-row :gutter="16">
-             <WeatherAndWeekDayAndDate> </WeatherAndWeekDayAndDate>
+            <WeatherAndWeekDayAndDate></WeatherAndWeekDayAndDate>
             <el-row :gutter="16">
                 <el-col :span="16">
                     <el-row :gutter="24">
@@ -58,6 +58,11 @@
                                                 size="mini"
                                                 type="primary"
                                                 @click="showRollWays(scope.$index, scope.row)">点名
+                                        </el-button>
+                                        <el-button
+                                                size="mini"
+                                                type="primary"
+                                                @click="showRollCallDetailByCourseId(scope.$index, scope.row)">查看考勤
                                         </el-button>
 
                                     </template>
@@ -195,6 +200,19 @@
 
         },
         methods: {
+            //查看考勤历史
+            showRollCallDetailByCourseId(index, row) {
+
+                this.$router.push({
+                    name: 'ShowRollCallHistory',
+                    params: {
+                        courseid: row.courseid,
+
+
+                    }
+                })
+
+            },
             //获取点名当时
             getRollType() {
 
@@ -298,7 +316,8 @@
                 })
 
 
-            }, snum_anum(row) {
+            },
+            snum_anum(row) {
                 return row.anum + "/" + row.snum;
             },
             showRollWays(index, row) {

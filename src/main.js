@@ -5,6 +5,7 @@ import axios from './config/axios'; //网络请求
 import router from './config/router'; //路由
 import './config/permission'; //权限验证
 import ELEMENT from 'element-ui'; //ui
+import VCharts from 'v-charts';//vcharts
 import './assets/css/icon.css'; //icon
 import './components/icon' // icon
 
@@ -16,6 +17,7 @@ Vue.config.productionTip = false;
 //     size: 'small'
 // });
 Vue.use(ELEMENT);
+Vue.use(VCharts);
 
 //注册全局变量
 Vue.prototype.$axios = axios;
