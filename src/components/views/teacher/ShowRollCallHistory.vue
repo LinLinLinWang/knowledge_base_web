@@ -78,32 +78,23 @@
 
 
                 chartData: {
-                    columns: ['出勤情况', '访问用户'],
+                    columns: ['a', 'b'],
                     rows: [
-                        {'出勤情况': '答到人数', '访问用户': this.attentnum},
-                        {'出勤情况': '请假人数', '访问用户': this.vacatenum},
-                        {'出勤情况': '逃课人数', '访问用户': this.notattentnum},
+                        {'a': '答到人数', 'b': 1},
+                        {'a': '请假人数', 'b': 1},
+                        {'a': '逃课人数', 'b': 1},
 
                     ]
                 }
             }
         },
-        beforeCreate() {
-            // this.getLatestRollDetail(1);
-
-
-
-        },
-
         created() {
             this.courseid = this.$route.params.courseid;
             this.getLatestRollDetail(1);
-
-
         },
         methods: {
             getLatestRollDetail(index_) {
-                if (index_ == 1) {
+                if (index_ === 1) {
                     //获取最近一次该课程出勤情况
                     //获取没有来的人的数目
 
@@ -116,16 +107,27 @@
                         }
                     }).then(response => {
                         var resdata = response.data;
-                        if (resdata.state == 200) {
+                        if (resdata.state === '200') {
                             this.$message({
                                 type: 'success',
                                 message: '获取最近一次点名记录成功'
                             });
 
+                            let datajson = JSON.parse(resdata.data);
+
                             this.index = this.index + 1;
-                            this.attentnum=resdata.data.attnum;
-                            this.vacatenum=resdata.data.vnum;
-                            this.notattentnum=resdata.data.notattnum;
+                            this.attentnum = resdata.data.attnum;
+
+                            this.chartData.rows[0].b = datajson.attnum;
+                            this.chartData.rows[1].b = datajson.vnum;
+                            this.chartData.rows[2].b = datajson.notattnum;
+
+                            console.log(resdata);
+                            console.log(datajson);
+                            console.log(this.chartData);
+
+                            this.vacatenum = resdata.data.vnum;
+                            this.notattentnum = resdata.data.notattnum;
 
 
                         } else {
