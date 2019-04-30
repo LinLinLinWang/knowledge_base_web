@@ -48,8 +48,8 @@
                                     placeholder="输入关键字搜索"/>
                         </template>
                         <template slot-scope="scope">
-                            <el-radio v-model="radio[scope.row.uid]" label="1">已到</el-radio>
-                            <el-radio v-model="radio[scope.row.uid]" label="2">未到</el-radio>
+                            <el-radio v-model="radio[scope.row.uid]" label="0">已到</el-radio>
+                            <el-radio v-model="radio[scope.row.uid]" label="1">未到</el-radio>
                         </template>
                     </el-table-column>
                 </el-table>

@@ -115,6 +115,16 @@ const teacherRouter = {
 
             }
         },
+        {
+            path: '/Rocall',
+            name: 'ShowPersoncalRollCall',
+            hidden: true,
+            component: resolve => require(['../../components/views/teacher/ShowPersoncalRollCall.vue'], resolve),
+            meta: {
+                title: '查看个人出勤历史',
+
+            }
+        },
     ]
 };
 

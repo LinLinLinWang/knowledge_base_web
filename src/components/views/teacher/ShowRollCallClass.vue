@@ -62,7 +62,7 @@
                                         <el-button
                                                 size="mini"
                                                 type="primary"
-                                                @click="showRollCallDetailByCourseId(scope.$index, scope.row)">查看考勤
+                                                @click="chooseCourseRollOrPerson(scope.$index, scope.row)">查看考勤
                                         </el-button>
 
                                     </template>
@@ -126,6 +126,18 @@
     <el-button type="primary" @click="startRoll">确 定</el-button>
   </span>
         </el-dialog>
+
+
+        <el-dialog
+                title="提示"
+                :visible.sync="dialogVisible_"
+                width="30%"
+                :before-close="handleClose">
+
+            <el-button type="primary" @click="showPersonaRollCall()">个人历史出勤</el-button>
+            <el-button type="primary" @click="showRollCallDetailByCourseId">课程历史出勤</el-button>
+
+        </el-dialog>
     </div>
 
 </template>
@@ -140,11 +152,14 @@
         },
         data() {
             return {
+                index: '',
+                row: '',
                 //点名类型
                 rolltype: [],
                 courseid: '',//点名班级号
                 //对话框选择点名技术
                 dialogVisible: false,
+                dialogVisible_: false,
                 ruleForm: {
                     cname: '',
                     ctime: ''
@@ -200,13 +215,31 @@
 
         },
         methods: {
-            //查看考勤历史
-            showRollCallDetailByCourseId(index, row) {
+            //查看个人
+            showPersonaRollCall() {
+                this.dialogVisible_=false;
+                this.$router.push({
+                    name: 'ShowPersoncalRollCall',
+                    params: {
+                        courseid: this.courseid,
 
+
+                    }
+                })
+
+
+            },
+            chooseCourseRollOrPerson(index, row) {
+                this.courseid = row.courseid;
+                this.dialogVisible_ = true;
+            },
+            //查看考勤历史
+            showRollCallDetailByCourseId() {
+                this.dialogVisible_ = false;
                 this.$router.push({
                     name: 'ShowRollCallHistory',
                     params: {
-                        courseid: row.courseid,
+                        courseid: this.courseid,
 
 
                     }
@@ -342,7 +375,7 @@
             //开始点名 //选择
             startRoll() {
                 //获取点名的课程
-
+                this.dialogVisible = false;
                 this.$router.push({
                     name: 'RocallUseNormal',
                     params: {
