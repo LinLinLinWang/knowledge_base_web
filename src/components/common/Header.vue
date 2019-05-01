@@ -20,7 +20,7 @@
                             <i class="el-icon-bell"></i>
                         </router-link>
                     </el-tooltip>
-                    <span class="btn-bell-badge" v-if="message"></span>
+                    <span class="btn-bell-badge" v-if="message>0"></span>
                 </div>
                 <!-- 用户头像 -->
                 <div class="user-avator">
@@ -74,7 +74,17 @@
                     data: {}
                 }).then(response => {
                     this.message = response.data.data;
+                    if (this.message > 0) {
+                        this.$notify({
+                            title: '消息通知',
+                            message: '您有' + this.message + '条新消息，请到右上角的消息中心中查看',
+                            offset: 100,
+                            type: 'warning'
+                        });
+                    }
                 })
+
+
             },
             //退出操作
             handleCommand(command) {
@@ -123,6 +133,7 @@
             if (document.body.clientWidth < 1500) {
                 this.collapseChage();
             }
+            setTimeout(this.getUnReadNum, 60000);
         }
     }
 </script>
