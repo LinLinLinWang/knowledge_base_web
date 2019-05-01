@@ -19,7 +19,14 @@ export const constantRouterMap = [
                 path: '/dashboard',
                 component: resolve => require(['../../components/views/Dashboard.vue'], resolve),
                 hidden: true,
-                meta: {title: 'dashboard'}
+                meta: {title: '概览'},
+            },
+            {
+                path: '/tabs',
+                hidden: true,
+                component: resolve => require(['../../components/views/Tabs.vue'], resolve),
+                meta: {title: '消息中心'}
+
             }
         ]
     },

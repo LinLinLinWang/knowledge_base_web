@@ -16,9 +16,9 @@
                 <!-- 消息中心 -->
                 <div class="btn-bell">
                     <el-tooltip effect="dark" :content="message?`有${message}条未读消息`:`消息中心`" placement="bottom">
-                        <!--<router-link to="/tabs">-->
-                        <i class="el-icon-bell"></i>
-                        <!--</router-link>-->
+                        <router-link to="/tabs">
+                            <i class="el-icon-bell"></i>
+                        </router-link>
                     </el-tooltip>
                     <span class="btn-bell-badge" v-if="message"></span>
                 </div>
@@ -60,10 +60,22 @@
                 return this.$store.state.user ? this.$store.state.user.uname : user.uname;
             }
         },
+        created() {
+            this.getUnReadNum();
+        },
         components: {
             Avatar
         },
         methods: {
+            getUnReadNum() {
+                this.$axios({
+                    method: 'POST',
+                    url: '/usermessage/getUnReadNum',
+                    data: {}
+                }).then(response => {
+                    this.message = response.data.data;
+                })
+            },
             //退出操作
             handleCommand(command) {
                 if (command === 'loginout') {
