@@ -44,6 +44,13 @@
 
                                 >
                                 </el-table-column>
+                                <el-table-column>
+                                    <el-button
+                                            size="mini"
+                                            type="primary"
+                                            @click="showRollWays(scope.$index, scope.row)">点名
+                                    </el-button>
+                                </el-table-column>
                                 <el-table-column
                                         align="right">
                                     <template slot="header" slot-scope="scope">
@@ -54,11 +61,7 @@
                                     </template>
                                     <template slot-scope="scope">
 
-                                        <el-button
-                                                size="mini"
-                                                type="primary"
-                                                @click="showRollWays(scope.$index, scope.row)">点名
-                                        </el-button>
+
                                         <el-button
                                                 size="mini"
                                                 type="primary"
@@ -217,7 +220,7 @@
         methods: {
             //查看个人
             showPersonaRollCall() {
-                this.dialogVisible_=false;
+                this.dialogVisible_ = false;
                 this.$router.push({
                     name: 'ShowPersoncalRollCall',
                     params: {
