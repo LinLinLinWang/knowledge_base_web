@@ -134,6 +134,12 @@
 
 
         </div>
+
+        <div id="footer">
+            Copyright © 境界的彼方 2019
+            <br>
+            鲁ICP备16018138号
+        </div>
     </div>
 </template>
 
@@ -449,7 +455,7 @@
         /*position: relative;*/
         width: 99%;
         height: 100%;
-        background-image: url(../../assets/img/2.png);
+        background-image: url(http://img.aloli.cn/2.png);
         background-repeat: round;
         background-size: 100%;
     }
@@ -487,8 +493,17 @@
     @media (max-width: 1023px) {
 
         .login-wrap {
-            background-image: url(../../assets/img/logo5.png);
+            background-image: url(http://img.aloli.cn/logo5.png);
         }
 
+    }
+
+    #footer {
+        color: #ffffff;
+        text-align: center;
+        position: fixed;
+        bottom: 5px;
+        left: 5%;
+        right: 5%;
     }
 </style>
