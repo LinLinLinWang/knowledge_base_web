@@ -449,7 +449,8 @@
         /*position: relative;*/
         width: 99%;
         height: 100%;
-        background-image: url(../../assets/img/loginbg.jpg);
+        background-image: url(../../assets/img/2.png);
+        background-repeat: round;
         background-size: 100%;
     }
 
@@ -483,7 +484,7 @@
         margin-bottom: 10px;
     }
 
-    @media(max-width: 1023px) {
+    @media (max-width: 1023px) {
 
         .login-wrap {
             background-image: url(../../assets/img/logo5.png);
