@@ -148,8 +148,8 @@
                 msg: '',
                 //密码登录
                 ruleForm: {
-                    phone: '1',
-                    password: '1'
+                    phone: '',
+                    password: ''
                 },
                 rules: {
                     phone: [
