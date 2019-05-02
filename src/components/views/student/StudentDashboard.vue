@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-row :gutter="7">
-            <el-col :span="9">
+            <el-col :span="9" :xs="24" :sm="24" :md="24" :lg="9" :xl="9">
                 <el-card shadow="hover">
                     <div class="user-info">
                         <avatar :username=user.uname :size="100" color="#fff" background-color="#FFC107"></avatar>
@@ -56,7 +56,7 @@
                     <MyCourse></MyCourse>
                 </el-card>
             </el-col>
-            <el-col :span="15">
+            <el-col class="hidden-md-and-down" :span="15">
                 <el-card shadow="hover">
                     <MyVacate></MyVacate>
                 </el-card>
@@ -105,6 +105,7 @@
             this.loginGetLast();
         },
         mounted() {
+            // eslint-disable-next-line no-console
             console.clear();
         },
         methods: {

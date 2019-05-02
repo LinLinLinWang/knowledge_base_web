@@ -445,10 +445,10 @@
 
 <style scoped>
     .login-wrap {
-        position: relative;
-        width: 100%;
+        /*position: relative;*/
+        width: 99%;
         height: 100%;
-        background-image: url(http://img.aloli.cn/blog/20190322/kGPBTSpGgUru.jpg);
+        background-image: url(../../assets/img/logo5.png);
         background-size: 100%;
     }
 
@@ -456,6 +456,7 @@
         width: 100%;
         line-height: 50px;
         text-align: center;
+        /*font-size: 20px;*/
         font-size: 20px;
         color: #fff;
         border-bottom: 1px solid #ddd;
@@ -466,8 +467,8 @@
         margin: 0 auto;
         border-radius: 5px;
         background: rgba(255, 255, 255, 0.3);
-        overflow: visible;
-        transform: translate(0, 20%);
+        /*overflow: visible;*/
+        /*transform: translate(0, 20%);*/
     }
 
     .login-btn {

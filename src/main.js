@@ -5,9 +5,11 @@ import axios from './config/axios'; //网络请求
 import router from './config/router'; //路由
 import './config/permission'; //权限验证
 import ELEMENT from 'element-ui'; //ui
-import VCharts from 'v-charts';//vcharts
+import VCharts from 'v-charts'; //vcharts
 import './assets/css/icon.css'; //icon
 import './components/icon' // icon
+import 'element-ui/lib/theme-chalk/display.css'; //mobile css
+
 
 //去除警告
 Vue.config.productionTip = false;
