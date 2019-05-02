@@ -15,8 +15,10 @@ module.exports = {
         }
     },
     devServer: {
-        disableHostCheck: true
+        disableHostCheck: true,
         //关闭域名检查
+        https: true
+        //启用https
     },
     chainWebpack: config => {
         config.module

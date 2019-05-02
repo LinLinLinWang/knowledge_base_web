@@ -5,6 +5,14 @@ import teacherRouter from "./teacher";
 
 export const constantRouterMap = [
     {
+        path: '/map',
+        name: 'map',
+        hidden: true,
+        component: resolve => require(['../../components/views/BaiduMap.vue'], resolve)
+    },
+
+
+    {
         path: '/login',
         name: 'login',
         hidden: true,
