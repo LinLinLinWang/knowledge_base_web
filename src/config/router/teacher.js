@@ -125,6 +125,16 @@ const teacherRouter = {
 
             }
         },
+        {
+            path: '/Rocall',
+            name: 'RocallUseDefaultRate',
+            hidden: true,
+            component: resolve => require(['../../components/views/teacher/RocallUseDefaultRate.vue'], resolve),
+            meta: {
+                title: '随机点名',
+
+            }
+        },
     ]
 };
 
