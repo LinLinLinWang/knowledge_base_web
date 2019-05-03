@@ -455,7 +455,7 @@
         /*position: relative;*/
         width: 99%;
         height: 100%;
-        background-image: url(https://cos.aloli.cn/2.png);
+        background-image: url(https://web.aloli.cn/img/2.png);
         background-repeat: round;
         background-size: 100%;
     }
@@ -493,7 +493,7 @@
     @media (max-width: 1023px) {
 
         .login-wrap {
-            background-image: url(https://cos.aloli.cn/logo5.png);
+            background-image: url(https://web.aloli.cn/img/logo5.png);
         }
 
     }
