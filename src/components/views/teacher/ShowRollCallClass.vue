@@ -45,11 +45,13 @@
                                 >
                                 </el-table-column>
                                 <el-table-column>
-                                    <el-button
-                                            size="mini"
-                                            type="primary"
-                                            @click="showRollWays(scope.$index, scope.row)">点名
-                                    </el-button>
+                                    <template slot-scope="scope">
+                                        <el-button
+                                                size="mini"
+                                                type="primary"
+                                                @click="showRollWays(scope.row)">点名
+                                        </el-button>
+                                    </template>
                                 </el-table-column>
                                 <el-table-column
                                         align="right">
@@ -60,14 +62,11 @@
                                                 placeholder="输入关键字搜索"/>
                                     </template>
                                     <template slot-scope="scope">
-
-
                                         <el-button
                                                 size="mini"
                                                 type="primary"
                                                 @click="chooseCourseRollOrPerson(scope.$index, scope.row)">查看考勤
                                         </el-button>
-
                                     </template>
                                 </el-table-column>
                             </el-table>
@@ -207,6 +206,15 @@
                     address: '上海市普陀区金沙江路 1516 弄'
                 }]
 
+            }
+        },
+        watch: {
+            '$route'(to, from) {
+                //监听路由变化
+                this.getWeather();
+                this.getDay();
+                this.getCourseToday();
+                this.getRollType();
             }
         },
         created() {
@@ -356,7 +364,8 @@
             snum_anum(row) {
                 return row.anum + "/" + row.snum;
             },
-            showRollWays(index, row) {
+            showRollWays(row) {
+                console.log(row);
                 this.dialogVisible = true;
                 this.courseid = row.courseid;
                 this.ruleForm.cname = row.cname;
@@ -377,19 +386,36 @@
             },
             //开始点名 //选择
             startRoll() {
-                //获取点名的课程
-                this.dialogVisible = false;
-                this.$router.push({
-                    name: 'RocallUseNormal',
-                    params: {
-                        courseid: this.courseid,
-                        rocalltype: this.ruleForm.ctime,
-                        coursename: this.ruleForm.cname,
+                if (this.ruleForm.ctime == 1) {
+                    //获取点名的课程
+                    this.dialogVisible = false;
+                    this.$router.push({
+                        name: 'RocallUseNormal',
+                        params: {
+                            courseid: this.courseid,
+                            rocalltype: this.ruleForm.ctime,
+                            coursename: this.ruleForm.cname,
 
-                        rocalldetail: this.rolltype[this.ruleForm.ctime].rtdescription
+                            rocalldetail: this.rolltype[this.ruleForm.ctime-1].rtdescription
 
-                    }
-                })
+                        }
+                    })
+                }
+                if (this.ruleForm.ctime == 2) {  //默认随机点名
+                    //获取点名的课程
+                    this.dialogVisible = false;
+                    this.$router.push({
+                        name: 'RocallUseDefaultRate',
+                        params: {
+                            courseid: this.courseid,
+                            rocalltype: this.ruleForm.ctime,
+                            coursename: this.ruleForm.cname,
+
+                            rocalldetail: this.rolltype[this.ruleForm.ctime-1].rtdescription
+
+                        }
+                    })
+                }
 
 
             }
