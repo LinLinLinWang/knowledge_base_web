@@ -11,7 +11,6 @@ import './assets/css/icon.css'; //icon
 import './components/icon' // icon
 import 'element-ui/lib/theme-chalk/display.css'; //mobile css
 
-
 //去除警告
 Vue.config.productionTip = false;
 

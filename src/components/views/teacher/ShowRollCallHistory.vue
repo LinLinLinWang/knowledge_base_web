@@ -44,8 +44,8 @@
 
 <script>
     import WeatherAndWeekDayAndDate from './WeatherAndWeekDayAndDate';
-    import VePie from 'v-charts/lib/pie'; //vcharts
-    import VeLine from 'v-charts/lib/line'; //vcharts
+    import VePie from 'v-charts/lib/pie.min'; //vcharts
+    import VeLine from 'v-charts/lib/line.min'; //vcharts
 
     export default {
         components: {
