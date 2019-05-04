@@ -20,17 +20,24 @@ axios.interceptors.request.use(
 // http response 拦截器
 axios.interceptors.response.use(
     response => {
-        return response;
-    },
-    error => {
-        if(error.response)
-        if (error.response.status === 401) {
+        if (response.data.state === '401') {
             store.commit(types.LOGOUT);
             router.replace({
                 path: '/login',
             });
-            return Promise.reject('401')   // 返回接口返回的错误信息
+        } else {
+            return response;
         }
+    },
+    error => {
+        if (error.response)
+            if (error.response.status === 401) {
+                store.commit(types.LOGOUT);
+                router.replace({
+                    path: '/login',
+                });
+                return Promise.reject('401')   // 返回接口返回的错误信息
+            }
     }
 )
 ;

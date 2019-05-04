@@ -437,9 +437,9 @@
             //获取注册验证码
             registerGetPhoneValidateCode() {
                 let userphone = this.registerRuleForm.userphone;
-                if (userphone === null || userphone === '') {
-                    this.promot = "请输入手机号";
-                    this.$alert('请输入手机号!', '提示', {
+                if (userphone === null || userphone === '' || userphone.length < 11) {
+                    this.promot = "请输入正确的手机号";
+                    this.$alert('请输入正确的手机号!', '提示', {
                         confirmButtonText: '确定'
                     });
                     return;
