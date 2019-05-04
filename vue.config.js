@@ -11,7 +11,8 @@ module.exports = {
             "vuex": "Vuex",
             "vue-router": "VueRouter",
             "element-ui": "ELEMENT",
-            'axios': 'axios'
+            'axios': 'axios',
+            'VCharts': 'v-charts'
         }
     },
     devServer: {
@@ -35,6 +36,10 @@ module.exports = {
             .end()
             .include
             .add(resolve('src/components/icon/svg'))
-            .end()
+            .end();
+        // config
+        //     .plugin('webpack-bundle-analyzer')
+        //     .use(require('webpack-bundle-analyzer').BundleAnalyzerPlugin)
+        //     .end();
     }
 };

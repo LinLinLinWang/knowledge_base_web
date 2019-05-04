@@ -6,7 +6,6 @@ import axios from './config/axios'; //网络请求
 import router from './config/router'; //路由
 import './config/permission'; //权限验证
 import ELEMENT from 'element-ui'; //ui
-import VCharts from 'v-charts'; //vcharts
 import vuescroll from 'vuescroll'; //滚动条
 import './assets/css/icon.css'; //icon
 import './components/icon' // icon
@@ -36,9 +35,6 @@ if (flag) {
 } else {
     Vue.use(ELEMENT);
 }
-
-//vcharts图表插件
-Vue.use(VCharts);
 
 //注册全局变量
 Vue.prototype.$axios = axios;

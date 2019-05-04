@@ -44,10 +44,14 @@
 
 <script>
     import WeatherAndWeekDayAndDate from './WeatherAndWeekDayAndDate';
+    import VePie from 'v-charts/lib/pie'; //vcharts
+    import VeLine from 'v-charts/lib/line'; //vcharts
 
     export default {
         components: {
-            WeatherAndWeekDayAndDate
+            WeatherAndWeekDayAndDate,
+            VePie,
+            VeLine,
         },
         name: "ShowRollCallHistory",
         data() {
@@ -80,9 +84,9 @@
                 chartData: {
                     columns: ['a', 'b'],
                     rows: [
-                        {'a': '答到人数', 'b': 1},
-                        {'a': '请假人数', 'b': 1},
-                        {'a': '逃课人数', 'b': 1},
+                        {'a': '答到人数', 'b': 0},
+                        {'a': '请假人数', 'b': 0},
+                        {'a': '逃课人数', 'b': 0},
 
                     ]
                 }
