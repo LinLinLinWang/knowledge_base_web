@@ -36,9 +36,9 @@ module.exports = {
             .include
             .add(resolve('src/components/icon/svg'))
             .end();
-        config
-            .plugin('webpack-bundle-analyzer')
-            .use(require('webpack-bundle-analyzer').BundleAnalyzerPlugin)
-            .end();
+        // config
+        //     .plugin('webpack-bundle-analyzer')
+        //     .use(require('webpack-bundle-analyzer').BundleAnalyzerPlugin)
+        //     .end();
     }
 };
