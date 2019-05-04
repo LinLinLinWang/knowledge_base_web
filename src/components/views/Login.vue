@@ -1,146 +1,160 @@
 <template>
-    <div class="login-wrap">
-        <div class="ms-login">
-            <div class="ms-title">点名系统</div>
-            <el-tabs
-                    type="border-card"
-                    :stretch=true
-            >
-                <el-tab-pane>
-                    <span slot="label"><i class="el-icon-date"></i> 验证码登录</span>
-                    <el-form :model="ruleFormCode" :rules="rulesCode" ref="ruleFormCode" label-width="0px"
-                             class="ms-content">
-                        <el-form-item prop="phone">
-                            <el-input v-model="ruleFormCode.phone" placeholder="请输入手机号">
-                                <el-button slot="prepend">
-                                    <svg-icon icon-class="手机号"/>
-                                </el-button>
-                            </el-input>
-                        </el-form-item>
-                        <el-row>
-                            <el-col :span="15">
-                                <el-input v-model="ruleFormCode.code"
-                                          placeholder="请输入验证码">
-                                    <el-button slot="prepend">
-                                        <svg-icon icon-class="验证码"/>
-                                    </el-button>
-                                </el-input>
-                            </el-col>
-                            <el-col :span="5">
-                                <el-button
-                                        type="primary"
-                                        round
-                                        @click="getPhoneValidateCode"
-                                        v-bind:disabled="changeCodeDisabled"
-                                        v-bind:style="{opacity:changeCodeOpacity}"
-                                >{{codemsg}}
-                                </el-button>
-                            </el-col>
-                        </el-row>
-                        <div class="login-btn">
-                            <el-button type="primary" @click="submitCodeForm('ruleFormCode')">登录</el-button>
-                        </div>
-                    </el-form>
-                </el-tab-pane>
-                <el-tab-pane>
-                    <span slot="label"><i class="el-icon-date"></i> 密码登录</span>
-                    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="0px" class="ms-content">
-                        <el-form-item prop="phone">
-                            <el-input v-model="ruleForm.phone" placeholder="请输入手机号">
-                                <el-button slot="prepend">
-                                    <svg-icon icon-class="people"/>
-                                </el-button>
-                            </el-input>
-                        </el-form-item>
-                        <el-form-item prop="password">
-                            <el-input type="password" placeholder="请输入密码" v-model="ruleForm.password">
-                                <el-button slot="prepend">
-                                    <svg-icon icon-class="密码"/>
-                                </el-button>
-                            </el-input>
-                        </el-form-item>
-                        <div class="login-btn">
-                            <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
-                        </div>
-                    </el-form>
-                </el-tab-pane>
-                <el-tab-pane>
-                    <span slot="label"><i class="el-icon-date"></i> 新用户注册</span>
-                    <el-form :model="registerRuleForm" label-width="0px" class="ms-content">
-                        <el-alert
-                                :title="promot"
-                                :type="promotType"
-                                center
-                                :closable="false"
-                                show-icon>
-                        </el-alert>
+    <div class="parent-dom">
+        <vue-scroll :ops="ops">
+            <div class="child-dom">
+                <div class="logindiv">
+                    <div class="ms-login">
+                        <div class="ms-title">点名系统</div>
+                        <el-tabs
+                                type="border-card"
+                                :stretch=true
+                        >
+                            <el-tab-pane>
+                                <span slot="label"><i class="el-icon-date"></i> 验证码登录</span>
+                                <el-form :model="ruleFormCode" :rules="rulesCode" ref="ruleFormCode" label-width="0px"
+                                         class="ms-content">
+                                    <el-form-item prop="phone">
+                                        <el-input v-model="ruleFormCode.phone" placeholder="请输入手机号"
+                                                  :disabled="ruleFormCode.disable">
+                                            <el-button slot="prepend">
+                                                <svg-icon icon-class="手机号"/>
+                                            </el-button>
+                                        </el-input>
+                                    </el-form-item>
+                                    <el-row>
+                                        <el-col :span="15">
+                                            <el-input v-model="ruleFormCode.code"
+                                                      placeholder="请输入验证码">
+                                                <el-button slot="prepend">
+                                                    <svg-icon icon-class="验证码"/>
+                                                </el-button>
+                                            </el-input>
+                                        </el-col>
+                                        <el-col :span="5">
+                                            <el-button
+                                                    type="primary"
+                                                    round
+                                                    @click="getPhoneValidateCode"
+                                                    v-bind:disabled="changeCodeDisabled"
+                                                    v-bind:style="{opacity:changeCodeOpacity}"
+                                            >{{codemsg}}
+                                            </el-button>
+                                        </el-col>
+                                    </el-row>
+                                    <div class="login-btn">
+                                        <el-button type="primary" @click="submitCodeForm('ruleFormCode')">登录</el-button>
+                                    </div>
+                                </el-form>
+                            </el-tab-pane>
+                            <el-tab-pane>
+                                <span slot="label"><i class="el-icon-date"></i> 密码登录</span>
+                                <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="0px"
+                                         class="ms-content">
+                                    <el-form-item prop="phone">
+                                        <el-input v-model="ruleForm.phone" placeholder="请输入手机号">
+                                            <el-button slot="prepend">
+                                                <svg-icon icon-class="people"/>
+                                            </el-button>
+                                        </el-input>
+                                    </el-form-item>
+                                    <el-form-item prop="password">
+                                        <el-input type="password" placeholder="请输入密码" v-model="ruleForm.password">
+                                            <el-button slot="prepend">
+                                                <svg-icon icon-class="密码"/>
+                                            </el-button>
+                                        </el-input>
+                                    </el-form-item>
+                                    <div class="login-btn">
+                                        <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
+                                    </div>
+                                </el-form>
+                            </el-tab-pane>
+                            <el-tab-pane>
+                                <span slot="label"><i class="el-icon-date"></i> 新用户注册</span>
+                                <el-form :model="registerRuleForm" :rules="rulesCode" label-width="0px"
+                                         class="ms-content">
+                                    <el-alert
+                                            :title="promot"
+                                            :type="promotType"
+                                            center
+                                            :closable="false"
+                                            show-icon>
+                                    </el-alert>
 
-                        <el-form-item prop="username">
-                            <el-input v-model="registerRuleForm.username" placeholder="请输入姓名"
-                                      v-on:input="validateUsername()">
-                                <el-button slot="prepend">
-                                    <svg-icon icon-class="people"/>
-                                </el-button>
-                            </el-input>
-                        </el-form-item>
-                        <el-form-item prop="username">
-                            <el-input v-model="registerRuleForm.idnumber" placeholder="请输入学号" required>
-                                <el-button slot="prepend">
-                                    <svg-icon icon-class="证件"/>
-                                </el-button>
-                            </el-input>
-                        </el-form-item>
+                                    <el-form-item prop="username">
+                                        <el-input v-model="registerRuleForm.username" placeholder="请输入姓名"
+                                                  v-on:input="validateUsername()">
+                                            <el-button slot="prepend">
+                                                <svg-icon icon-class="people"/>
+                                            </el-button>
+                                        </el-input>
+                                    </el-form-item>
+                                    <el-form-item prop="username">
+                                        <el-input v-model="registerRuleForm.idnumber" placeholder="请输入学号" required>
+                                            <el-button slot="prepend">
+                                                <svg-icon icon-class="证件"/>
+                                            </el-button>
+                                        </el-input>
+                                    </el-form-item>
 
-                        <el-form-item prop="userphone">
-                            <el-input v-model="registerRuleForm.userphone"
-                                      placeholder="请输入手机号"
-                                      v-on:input="getRealTimePhone">
-                                <el-button slot="prepend">
-                                    <svg-icon icon-class="手机号"/>
-                                </el-button>
-                            </el-input>
-                        </el-form-item>
+                                    <el-form-item prop="userphone">
+                                        <el-input v-model="registerRuleForm.userphone"
+                                                  :disabled="registerRuleForm.disabled"
+                                                  placeholder="请输入手机号"
+                                                  v-on:input="getRealTimePhone">
+                                            <el-button slot="prepend">
+                                                <svg-icon icon-class="手机号"/>
+                                            </el-button>
+                                        </el-input>
+                                    </el-form-item>
 
-                        <el-form-item prop="validatecode">
-                            <el-row>
-                                <el-col :span="15">
-                                    <el-input v-model="registerRuleForm.validatecode"
-                                              placeholder="请输入验证码">
-                                        <el-button slot="prepend">
-                                            <svg-icon icon-class="验证码"/>
+                                    <el-form-item prop="validatecode">
+                                        <el-row>
+                                            <el-col :span="15">
+                                                <el-input v-model="registerRuleForm.validatecode"
+                                                          placeholder="请输入验证码">
+                                                    <el-button slot="prepend">
+                                                        <svg-icon icon-class="验证码"/>
+                                                    </el-button>
+                                                </el-input>
+                                            </el-col>
+                                            <el-col :span="5">
+                                                <el-button
+                                                        type="primary"
+                                                        round
+                                                        @click="registerGetPhoneValidateCode"
+                                                        :disabled="registerChangeCodeDisabled"
+                                                        v-bind:style="{opacity:registerChangeCodeOpacity}">
+                                                    {{registerCodemsg}}
+                                                </el-button>
+                                            </el-col>
+                                        </el-row>
+
+                                    </el-form-item>
+                                    <div class="login-btn">
+                                        <el-button type="primary" @click="submitRegisterForm('registerRuleForm')">注册
                                         </el-button>
-                                    </el-input>
-                                </el-col>
-                                <el-col :span="5">
-                                    <el-button
-                                            type="primary"
-                                            round
-                                            @click="registerGetPhoneValidateCode"
-                                            v-bind:disabled="registerChangeCodeDisabled"
-                                            v-bind:style="{opacity:registerChangeCodeOpacity}">{{registerCodemsg}}
-                                    </el-button>
-                                </el-col>
-                            </el-row>
+                                    </div>
 
-                        </el-form-item>
-                        <div class="login-btn">
-                            <el-button type="primary" @click="submitRegisterForm('registerRuleForm')">注册</el-button>
-                        </div>
+                                </el-form>
 
-                    </el-form>
-
-                </el-tab-pane>
-            </el-tabs>
+                            </el-tab-pane>
+                        </el-tabs>
 
 
-        </div>
+                    </div>
 
-        <div id="footer">
-            Copyright © 境界的彼方 2019
-            <br>
-            鲁ICP备16018138号
-        </div>
+                    <div id="footer">
+                        Copyright © 境界的彼方 2019
+                        <br>
+                        鲁ICP备16018138号
+                    </div>
+                </div>
+            </div>
+        </vue-scroll>
     </div>
+
+
 </template>
 
 <script type="application/ecmascript">
@@ -150,6 +164,15 @@
         name: '',
         data() {
             return {
+                /*滚动条设置*/
+                ops: {
+                    vuescroll: {
+                        mode: 'native',
+                    },
+                    scrollPanel: {},
+                    rail: {},
+                    bar: {}
+                },
                 UserTypeEnv: '',
                 msg: '',
                 //密码登录
@@ -168,7 +191,8 @@
                 //验证码登录
                 ruleFormCode: {
                     phone: '',
-                    code: ''
+                    code: '',
+                    disable: false,
                 },
                 rulesCode: {
                     phone: [
@@ -188,6 +212,18 @@
                     userphone: '',
                     validatecode: '',
                     idnumber: '',
+                    disabled: false,
+                },
+                registerRules: {
+                    username: [
+                        {required: true, message: '请输入姓名', trigger: 'blur'}
+                    ],
+                    userphone: [
+                        {required: true, message: '请输入手机号', trigger: 'blur'}
+                    ],
+                    idnumber: [
+                        {required: true, message: '请输入验证码', trigger: 'blur'}
+                    ]
                 },
 
                 promot: "请确保信息的准确性,姓名学号注册后不可修改",
@@ -209,20 +245,27 @@
         methods: {
             //判断登录类型
             CheckUserTypeEnv() {
-                switch (process.env.VUE_APP_LOGINTYPE) {
-                    case 'vue':
-                        this.UserTypeEnv = 1;
-                        return;
-                    case 'electron':
-                        this.UserTypeEnv = 3;
-                        return;
-                    default:
-                        this.UserTypeEnv = 1;
-                        return;
+                if (!this.$store.state.isPc) {
+                    //移动端
+                    this.UserTypeEnv = 2;
+                    //滚动条样式
+                    this.ops.vuescroll.mode = 'slide';
+                } else {
+                    switch (process.env.VUE_APP_LOGINTYPE) {
+                        //网页端
+                        case 'vue':
+                            this.UserTypeEnv = 1;
+                            return;
+                        //桌面端
+                        case 'electron':
+                            this.UserTypeEnv = 3;
+                            return;
+                    }
                 }
             },
             //获取登录验证码
             getPhoneValidateCode() {
+                this.ruleFormCode.disable = true;
                 this.$axios({
                     method: 'POST',
                     url: '/validatecode/getLoginValidatecode',
@@ -230,7 +273,11 @@
                         userphone: this.ruleFormCode.phone,
                     }
                 }).then(response => {
-                    this.changeGetCodeButtonStyle();
+                    if (response.data.state === '400') {
+                        this.ruleFormCode.disable = false;
+                    } else {
+                        this.changeGetCodeButtonStyle();
+                    }
                     this.$alert(response.data.msg, '', {
                         confirmButtonText: '确定'
                     });
@@ -252,6 +299,7 @@
                     that.codemsg = "获取验证码";
                     that.changeCodeOpacity = "1";
                     that.changeCodeDisabled = false;
+                    that.ruleFormCode.disable = false;
                     clearInterval(set);
                 }, 60000);
             },
@@ -386,8 +434,17 @@
                     }
                 }
             },
-            //获取验证码
+            //获取注册验证码
             registerGetPhoneValidateCode() {
+                let userphone = this.registerRuleForm.userphone;
+                if (userphone === null || userphone === '') {
+                    this.promot = "请输入手机号";
+                    this.$alert('请输入手机号!', '提示', {
+                        confirmButtonText: '确定'
+                    });
+                    return;
+                }
+                this.registerRuleForm.disabled = true;
                 this.$axios({
                     method: 'POST',
                     url: '/validatecode/getValidatecode',
@@ -395,7 +452,12 @@
                         userphone: this.registerRuleForm.userphone,
                     }
                 }).then(response => {
-                    this.registerChangeGetCodeButtonStyle();
+
+                    if (response.data.state === '400') {
+                        this.registerRuleForm.disabled = false;
+                    } else {
+                        this.registerChangeGetCodeButtonStyle();
+                    }
                     this.$alert(response.data.msg, '', {
                         confirmButtonText: '确定'
                     });
@@ -451,20 +513,22 @@
 
 <style scoped>
 
-    .login-wrap {
-        /*position: relative;*/
+    .parent-dom {
+        background-image: url(../../assets/img/2.png);
+        background-repeat: repeat-y;
+        background-size: 100%;
+        height: 100%;
+    }
+
+    .logindiv {
         width: 99%;
         height: 100%;
-        background-image: url(../../assets/img/2.png);
-        background-repeat: round;
-        background-size: 100%;
     }
 
     .ms-title {
         width: 100%;
         line-height: 50px;
         text-align: center;
-        /*font-size: 20px;*/
         font-size: 20px;
         color: #fff;
         border-bottom: 1px solid #ddd;
@@ -475,8 +539,6 @@
         margin: 0 auto;
         border-radius: 5px;
         background: rgba(255, 255, 255, 0.3);
-        /*overflow: visible;*/
-        /*transform: translate(0, 20%);*/
     }
 
     .login-btn {
@@ -490,14 +552,6 @@
         margin-bottom: 10px;
     }
 
-    @media (max-width: 1023px) {
-
-        .login-wrap {
-            background-image: url(../../assets/img/logo5.png);
-        }
-
-    }
-
     #footer {
         color: #ffffff;
         text-align: center;
@@ -506,4 +560,18 @@
         left: 5%;
         right: 5%;
     }
+
+    @media (max-width: 1023px) {
+        .logindiv {
+            background-image: url(../../assets/img/logo5.png);
+        }
+    }
+
+    @media (max-height: 520px) {
+        #footer {
+            display: none;
+        }
+    }
+
+
 </style>
