@@ -514,7 +514,7 @@
 <style scoped>
 
     .parent-dom {
-        background-image: url(../../assets/img/2.png);
+        background-image: url(https://cos.aloli.cn/2.png);
         background-repeat: repeat-y;
         background-size: 100%;
         height: 100%;
@@ -563,7 +563,7 @@
 
     @media (max-width: 1023px) {
         .logindiv {
-            background-image: url(../../assets/img/logo5.png);
+            background-image: url(https://cos.aloli.cn/logo5.png);
         }
     }
 
