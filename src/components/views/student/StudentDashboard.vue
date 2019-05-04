@@ -50,6 +50,9 @@
                             </div>
                         </el-col>
                     </el-row>
+                    <el-row>
+                        <BaiduMap></BaiduMap>
+                    </el-row>
                 </el-card>
                 <br>
                 <el-card shadow="hover">
@@ -62,6 +65,7 @@
                 </el-card>
             </el-col>
         </el-row>
+
     </div>
 </template>
 
@@ -69,6 +73,7 @@
     import Avatar from 'vue-avatar';
     import MyVacate from './MyVacate';
     import MyCourse from './MyCourse';
+    import BaiduMap from '../BaiduMap';
 
     export default {
         name: 'StudentDashboard',
@@ -93,7 +98,8 @@
         components: {
             Avatar,
             MyVacate,
-            MyCourse
+            MyCourse,
+            BaiduMap
         },
         computed: {
             role() {
