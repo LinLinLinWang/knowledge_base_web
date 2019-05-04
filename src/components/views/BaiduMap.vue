@@ -10,9 +10,6 @@
                    :double-click-zoom="false"
                    :keyboard="false"
                    :pinch-to-zoom="false"
-                   @moving="syncCenterAndZoom"
-                   @moveend="syncCenterAndZoom"
-                   @zoomend="syncCenterAndZoom"
                    @ready="handler"
         >
             <!--缩放控件-->
@@ -50,7 +47,7 @@
                 this.$notify({
                     title: '消息通知',
                     message: '正在定位，请授予相关权限',
-                    offset: 120,
+                    offset: 80,
                     type: 'warning'
                 });
                 let that = this;

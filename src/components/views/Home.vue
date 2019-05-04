@@ -48,6 +48,8 @@
                             continue;
                         case 'StudentDashboard':
                             continue;
+                        case '概览':
+                            continue;
                     }
                     msg[i].name && arr.push(msg[i].name);
                 }

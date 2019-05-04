@@ -14,11 +14,27 @@ import 'element-ui/lib/theme-chalk/display.css'; //mobile css
 //去除警告
 Vue.config.productionTip = false;
 
-//启用Element
-// Vue.use(ELEMENT, {
-//     size: 'small'
-// });
-Vue.use(ELEMENT);
+//判断设备类型,使用不同尺寸的组件大小
+let userAgentInfo = navigator.userAgent;
+let Agents = ["Android", "iPhone",
+    "SymbianOS", "Windows Phone",
+    "iPad", "iPod"];
+let flag = false;
+for (var v = 0; v < Agents.length; v++) {
+    if (userAgentInfo.indexOf(Agents[v]) > 0) {
+        flag = true;
+        break;
+    }
+}
+if (flag) {
+    Vue.use(ELEMENT, {
+        size: 'mini'
+    });
+} else {
+    Vue.use(ELEMENT);
+}
+
+//vcharts图表插件
 Vue.use(VCharts);
 
 //注册全局变量

@@ -160,13 +160,9 @@
         watch: {
             '$route'(to, from) {
                 //监听路由变化
-                if (this.$route.params.vid == null) {
-                    this.$router.push('/myVacate');
-                } else {
-                    this.vid = this.$route.params.vid;
-                    this.getDetails();
-                    this.getVacateFiles();
-                }
+                this.vid = this.$route.params.vid;
+                this.getDetails();
+                this.getVacateFiles();
             }
         },
         created() {
