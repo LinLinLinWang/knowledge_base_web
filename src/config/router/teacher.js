@@ -96,7 +96,7 @@ const teacherRouter = {
             }
         },
         {
-            path: '/Rocall',
+            path: '/RocallUserNormal',
             name: 'RocallUseNormal',
             hidden: true,
             component: resolve => require(['../../components/views/teacher/RocallUserNormal.vue'], resolve),
@@ -106,7 +106,7 @@ const teacherRouter = {
             }
         },
         {
-            path: '/Rocall',
+            path: '/ShowRollCallHistory',
             name: 'ShowRollCallHistory',
             hidden: true,
             component: resolve => require(['../../components/views/teacher/ShowRollCallHistory.vue'], resolve),
@@ -116,7 +116,7 @@ const teacherRouter = {
             }
         },
         {
-            path: '/Rocall',
+            path: '/ShowPersoncalRollCall',
             name: 'ShowPersoncalRollCall',
             hidden: true,
             component: resolve => require(['../../components/views/teacher/ShowPersoncalRollCall.vue'], resolve),
@@ -126,13 +126,21 @@ const teacherRouter = {
             }
         },
         {
-            path: '/Rocall',
+            path: '/RocallUseDefaultRate',
             name: 'RocallUseDefaultRate',
             hidden: true,
             component: resolve => require(['../../components/views/teacher/RocallUseDefaultRate.vue'], resolve),
             meta: {
                 title: '随机点名',
 
+            }
+        }, {
+            path: '/RocallUseVoice',
+            name: 'RocallUseVoice',
+            hidden: true,
+            component: resolve => require(['../../components/views/teacher/RocallUseVoice.vue'], resolve),
+            meta: {
+                title: '语音点名',
             }
         },
     ]

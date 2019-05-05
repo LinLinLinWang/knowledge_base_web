@@ -107,7 +107,8 @@
                 title="提示"
                 :visible.sync="dialogVisible"
                 width="30%"
-                :before-close="handleClose">
+
+        >
             <el-form :model="ruleForm" ref="ruleForm" label-width="100px" class="demo-ruleForm">
 
                 <el-form-item label="点名课程名字" prop="cname">
@@ -115,8 +116,8 @@
                 </el-form-item>
                 <el-form-item label="点名方式" prop="ctime">
                     <el-select v-model="ruleForm.ctime" placeholder="请选择点名方式">
-                        <el-option :label="item.rtname" :value="item.rtid+''" v-for="item  in rolltype"
-                                   v-bind:key="item.rtid"></el-option>
+                        <el-option :label="item.rtname" :value="item.rtid+''" v-for="item in rolltype"
+                                   :key="item.rtid"></el-option>
 
                     </el-select>
                 </el-form-item>
@@ -124,9 +125,9 @@
 
             </el-form>
             <span slot="footer" class="dialog-footer">
-    <el-button @click="dialogVisible = false">取 消</el-button>
-    <el-button type="primary" @click="startRoll">确 定</el-button>
-  </span>
+                <el-button @click="dialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="startRoll">确 定</el-button>
+            </span>
         </el-dialog>
 
 
@@ -233,12 +234,8 @@
                     name: 'ShowPersoncalRollCall',
                     params: {
                         courseid: this.courseid,
-
-
                     }
                 })
-
-
             },
             chooseCourseRollOrPerson(index, row) {
                 this.courseid = row.courseid;
@@ -257,7 +254,7 @@
                 })
 
             },
-            //获取点名当时
+            //获取点名方式
             getRollType() {
 
                 this.$axios({
@@ -376,47 +373,43 @@
             //关闭对话框
             handleClose(done) {
                 this.$confirm('确认关闭？')
-                    .then(_ => {
-
+                    .then(() => {
                         done();
                     })
-                    .catch(_ => {
+                    .catch(() => {
                     });
-
             },
-            //开始点名 //选择
+            //开始点名
             startRoll() {
-                if (this.ruleForm.ctime == 1) {
-                    //获取点名的课程
-                    this.dialogVisible = false;
-                    this.$router.push({
-                        name: 'RocallUseNormal',
-                        params: {
-                            courseid: this.courseid,
-                            rocalltype: this.ruleForm.ctime,
-                            coursename: this.ruleForm.cname,
+                this.dialogVisible = false;
+                let param = {
+                    courseid: this.courseid,
+                    rocalltype: this.ruleForm.ctime,
+                    coursename: this.ruleForm.cname,
+                    rocalldetail: this.rolltype[this.ruleForm.ctime - 1].rtdescription
+                };
 
-                            rocalldetail: this.rolltype[this.ruleForm.ctime-1].rtdescription
+                switch (this.ruleForm.ctime) {
+                    case "1":
+                        this.$router.push({
+                            name: 'RocallUseNormal',
+                            params: param
+                        });
+                        return;
+                    case "2":
+                        this.$router.push({
+                            name: 'RocallUseDefaultRate',
+                            params: param
+                        });
+                        return;
+                    case "4":
+                        this.$router.push({
+                            name: 'RocallUseVoice',
+                            params: param
+                        });
+                        return;
 
-                        }
-                    })
                 }
-                if (this.ruleForm.ctime == 2) {  //默认随机点名
-                    //获取点名的课程
-                    this.dialogVisible = false;
-                    this.$router.push({
-                        name: 'RocallUseDefaultRate',
-                        params: {
-                            courseid: this.courseid,
-                            rocalltype: this.ruleForm.ctime,
-                            coursename: this.ruleForm.cname,
-
-                            rocalldetail: this.rolltype[this.ruleForm.ctime-1].rtdescription
-
-                        }
-                    })
-                }
-
 
             }
         }
