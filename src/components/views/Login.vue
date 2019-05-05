@@ -342,6 +342,14 @@
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
+
+                        const loading = this.$loading({
+                            lock: true,
+                            text: 'Loading',
+                            spinner: 'el-icon-loading',
+                            background: 'rgba(0, 0, 0, 0.7)'
+                        });
+
                         this.$axios({
                             method: 'POST',
                             url: '/users/login',
@@ -359,7 +367,9 @@
                                 this.$router.push({
                                     path: redirect
                                 });
+                                loading.close();
                             } else {
+                                loading.close();
                                 this.$alert('手机号或密码错误', '', {
                                     confirmButtonText: '确定'
                                 });

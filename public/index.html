@@ -2,8 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit"/>
+    <meta name="force-rendering" content="webkit"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1"/>
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="stylesheet" href="loading.css">
+    <script>/*@cc_on alert("您正在使用的浏览器版本过低，为了您的最佳体验，请先升级浏览器。");window.location.href="http://support.dmeng.net/upgrade-your-browser.html?referrer="+encodeURIComponent(window.location.href); @*/</script>
 
     <link rel="stylesheet" href="https://cdn.bootcss.com/element-ui/2.7.2/theme-chalk/index.css">
     <script src="https://cdn.bootcss.com/vue/2.6.10/vue.js"></script>
@@ -22,13 +26,21 @@
     <title>web</title>
 </head>
 <body>
-<noscript>
-    <strong>当前的浏览器不被支持</strong>
-    <strong>请使用Chrome 54+,FireFox 45+,Edge,IE 9+</strong>
-</noscript>
+
 <div id="app"></div>
 
 <!--上线时改为压缩的min版本-->
+
+<div class="htmleaf-container">
+    <div class="spinner-box">
+        <div class="configure-border-1">
+            <div class="configure-core"></div>
+        </div>
+        <div class="configure-border-2">
+            <div class="configure-core"></div>
+        </div>
+    </div>
+</div>
 
 </body>
 </html>

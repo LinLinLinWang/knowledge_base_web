@@ -44,6 +44,7 @@
         },
         methods: {
             handler({BMap, map}) {
+
                 this.$notify({
                     title: '消息通知',
                     message: '正在定位，请授予相关权限',
