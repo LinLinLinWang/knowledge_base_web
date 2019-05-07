@@ -7,6 +7,7 @@ const studentRouter = {
         roles: ['2']
     },
     children: [
+
         {
             path: '/dashboardStudent',
             meta: {
@@ -22,6 +23,15 @@ const studentRouter = {
                 title: '信息维护',
                 icon: 'documentation',
             }
+        },
+        {
+            path: '/SetFaceImg',
+            name: '人脸信息',
+            meta: {
+                title: '人脸信息',
+                icon: 'face',
+            },
+            component: resolve => require(['../../components/views/student/SetFaceImg.vue'], resolve)
         },
         {
             path: '/myClass',

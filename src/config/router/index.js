@@ -4,7 +4,7 @@ import studentRouter from './student'
 import teacherRouter from "./teacher";
 
 export const constantRouterMap = [
-    {
+   {
         path: '/login',
         name: 'login',
         hidden: true,
