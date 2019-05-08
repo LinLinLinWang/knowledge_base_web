@@ -135,7 +135,7 @@
                 <div class="container">
                     <el-button type="danger" plain v-if="notsupport">获取摄像头权限失败，请检查后重试</el-button>
                     <div v-show="!notsupport">
-                        共需10张照片，已有{{successnum}}张
+                        该同学已上传{{successnum}}张
                         <el-button type="primary" @click="getPhoto" round>拍照</el-button>
                         <br>
                         <video id="videovar" width="100%" autoplay></video>
@@ -162,6 +162,8 @@
         },
         data() {
             return {
+                param: new FormData(),
+                uid: '',
                 successnum: 0,
                 notsupport: false,
                 dialogVisible_: false,
@@ -233,32 +235,28 @@
                 let that = this;
 
                 //此处使用原生js，避免拦截器影响multipart/form-data
-                let url = this.$axios.defaults.baseURL + "/users/uploadPhotoForRollCall";
+                let url = this.$axios.defaults.baseURL + "/rollcall/faceRocall";
                 let data = this.param;
                 //附加表单id
-                data.append('imgCode', image_code);
-
+                data.append('imgcode', image_code);
+                data.append('uid', this.uid);
                 let xhr = new XMLHttpRequest();
                 xhr.onreadystatechange = function () {
                     if (xhr.readyState === 4 && xhr.status === 200) {
                         let resdata = JSON.parse(xhr.responseText);
-                        console.log(resdata);
-                        that.successnum = resdata.successnum;
-                        if (resdata.state === "400") {
-                            that.$alert(resdata.msg, '操作结果', {
-                                confirmButtonText: '确定',
-                            });
+                        console.log(resdata.data + "本人");
+                        //   that.successnum = resdata.successnum;
+                        if (resdata.data == "no") {
+                            console.log(that.radio);
+                            that.radio[that.uid] = "1";
+                            console.log(that.radio);
+                            that.$message.error('并非本人，请仔细检查该学生证件（或重新进行对其进行人脸识别）');
                         } else {
-                            that.$message({
-                                message: resdata.msg,
-                                type: 'success'
-                            });
+                            that.radio[that.uid] = "0";
+                            console.log(that.radio);
                         }
-                        if (that.successnum === "10") {
-                            this.$router.push({
-                                path: "/"
-                            });
-                        }
+
+
                     }
                 };
 
@@ -269,16 +267,32 @@
             },
             //关闭对话框
             handleClose(done) {
-                this.$confirm('确认关闭？')
-                    .then(() => {
+
                         done();
-                    })
-                    .catch(() => {
-                    });
+
             },
             //打开相机
             openCamers(uid) {
-                this.dialogVisible_ = true;
+                //返回改用户训练图片的数目
+                this.uid = uid;
+                this.$axios({
+                    method: 'POST',
+                    url: '/rollcall/getPhotoNum',
+                    data: {
+                        uid: uid
+                    }
+                }).then(response => {
+                    var resdata = response.data;
+                    console.log(resdata.num + "张图片");
+                    this.successnum = resdata.num;
+                    if (this.successnum < 1) {
+                        this.$message.error('该同学未上传过图片，无法进行人脸识别');
+                    } else {
+                        this.dialogVisible_ = true;
+                    }
+                })
+
+
             },
             //获取当前课程下的学生请假信息
             getCourseStudentWhoVacate() {
