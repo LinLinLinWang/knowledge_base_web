@@ -53,7 +53,8 @@
                 collapse: false,
                 fullscreen: false,
                 user: null,
-                message: 0
+                message: 0,
+                notify: 0,
             }
         },
         computed: {
@@ -75,8 +76,15 @@
                     url: '/usermessage/getUnReadNum',
                     data: {}
                 }).then(response => {
-                    this.message = response.data.data;
-                    if (this.message > 0) {
+                    if (this.message !== response.data.data) {
+                        this.notify = 0;
+                    } else {
+                        this.notify = 1;
+                    }
+
+                    if (this.notify === 0) {
+                        this.message = response.data.data;
+                        this.notify = 1;
                         this.$notify({
                             title: '消息通知',
                             message: '您有' + this.message + '条新消息，请到右上角的消息中心中查看',
@@ -84,8 +92,11 @@
                             type: 'warning'
                         });
                     }
-                })
+                });
 
+                setTimeout(() => {
+                    this.getUnReadNum();
+                }, 6000);
 
             },
             //退出操作
@@ -135,8 +146,6 @@
             if (document.body.clientWidth < 1500) {
                 this.collapseChage();
             }
-
-            setTimeout(this.getUnReadNum, 6000);
 
             bus.$on('changemsgnum', msg => {
                 this.getUnReadNum();

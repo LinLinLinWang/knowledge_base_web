@@ -353,6 +353,7 @@
                         this.$axios({
                             method: 'POST',
                             url: '/users/login',
+                            timeout: 1000 * 5,
                             data: {
                                 loginType: this.UserTypeEnv,
                                 phone: this.ruleForm.phone,
@@ -374,6 +375,11 @@
                                     confirmButtonText: '确定'
                                 });
                             }
+                        }).catch(() => {
+                            loading.close();
+                            this.$alert("连接服务器失败，请检查网络情况", '操作结果', {
+                                confirmButtonText: '确定',
+                            });
                         })
                     } else {
                         this.$alert('请输入用户名和密码', '', {
