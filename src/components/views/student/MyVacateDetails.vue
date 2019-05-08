@@ -59,15 +59,6 @@
                         prop="state">
                 </el-table-column>
 
-                <el-table-column
-                        label="操作"
-                        align="right">
-                    <el-button
-                            size="mini"
-                            type="primary"
-                            @click="joinClassButton(scope.$index, scope.row)">??
-                    </el-button>
-                </el-table-column>
             </el-table>
             <div class="pagination">
                 <el-pagination
