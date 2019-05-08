@@ -1,9 +1,12 @@
 <template>
-    <div>
+    <div class="container">
         <el-button type="danger" plain v-if="notsupport">获取摄像头权限失败，请检查后重试</el-button>
-        <div v-if="!notsupport">共需10张照片，已有{{successnum}}张
+        <div v-if="!notsupport">
+            共需10张照片，已有{{successnum}}张
             <el-button type="primary" @click="getPhoto" round>拍照</el-button>
+            <br>
             <video id="videovar" width="100%" autoplay></video>
+            <br>
             <canvas id="canvasvar"></canvas>
         </div>
     </div>
