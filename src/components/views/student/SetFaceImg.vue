@@ -19,7 +19,6 @@
             return {
                 notsupport: false,
                 successnum: 0,
-                param: new FormData(),
             }
         },
         components: {},
@@ -70,7 +69,7 @@
 
                 //此处使用原生js，避免拦截器影响multipart/form-data
                 let url = this.$axios.defaults.baseURL + "/users/uploadPhotoForRollCall";
-                let data = this.param;
+                let data = new FormData();
                 //附加表单id
                 data.append('imgCode', image_code);
 

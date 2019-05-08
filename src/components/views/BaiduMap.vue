@@ -25,7 +25,6 @@
 <script>
     import BaiduMap from 'vue-baidu-map/components/map/Map.vue'
     import Navigation from 'vue-baidu-map/components/controls/Navigation.vue'
-    import Scale from 'vue-baidu-map/components/controls/Scale.vue'
     import Geolocation from 'vue-baidu-map/components/controls/Geolocation.vue'
 
     export default {
@@ -39,7 +38,6 @@
         components: {
             BaiduMap,
             Navigation,
-            Scale,
             Geolocation
         },
         methods: {
