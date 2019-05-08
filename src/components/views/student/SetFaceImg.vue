@@ -16,6 +16,7 @@
             return {
                 notsupport: false,
                 successnum: 0,
+                param: new FormData(),
             }
         },
         components: {},
@@ -61,25 +62,43 @@
                 context2D.drawImage(videovar, 0, 0, width, height);
                 var image_code = canvas.toDataURL("image/png");//要传给后台的base64
 
-                this.$axios({
-                    method: 'POST',
-                    url: '/users/uploadPhotoForRollCall',
-                    data: {
-                        imgCode: image_code,
+
+                let that = this;
+
+                //此处使用原生js，避免拦截器影响multipart/form-data
+                let url = this.$axios.defaults.baseURL + "/users/uploadPhotoForRollCall";
+                let data = this.param;
+                //附加表单id
+                data.append('imgCode', image_code);
+
+                let xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                        let resdata = JSON.parse(xhr.responseText);
+                        console.log(resdata);
+                        that.successnum = resdata.successnum;
+                        if (resdata.state === "400") {
+                            that.$alert(resdata.msg, '操作结果', {
+                                confirmButtonText: '确定',
+                            });
+                        } else {
+                            that.$message({
+                                message: resdata.msg,
+                                type: 'success'
+                            });
+                        }
+                        if (that.successnum === "10") {
+                            this.$router.push({
+                                path: "/"
+                            });
+                        }
                     }
-                }).then(response => {
-                    var resdata = response.data;
-                    console.log(resdata);
-                    this.$alert(response.data.msg, '', {
-                        confirmButtonText: '确定'
-                    });
-                    this.successnum = response.data.successnum;
-                    if (datajson === '10') {
-                        this.$router.push({
-                            path: "/"
-                        });
-                    }
-                })
+                };
+
+                xhr.open('POST', url);
+
+                xhr.setRequestHeader("Authorization", that.$store.state.token);
+                xhr.send(data);
             }
         }
     }
@@ -87,5 +106,7 @@
 
 
 <style scoped>
-
+    #videovar {
+        max-width: 400px;
+    }
 </style>
