@@ -29,7 +29,7 @@ const studentRouter = {
             name: '人脸信息',
             meta: {
                 title: '人脸信息',
-                icon: 'face',
+                icon: '人脸',
             },
             component: resolve => require(['../../components/views/student/SetFaceImg.vue'], resolve)
         },
