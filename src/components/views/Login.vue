@@ -265,6 +265,7 @@
             },
             //获取登录验证码
             getPhoneValidateCode() {
+
                 this.ruleFormCode.disable = true;
                 this.$axios({
                     method: 'POST',
@@ -453,7 +454,8 @@
             //获取注册验证码
             registerGetPhoneValidateCode() {
                 let userphone = this.registerRuleForm.userphone;
-                if (userphone === null || userphone === '' || userphone.length < 11) {
+                var partten_phone = /^1[3,5,8]\d{9}$/;
+                if (!partten_phone.test(userphone)) {
                     this.promot = "请输入正确的手机号";
                     this.$alert('请输入正确的手机号!', '提示', {
                         confirmButtonText: '确定'
@@ -480,27 +482,31 @@
                 })
             },
             //提交注册
-            submitRegisterForm() {
-                if (this.validateUsername()) {
-                    this.$axios({
-                        method: 'POST',
-                        url: '/users/registe',
-                        data: {
-                            username: this.registerRuleForm.username,
-                            userphone: this.registerRuleForm.userphone,
-                            validatecode: this.registerRuleForm.validatecode,
-                            idnumber: this.registerRuleForm.idnumber,
+            submitRegisterForm(formName) {
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        if (this.validateUsername()) {
+                            this.$axios({
+                                method: 'POST',
+                                url: '/users/registe',
+                                data: {
+                                    username: this.registerRuleForm.username,
+                                    userphone: this.registerRuleForm.userphone,
+                                    validatecode: this.registerRuleForm.validatecode,
+                                    idnumber: this.registerRuleForm.idnumber,
+                                }
+                            }).then(response => {
+                                var resdata = response.data;
+                                this.$alert(response.data.msg, '', {
+                                    confirmButtonText: '确定'
+                                });
+                                if (resdata.state === "200") {
+                                    this.$router.push('/');
+                                }
+                            })
                         }
-                    }).then(response => {
-                        var resdata = response.data;
-                        this.$alert(response.data.msg, '', {
-                            confirmButtonText: '确定'
-                        });
-                        if (resdata.state === "200") {
-                            this.$router.push('/');
-                        }
-                    })
-                }
+                    }
+                })
             },
             //改变获取验证码按钮样式
             registerChangeGetCodeButtonStyle() {
