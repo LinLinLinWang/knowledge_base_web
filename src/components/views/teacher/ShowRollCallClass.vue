@@ -402,6 +402,12 @@
                             params: param
                         });
                         return;
+                    case "3"://人脸识别点名
+                        this.$router.push({
+                            name: 'RocallUseFaceReco',
+                            params: param
+                        });
+                        return;
                     case "4":
                         this.$router.push({
                             name: 'RocallUseVoice',

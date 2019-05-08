@@ -142,6 +142,14 @@ const teacherRouter = {
             meta: {
                 title: '语音点名',
             }
+        },{
+            path: '/RocallUseFaceReco',
+            name: 'RocallUseFaceReco',
+            hidden: true,
+            component: resolve => require(['../../components/views/teacher/RocallUseFaceReco.vue'], resolve),
+            meta: {
+                title: '人脸识别点名',
+            }
         },
     ]
 };
