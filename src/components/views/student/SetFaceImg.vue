@@ -23,6 +23,7 @@
         },
         components: {},
         mounted() {
+            this.getAlreadyUploadImgNum();
             this.getMedia();
         },
         methods: {
@@ -54,6 +55,13 @@
                 }
             },
             getPhoto() {
+                if (this.successnum >= 10) {
+                    this.$message({
+                        type: 'error',
+                        message: '您已上传足够图片'
+                    });
+                    return;
+                }
                 var videovar = document.getElementById('videovar');
                 var width = videovar.clientWidth;
                 var height = videovar.clientHeight;
@@ -89,11 +97,7 @@
                                 type: 'success'
                             });
                         }
-                        if (that.successnum === "10") {
-                            this.$router.push({
-                                path: "/"
-                            });
-                        }
+
                     }
                 };
 
@@ -101,7 +105,21 @@
 
                 xhr.setRequestHeader("Authorization", that.$store.state.token);
                 xhr.send(data);
+            },
+            getAlreadyUploadImgNum() {
+
+                this.$axios({
+                    method: 'POST',
+                    url: '/users/getAlreadyUploadImgNum',
+                    data: {}
+                }).then(response => {
+                    var resdata = response.data;
+                    this.successnum = resdata.num;
+                })
+
             }
+
+
         }
     }
 </script>

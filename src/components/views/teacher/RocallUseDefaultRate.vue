@@ -276,7 +276,7 @@
                                 type: 'success',
                                 message: '提交成功'
                             });
-
+                            this.$router.push('/ShowRollCallHistory');
                         } else {
                             this.$message.error('请稍后再试');
                             return;

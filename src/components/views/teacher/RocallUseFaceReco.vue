@@ -252,6 +252,11 @@
                             console.log(that.radio);
                             that.$message.error('并非本人，请仔细检查该学生证件（或重新进行对其进行人脸识别）');
                         } else {
+                       that.dialogVisible_=false;
+                            that.$message({
+                                type: 'success',
+                                message: '验证成功---'
+                            });
                             that.radio[that.uid] = "0";
                             console.log(that.radio);
                         }
@@ -413,6 +418,7 @@
                                 type: 'success',
                                 message: '提交成功'
                             });
+                            this.$router.push('/ShowRollCallHistory');
 
                         } else {
                             this.$message.error('请稍后再试');

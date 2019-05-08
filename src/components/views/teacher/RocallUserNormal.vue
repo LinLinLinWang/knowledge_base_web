@@ -255,7 +255,8 @@
                 var StringJson = JSON.stringify(this.radio);
                 //将json类型的String  转为 json
                 var json = JSON.parse(StringJson);
-
+                console.log(this.radio);
+                console.log(this.JSONLength(json));
                 if (this.count === (this.JSONLength(json))) {
                     this.$message({
                         type: 'success',
@@ -276,7 +277,7 @@
                                 type: 'success',
                                 message: '提交成功'
                             });
-
+                            this.$router.push('/ShowRollCallHistory');
                         } else {
                             this.$message.error('请稍后再试');
                             return;

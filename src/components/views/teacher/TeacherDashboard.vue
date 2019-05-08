@@ -1,7 +1,7 @@
 <template>
     <div>
-        <el-row :gutter="16">
-            <el-col :span="8">
+        <el-row :gutter="7">
+            <el-col :span="9" :xs="24" :sm="24" :md="24" :lg="9" :xl="9">
                 <el-card shadow="hover">
                     <div class="user-info">
                         <avatar :username=user.uname :size="100" color="#fff" background-color="#FFC107"></avatar>
@@ -10,64 +10,72 @@
                             <div>{{role}}</div>
                         </div>
                     </div>
-                    <el-container>
-                        <el-row :gutter="64">
-                            <el-col :span="12">
-                                <div v-if="havelast">
-                                    <div class="user-info-list">上次登录时间：<span>{{beforelogintime}}</span></div>
-                                    <div class="user-info-list">上次登录地点：<span>{{beforeloginaddress}}</span></div>
-                                    <div class="user-info-list" v-if="beforelogintype==='1'">上次登录类型：<span>网页端</span>
-                                    </div>
-                                    <div class="user-info-list" v-else-if="beforelogintype==='2'">
-                                        上次登录类型：<span>移动端</span>
-                                    </div>
-                                    <div class="user-info-list" v-else-if="beforelogintype==='3'">
-                                        上次登录类型：<span>客户端</span>
-                                    </div>
-                                    <div class="user-info-list" v-else-if="beforelogintype==='4'">
-                                        上次登录类型：<span>微信端</span>
-                                    </div>
-                                    <div class="user-info-list" v-else-if="beforelogintype==='4'">
-                                        上次登录类型：<span>安卓端</span>
-                                    </div>
+                    <el-row :gutter="32">
+                        <el-col :span="12">
+                            <div v-if="havelast">
+                                <div class="user-info-list">上次登录时间：<span>{{beforelogintime}}</span></div>
+                                <div class="user-info-list">上次登录地点：<span>{{beforeloginaddress}}</span></div>
+                                <div class="user-info-list" v-if="beforelogintype==='1'">上次登录类型：<span>网页端</span>
                                 </div>
-                                <div v-else>
-                                    欢迎访问，这是您第一次登录
+                                <div class="user-info-list" v-else-if="beforelogintype==='2'">
+                                    上次登录类型：<span>移动端</span>
                                 </div>
-                            </el-col>
-                            <el-col :span="12" style="right: 4px">
-                                <div>
-                                    <div class="user-info-list">本次登录时间：<span>{{lastlogintime}}</span></div>
-                                    <div class="user-info-list">本次登录地点：<span>{{lastloginaddress}}</span></div>
-                                    <div class="user-info-list" v-if="lastlogintype==='1'">上次登录类型：<span>网页端</span></div>
-                                    <div class="user-info-list" v-else-if="lastlogintype==='2'">上次登录类型：<span>移动端</span>
-                                    </div>
-                                    <div class="user-info-list" v-else-if="lastlogintype==='3'">上次登录类型：<span>客户端</span>
-                                    </div>
-                                    <div class="user-info-list" v-else-if="lastlogintype==='4'">上次登录类型：<span>微信端</span>
-                                    </div>
-                                    <div class="user-info-list" v-else-if="lastlogintype==='4'">上次登录类型：<span>安卓端</span>
-                                    </div>
+                                <div class="user-info-list" v-else-if="beforelogintype==='3'">
+                                    上次登录类型：<span>客户端</span>
                                 </div>
-                            </el-col>
-                        </el-row>
-                    </el-container>
+                                <div class="user-info-list" v-else-if="beforelogintype==='4'">
+                                    上次登录类型：<span>微信端</span>
+                                </div>
+                                <div class="user-info-list" v-else-if="beforelogintype==='4'">
+                                    上次登录类型：<span>安卓端</span>
+                                </div>
+                            </div>
+                            <div v-else>
+                                欢迎访问，这是您第一次登录
+                            </div>
+                        </el-col>
+                        <el-col :span="12">
+                            <div>
+                                <div class="user-info-list">本次登录时间：<span>{{lastlogintime}}</span></div>
+                                <div class="user-info-list">本次登录地点：<span>{{lastloginaddress}}</span></div>
+                                <div class="user-info-list" v-if="lastlogintype==='1'">本次登录类型：<span>网页端</span></div>
+                                <div class="user-info-list" v-else-if="lastlogintype==='2'">本次登录类型：<span>移动端</span>
+                                </div>
+                                <div class="user-info-list" v-else-if="lastlogintype==='3'">本次登录类型：<span>客户端</span>
+                                </div>
+                                <div class="user-info-list" v-else-if="lastlogintype==='4'">本次登录类型：<span>微信端</span>
+                                </div>
+                                <div class="user-info-list" v-else-if="lastlogintype==='4'">本次登录类型：<span>安卓端</span>
+                                </div>
+                            </div>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <BaiduMap></BaiduMap>
+                    </el-row>
+                </el-card>
+                <br>
+                <el-card shadow="hover">
+
                 </el-card>
             </el-col>
-            <el-col :span="16">
+            <el-col class="hidden-md-and-down" :span="15">
                 <el-card shadow="hover">
-                    test
+
                 </el-card>
             </el-col>
         </el-row>
+
     </div>
 </template>
 
 <script>
     import Avatar from 'vue-avatar';
 
+    import BaiduMap from '../BaiduMap';
+
     export default {
-        name: 'TeacherDashboard',
+        name: 'StudentDashboard',
         data() {
             return {
                 calenderdate: new Date(),
@@ -88,6 +96,7 @@
         },
         components: {
             Avatar,
+            BaiduMap
         },
         computed: {
             role() {
@@ -99,7 +108,8 @@
             this.loginGetLast();
         },
         mounted() {
-            // console.clear();
+            // eslint-disable-next-line no-console
+            console.clear();
         },
         methods: {
             loginGetLast: function () {

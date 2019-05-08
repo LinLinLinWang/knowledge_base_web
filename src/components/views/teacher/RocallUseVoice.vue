@@ -164,7 +164,7 @@
                 count: '',
                 tableData: {},
                 //按钮点名
-                radio: [],
+                radio: {},
                 courseid: '',
                 coursename: '',
                 rocalltype: '',
@@ -268,7 +268,8 @@
                 var StringJson = JSON.stringify(this.radio);
                 //将json类型的String  转为 json
                 var json = JSON.parse(StringJson);
-
+                console.log(this.radio);
+                console.log(this.JSONLength(json));
                 if (this.count === (this.JSONLength(json))) {
                     this.$message({
                         type: 'success',
@@ -289,7 +290,7 @@
                                 type: 'success',
                                 message: '提交成功'
                             });
-
+                            this.$router.push('/ShowRollCallHistory');
                         } else {
                             this.$message.error('请稍后再试');
                         }
@@ -312,15 +313,13 @@
             nextStep(state) {
                 //下一个名字
                 let index = this.activeIndex;
-                this.radio[this.tableData[index].uid] = state;
-
+                this.radio[this.tableData[index].uid] = state + "";
+                if (state === 0)
+                    this.countatt++;
+                else
+                    this.countnotatt++;
+                console.log(this.radio);
                 if (this.activeIndex + 1 === this.tableData.length) {
-                    for (let i = 0; i < this.tableData.length; i++) {
-                        if (this.radio[i] === 0)
-                            this.countatt++;
-                        else
-                            this.countnotatt++;
-                    }
                     this.btndisable = 2;
                 } else {
                     index = ++this.activeIndex;
