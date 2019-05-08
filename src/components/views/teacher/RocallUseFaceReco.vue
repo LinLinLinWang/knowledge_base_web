@@ -126,19 +126,22 @@
         <!-- 对话框-->
         <el-dialog
                 title="提示"
-                :visible.sync="dialogVisible_"
                 width="30%"
-                :before-close="handleClose">
-
-            <div class="container">
-                <el-button type="danger" plain v-if="notsupport">获取摄像头权限失败，请检查后重试</el-button>
-                <div v-if="!notsupport">
-                    共需10张照片，已有{{successnum}}张
-                    <el-button type="primary" @click="getPhoto" round>拍照</el-button>
-                    <br>
-                    <video id="videovar" width="100%" autoplay></video>
-                    <br>
-                    <canvas id="canvasvar"></canvas>
+                :visible.sync="dialogVisible_"
+                @open="getMedia"
+                :before-close="handleClose"
+        >
+            <div slot="footer">
+                <div class="container">
+                    <el-button type="danger" plain v-if="notsupport">获取摄像头权限失败，请检查后重试</el-button>
+                    <div v-show="!notsupport">
+                        共需10张照片，已有{{successnum}}张
+                        <el-button type="primary" @click="getPhoto" round>拍照</el-button>
+                        <br>
+                        <video id="videovar" width="100%" autoplay></video>
+                        <br>
+                        <canvas id="canvasvar"></canvas>
+                    </div>
                 </div>
             </div>
 
@@ -173,11 +176,8 @@
                 rocalldetail: '' //显示点名方式详情
 
             }
-        }, mounted() {
-            this.getMedia();
         },
         created() {
-
             //获取参数值
             this.courseid = this.$route.params.courseid,
                 this.rocalltype = this.$route.params.rocalltype,
@@ -193,6 +193,7 @@
             getMedia() {
                 var that = this;
                 var videovar = document.getElementById('videovar');
+                console.log(videovar);
                 navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
                 if (navigator.getUserMedia) {
                     navigator.getUserMedia({video: true},
@@ -277,9 +278,7 @@
             },
             //打开相机
             openCamers(uid) {
-                this.getMedia();
                 this.dialogVisible_ = true;
-
             },
             //获取当前课程下的学生请假信息
             getCourseStudentWhoVacate() {

@@ -135,7 +135,12 @@
             if (document.body.clientWidth < 1500) {
                 this.collapseChage();
             }
-            setTimeout(this.getUnReadNum, 60000);
+
+            setTimeout(this.getUnReadNum, 6000);
+
+            bus.$on('changemsgnum', msg => {
+                this.getUnReadNum();
+            });
         }
     }
 </script>

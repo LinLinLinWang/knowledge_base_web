@@ -56,6 +56,8 @@
 </template>
 
 <script>
+    import bus from '../common/bus';
+
     export default {
         name: 'tabs',
         data() {
@@ -92,6 +94,7 @@
                         confirmButtonText: '确定',
                     });
                     this.getMsg();
+                    bus.$emit('changemsgnum', 0);
                 });
             },
             handleAllRead() {
@@ -105,6 +108,7 @@
                         confirmButtonText: '确定',
                     });
                     this.getMsg();
+                    bus.$emit('changemsgnum', 0);
                 });
 
             },
