@@ -55,12 +55,23 @@
                     </el-row>
                 </el-card>
                 <br>
-                <el-card shadow="hover">
 
-                </el-card>
             </el-col>
             <el-col class="hidden-md-and-down" :span="15">
                 <el-card shadow="hover">
+
+                    <WeatherAndWeekDayAndDate></WeatherAndWeekDayAndDate>
+
+
+                </el-card>
+                <el-card shadow="hover">
+                    <el-carousel :interval="4000" type="card" height="200px">
+                        <el-carousel-item v-for="item in imgsrc" :key="item">
+                            <h3 class="medium"><img  :src="item"></h3>
+                        </el-carousel-item>
+                    </el-carousel>
+
+
 
                 </el-card>
             </el-col>
@@ -71,13 +82,15 @@
 
 <script>
     import Avatar from 'vue-avatar';
-
+    import WeatherAndWeekDayAndDate from './WeatherAndWeekDayAndDate';
     import BaiduMap from '../BaiduMap';
 
     export default {
+
         name: 'StudentDashboard',
         data() {
             return {
+                imgsrc:["..../assets/img/1.png",2,3,4,5,6],
                 calenderdate: new Date(),
 
                 //上次登录信息
@@ -95,6 +108,7 @@
             }
         },
         components: {
+            WeatherAndWeekDayAndDate,
             Avatar,
             BaiduMap
         },
@@ -227,6 +241,20 @@
         color: #999;
         line-height: 25px;
     }
+    .el-carousel__item h3 {
+        color: #475669;
+        font-size: 14px;
+        opacity: 0.75;
+        line-height: 200px;
+        margin: 0;
+    }
 
+    .el-carousel__item:nth-child(2n) {
+        background-color: #99a9bf;
+    }
+
+    .el-carousel__item:nth-child(2n+1) {
+        background-color: #d3dce6;
+    }
 
 </style>

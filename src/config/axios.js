@@ -42,13 +42,11 @@ axios.interceptors.response.use(
 )
 ;
 
-axios.defaults.baseURL = '/api';
-
-// if (process.env.NODE_ENV === "production") {
-//     axios.defaults.baseURL = 'https://vue.aloli.cn/api';
-// } else {
-//     axios.defaults.baseURL = '/api';
-// }
+if (process.env.NODE_ENV === "production") {
+    axios.defaults.baseURL = 'https://vue.aloli.cn/api';
+} else {
+    axios.defaults.baseURL = 'http://127.0.0.1:58887';
+}
 
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'; //改为表单提交
 axios.defaults.withCredentials = true; //携带cookie

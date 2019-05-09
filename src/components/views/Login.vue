@@ -71,7 +71,8 @@
                             </el-tab-pane>
                             <el-tab-pane>
                                 <span slot="label"><i class="el-icon-date"></i> 新用户注册</span>
-                                <el-form :model="registerRuleForm" :rules="rulesCode" label-width="0px"
+                                <el-form :model="registerRuleForm" :rules="registerRules" label-width="0px"
+                                         ref="registerRuleForm"
                                          class="ms-content">
                                     <el-alert
                                             :title="promot"
@@ -83,14 +84,17 @@
 
                                     <el-form-item prop="username">
                                         <el-input v-model="registerRuleForm.username" placeholder="请输入姓名"
-                                                  v-on:input="validateUsername()">
+                                                  v-on:input="validateUsername()"
+                                                  required>
                                             <el-button slot="prepend">
                                                 <svg-icon icon-class="people"/>
                                             </el-button>
                                         </el-input>
                                     </el-form-item>
-                                    <el-form-item prop="username">
-                                        <el-input v-model="registerRuleForm.idnumber" placeholder="请输入学号" required>
+                                    <el-form-item prop="idnumber">
+                                        <el-input v-model="registerRuleForm.idnumber" placeholder="请输入学号"
+                                                  v-on:input="getRealIdNumber"
+                                                  required>
                                             <el-button slot="prepend">
                                                 <svg-icon icon-class="证件"/>
                                             </el-button>
@@ -101,7 +105,8 @@
                                         <el-input v-model="registerRuleForm.userphone"
                                                   :disabled="registerRuleForm.disabled"
                                                   placeholder="请输入手机号"
-                                                  v-on:input="getRealTimePhone">
+                                                  v-on:input="getRealTimePhone"
+                                                  required>
                                             <el-button slot="prepend">
                                                 <svg-icon icon-class="手机号"/>
                                             </el-button>
@@ -222,7 +227,7 @@
                         {required: true, message: '请输入手机号', trigger: 'blur'}
                     ],
                     idnumber: [
-                        {required: true, message: '请输入验证码', trigger: 'blur'}
+                        {required: true, message: '请输入学号', trigger: 'blur'}
                     ]
                 },
 
@@ -402,20 +407,25 @@
                     this.promot = "姓名含有非中文";
                     this.promotType = "warning";
                     this.registerRuleForm.username = uname.substring(0, uname.length - 1);
+                    return false;
                 } else {
                     this.promot = "姓名符合规范";
                     this.promotType = "success";
+
+                }
+
+                if (uname.length > 20 || uname.length == 1) {
+                    this.promot = "用户姓名长度限制在2--20位";
+                    this.promotType = "warning";
+                    this.registerRuleForm.username = uname.substring(0, 20);
+                    return false;
+                } else {
                     return true;
                 }
 
-                if (uname.length > 20) {
-                    this.promot = "用户姓名长度不可超过20";
-                    this.promotType = "warning";
-                    this.registerRuleForm.username = uname.substring(0, 19);
-                }
 
-                return false;
             },
+
 
             //实时获取用户输入的手机号
             getRealTimePhone() {
@@ -449,8 +459,57 @@
                             }
                         })
                     }
+                } else {
+                    this.promot = "手机号长度错误！";
+                    this.promotType = "warning";
+
                 }
             },
+            //实时获取用户输入的学号
+            getRealIdNumber() {
+                this.promot = "请仔细填写您的学号，后期无法修改";
+                let idnumber = this.registerRuleForm.idnumber;
+
+                var ref = /^[0-9]+$/;
+                if (!ref.test(idnumber)) {
+                    this.promot = "学号不能出现非数字";
+                    this.registerRuleForm.idnumber = "";
+                    return;
+
+                }
+                if (idnumber == "" || idnumber.length == 0 || idnumber.length > 20) {
+                    this.promot = "学号限制在1--20位";
+                    this.registerRuleForm.idnumber = "";
+                    return;
+
+                } else {
+                    this.$axios({
+                        method: 'POST',
+                        url: '/usersRegiste/idNumberIsOrNotExist',
+                        data: {
+                            idnumber: idnumber,
+                        }
+                    }).then(response => {
+                        var resdata = response.data;
+                        if (null == resdata) {
+                            this.promot = "请检查网络连接状况";
+                        }
+                        if (resdata.state === "200") {
+                            this.promot = "该学号可以注册使用";
+                            this.registerChangeCodeDisabled = false;
+                            this.registerChangeCodeOpacity = "1";
+                        } else {
+                            this.promot = "该学号已经注册";
+                            this.registerChangeCodeDisabled = true;
+                            this.registerChangeCodeOpacity = "0.6";
+                        }
+                    })
+
+                }
+
+
+            },
+
             //获取注册验证码
             registerGetPhoneValidateCode() {
                 let userphone = this.registerRuleForm.userphone;
@@ -483,6 +542,7 @@
             },
             //提交注册
             submitRegisterForm(formName) {
+                let that=this;
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         if (this.validateUsername()) {
@@ -501,9 +561,13 @@
                                     confirmButtonText: '确定'
                                 });
                                 if (resdata.state === "200") {
-                                    this.$router.push('/');
+                                  that.$router.go(0);
                                 }
                             })
+                        } else {
+                            this.$alert("姓名不规范 禁止提交", '', {
+                                confirmButtonText: '确定'
+                            });
                         }
                     }
                 })
