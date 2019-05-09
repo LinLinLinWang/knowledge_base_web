@@ -80,6 +80,8 @@
 
                 //此处使用原生js，避免拦截器影响multipart/form-data
                 let url = this.$axios.defaults.baseURL + "/users/uploadPhotoForRollCall";
+                console.log("url");
+                console.log(url);
                 let data = new FormData();
                 //附加表单id
                 data.append('imgCode', image_code);
