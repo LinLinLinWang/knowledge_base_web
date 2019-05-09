@@ -82,7 +82,7 @@
                         this.notify = 1;
                     }
 
-                    if (this.notify === 0) {
+                    if (this.notify === 0 && response.data.data !== "0") {
                         this.message = response.data.data;
                         this.notify = 1;
                         this.$notify({
@@ -147,6 +147,7 @@
                 this.collapseChage();
             }
 
+            // eslint-disable-next-line no-unused-vars
             bus.$on('changemsgnum', msg => {
                 this.getUnReadNum();
             });

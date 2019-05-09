@@ -45,7 +45,7 @@ axios.interceptors.response.use(
 if (process.env.NODE_ENV === "production") {
     axios.defaults.baseURL = 'https://vue.aloli.cn/api';
 } else {
-    axios.defaults.baseURL = 'http://127.0.0.1:58887';
+    axios.defaults.baseURL = '/api';
 }
 
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'; //改为表单提交

@@ -284,9 +284,7 @@
                     } else {
                         this.changeGetCodeButtonStyle();
                     }
-                    this.$alert(response.data.msg, '', {
-                        confirmButtonText: '确定'
-                    });
+                    this.$message(response.data.msg);
                 })
             },
             //改变获取验证码按钮样式
@@ -331,15 +329,11 @@
                                     path: redirect
                                 });
                             } else {
-                                this.$alert('手机号或验证码错误', '', {
-                                    confirmButtonText: '确定'
-                                });
+                                this.$message(response.data.msg);
                             }
                         })
                     } else {
-                        this.$alert('请输入用户名和验证码', '', {
-                            confirmButtonText: '确定'
-                        });
+                        this.$message('请输入用户名和验证码');
                         return false;
                     }
                 });
@@ -406,7 +400,7 @@
                 if (!reg.test(uname)) {
                     this.promot = "姓名含有非中文";
                     this.promotType = "warning";
-                    this.registerRuleForm.username = uname.substring(0, uname.length - 1);
+                    // this.registerRuleForm.username = uname.substring(0, uname.length - 1);
                     return false;
                 } else {
                     this.promot = "姓名符合规范";
@@ -414,7 +408,7 @@
 
                 }
 
-                if (uname.length > 20 || uname.length == 1) {
+                if (uname.length > 20 || uname.length === 1) {
                     this.promot = "用户姓名长度限制在2--20位";
                     this.promotType = "warning";
                     this.registerRuleForm.username = uname.substring(0, 20);
@@ -429,7 +423,7 @@
 
             //实时获取用户输入的手机号
             getRealTimePhone() {
-                this.promot = "请填写手机号";
+                // this.promot = "请填写手机号";
                 let userphone = this.registerRuleForm.userphone;
                 if (userphone.length === 11) {
                     if (!(/^1[3|4|5|7|8][0-9]\d{8,11}$/.test(userphone))) {
@@ -450,10 +444,12 @@
                             }
                             if (resdata.state === "200") {
                                 this.promot = "该手机号可以注册使用";
+                                this.promotType = "success";
                                 this.registerChangeCodeDisabled = false;
                                 this.registerChangeCodeOpacity = "1";
                             } else {
                                 this.promot = "手机号已经注册";
+                                this.promotType = "error";
                                 this.registerChangeCodeDisabled = true;
                                 this.registerChangeCodeOpacity = "0.6";
                             }
@@ -461,13 +457,12 @@
                     }
                 } else {
                     this.promot = "手机号长度错误！";
-                    this.promotType = "warning";
-
+                    this.promotType = "info";
                 }
             },
             //实时获取用户输入的学号
             getRealIdNumber() {
-                this.promot = "请仔细填写您的学号，后期无法修改";
+                // this.promot = "请仔细填写您的学号，后期无法修改";
                 let idnumber = this.registerRuleForm.idnumber;
 
                 var ref = /^[0-9]+$/;
@@ -496,10 +491,12 @@
                         }
                         if (resdata.state === "200") {
                             this.promot = "该学号可以注册使用";
+                            this.promotType = "success";
                             this.registerChangeCodeDisabled = false;
                             this.registerChangeCodeOpacity = "1";
                         } else {
                             this.promot = "该学号已经注册";
+                            this.promotType = "error";
                             this.registerChangeCodeDisabled = true;
                             this.registerChangeCodeOpacity = "0.6";
                         }
@@ -513,12 +510,9 @@
             //获取注册验证码
             registerGetPhoneValidateCode() {
                 let userphone = this.registerRuleForm.userphone;
-                var partten_phone = /^1[3,5,8]\d{9}$/;
+                var partten_phone = /^1\d{10}$/;
                 if (!partten_phone.test(userphone)) {
                     this.promot = "请输入正确的手机号";
-                    this.$alert('请输入正确的手机号!', '提示', {
-                        confirmButtonText: '确定'
-                    });
                     return;
                 }
                 this.registerRuleForm.disabled = true;
@@ -535,20 +529,18 @@
                     } else {
                         this.registerChangeGetCodeButtonStyle();
                     }
-                    this.$alert(response.data.msg, '', {
-                        confirmButtonText: '确定'
-                    });
+                    this.$message(response.data.msg);
                 })
             },
             //提交注册
             submitRegisterForm(formName) {
-                let that=this;
+                let that = this;
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         if (this.validateUsername()) {
                             this.$axios({
                                 method: 'POST',
-                                url: '/users/registe',
+                                url: '/usersRegiste/registe',
                                 data: {
                                     username: this.registerRuleForm.username,
                                     userphone: this.registerRuleForm.userphone,
@@ -561,7 +553,7 @@
                                     confirmButtonText: '确定'
                                 });
                                 if (resdata.state === "200") {
-                                  that.$router.go(0);
+                                    that.$router.go(0);
                                 }
                             })
                         } else {
