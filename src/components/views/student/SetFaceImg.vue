@@ -60,6 +60,9 @@
                         type: 'error',
                         message: '您已上传足够图片'
                     });
+                    this.$router.push({
+                        path: "/"
+                    });
                     return;
                 }
                 var videovar = document.getElementById('videovar');
@@ -85,11 +88,11 @@
                 xhr.onreadystatechange = function () {
                     if (xhr.readyState === 4 && xhr.status === 200) {
                         let resdata = JSON.parse(xhr.responseText);
-                        console.log(resdata);
                         that.successnum = resdata.successnum;
                         if (resdata.state === "400") {
-                            that.$alert(resdata.msg, '操作结果', {
-                                confirmButtonText: '确定',
+                            that.$message({
+                                message: resdata.msg,
+                                type: 'error'
                             });
                         } else {
                             that.$message({

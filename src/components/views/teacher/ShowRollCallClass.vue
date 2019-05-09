@@ -1,114 +1,72 @@
 <template xmlns:el-col="http://www.w3.org/1999/html">
     <div>
-        <el-row :gutter="16">
-            <WeatherAndWeekDayAndDate></WeatherAndWeekDayAndDate>
-            <el-row :gutter="16">
-                <el-col :span="16">
-                    <el-row :gutter="24">
-                        <el-col :span="8" :offset="8">
-                            请选择课程点名
-                        </el-col>
-                        <el-col :span="8">
-
-
-                        </el-col>
-                    </el-row>
-
-                    <el-row :gutter="24">
-                        <el-card :body-style="{ padding: '5px' }">
-
-
-                            <el-table
-                                    :data="tableData1.filter(data => !search || data.cname.toLowerCase().includes(search.toLowerCase()))"
-
-                                    style="width: 100%">
-
-                                <el-table-column
-                                        label="课程id"
-                                        prop="courseid">
-                                </el-table-column>
-                                <el-table-column
-                                        label="班级名字"
-                                        prop="classname">
-                                </el-table-column>
-                                <el-table-column
-                                        label="课程名字"
-                                        prop="cname"
-                                >
-                                </el-table-column>
-                                <el-table-column
-                                        label="应到人数/总人数"
-                                        prop="cname"
-                                        :formatter="snum_anum"
-
-
-                                >
-                                </el-table-column>
-                                <el-table-column>
-                                    <template slot-scope="scope">
-                                        <el-button
-                                                size="mini"
-                                                type="primary"
-                                                @click="showRollWays(scope.row)">点名
-                                        </el-button>
-                                    </template>
-                                </el-table-column>
-                                <el-table-column
-                                        align="right">
-                                    <template slot="header" slot-scope="scope">
-                                        <el-input
-                                                v-model="search"
-                                                size="mini"
-                                                placeholder="输入关键字搜索"/>
-                                    </template>
-                                    <template slot-scope="scope">
-                                        <el-button
-                                                size="mini"
-                                                type="primary"
-                                                @click="chooseCourseRollOrPerson(scope.$index, scope.row)">查看考勤
-                                        </el-button>
-                                    </template>
-                                </el-table-column>
-                            </el-table>
-                        </el-card>
-
-
-                    </el-row>
-
-                </el-col>
-                <el-col :span="8">
+        <div v-show="showdiv===0">
+            <el-row>
+                <WeatherAndWeekDayAndDate></WeatherAndWeekDayAndDate>
+                <el-row :gutter="24">
                     <el-card :body-style="{ padding: '5px' }">
 
                         <el-table
-                                :data="tableData"
+                                :data="tableData1.filter(data => !search || data.cname.toLowerCase().includes(search.toLowerCase()))"
+
                                 style="width: 100%">
+
                             <el-table-column
-                                    prop="date"
-                                    label="日期"
-                                    width="180">
+                                    label="课程id"
+                                    prop="courseid">
                             </el-table-column>
                             <el-table-column
-                                    prop="name"
-                                    label="姓名"
-                                    width="180">
+                                    label="班级名字"
+                                    prop="classname">
                             </el-table-column>
                             <el-table-column
-                                    prop="address"
-                                    label="地址">
+                                    label="课程名字"
+                                    prop="cname"
+                            >
+                            </el-table-column>
+                            <el-table-column
+                                    label="应到人数/总人数"
+                                    prop="cname"
+                                    :formatter="snum_anum"
+
+
+                            >
+                            </el-table-column>
+                            <el-table-column>
+                                <template slot-scope="scope">
+                                    <el-button
+                                            size="mini"
+                                            type="primary"
+                                            @click="showRollWays(scope.row)">点名
+                                    </el-button>
+                                </template>
+                            </el-table-column>
+                            <el-table-column
+                                    align="right">
+                                <template slot="header" slot-scope="scope">
+                                    <el-input
+                                            v-model="search"
+                                            size="mini"
+                                            placeholder="输入关键字搜索"/>
+                                </template>
+                                <template slot-scope="scope">
+                                    <el-button
+                                            size="mini"
+                                            type="primary"
+                                            @click="chooseCourseRollOrPerson(scope.$index, scope.row)">查看考勤
+                                    </el-button>
+                                </template>
                             </el-table-column>
                         </el-table>
-
                     </el-card>
-                </el-col>
+
+
+                </el-row>
+
 
             </el-row>
-        </el-row>
-        <el-dialog
-                title="提示"
-                :visible.sync="dialogVisible"
-                width="30%"
-
-        >
+        </div>
+        <div v-show="showdiv===1" class="container">
             <el-form :model="ruleForm" ref="ruleForm" label-width="100px" class="demo-ruleForm">
 
                 <el-form-item label="点名课程名字" prop="cname">
@@ -124,23 +82,14 @@
 
 
             </el-form>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="dialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="startRoll">确 定</el-button>
-            </span>
-        </el-dialog>
+            <el-button type="primary" @click="startRoll">确 定</el-button>
+            <el-button @click="dialogVisible = false">取 消</el-button>
+        </div>
 
-
-        <el-dialog
-                title="提示"
-                :visible.sync="dialogVisible_"
-                width="30%"
-                >
-
+        <div v-show="showdiv===2" class="container">
             <el-button type="primary" @click="showPersonaRollCall()">个人历史出勤</el-button>
             <el-button type="primary" @click="showRollCallDetailByCourseId">课程历史出勤</el-button>
-
-        </el-dialog>
+        </div>
     </div>
 
 </template>
@@ -181,32 +130,7 @@
                 loginaddress: '',
                 value: new Date(),
 
-                tableData: [{
-                    date: '2016-05-02',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                }, {
-                    date: '2016-05-04',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1517 弄'
-                }, {
-                    date: '2016-05-01',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1519 弄'
-                }, {
-                    date: '2016-05-03',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1516 弄'
-                }, {
-                    date: '2016-05-03',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1516 弄'
-                }, {
-                    date: '2016-05-03',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1516 弄'
-                }]
-
+                showdiv: 0,
             }
         },
         watch: {
@@ -240,6 +164,7 @@
             chooseCourseRollOrPerson(index, row) {
                 this.courseid = row.courseid;
                 this.dialogVisible_ = true;
+                this.showdiv = 2;
             },
             //查看考勤历史
             showRollCallDetailByCourseId() {
@@ -365,9 +290,8 @@
                 this.dialogVisible = true;
                 this.courseid = row.courseid;
                 this.ruleForm.cname = row.cname;
-                this.ruleForm.ctime = '1'
-
-
+                this.ruleForm.ctime = '1';
+                this.showdiv = 1;
             },
             //开始点名
             startRoll() {
@@ -421,5 +345,11 @@
 
     .el-col {
         border-radius: 4px;
+    }
+
+
+    .container {
+        max-width: 500px;
+        margin: 0 auto;
     }
 </style>

@@ -1,151 +1,144 @@
 <template>
     <div style="background-color: white">
-        <el-row :gutter="16">
-            <WeatherAndWeekDayAndDate></WeatherAndWeekDayAndDate>
-        </el-row>
-        <el-row :gutter="16">
-            <el-col :span="8" :offset="8">
-                <el-tag size="medium">{{rocalldetail}}</el-tag>
-            </el-col>
-            <el-col :span="8">
+        <div v-show="!showimg">
+            <el-row :gutter="16">
+                <WeatherAndWeekDayAndDate></WeatherAndWeekDayAndDate>
+            </el-row>
+            <el-row :gutter="16">
+                <el-col :span="8" :offset="8">
+                    <el-tag size="medium">{{rocalldetail}}</el-tag>
+                </el-col>
+                <el-col :span="8">
 
-            </el-col>
+                </el-col>
 
-        </el-row>
-        <el-row :gutter="16">
-            <el-col :span="18">
-                <el-table
-                        :data="tableData"
-                        border
-                        style="width: 100%">
+            </el-row>
+            <el-row :gutter="16">
+                <el-col :span="18">
+                    <el-table
+                            :data="tableData"
+                            border
+                            style="width: 100%">
 
-                    <el-table-column
-                            label="学生账号"
-                            prop="uid">
-                    </el-table-column>
-                    <el-table-column
-                            label="学生姓名"
-                            prop="uname">
-                    </el-table-column>
-                    <el-table-column
-                            label="学生手机号"
-                            prop="phone"
-                    >
-                    </el-table-column>
-                    <el-table-column
-                            label="请假情况"
-                            prop="state"
-                            :formatter="studentState"
-                    >
-                    </el-table-column>
-                    <el-table-column
-                            label="人脸识别">
-                        <template slot-scope="scope">
+                        <el-table-column
+                                label="学生账号"
+                                prop="uid">
+                        </el-table-column>
+                        <el-table-column
+                                label="学生姓名"
+                                prop="uname">
+                        </el-table-column>
+                        <el-table-column
+                                label="学生手机号"
+                                prop="phone"
+                        >
+                        </el-table-column>
+                        <el-table-column
+                                label="请假情况"
+                                prop="state"
+                                :formatter="studentState"
+                        >
+                        </el-table-column>
+                        <el-table-column
+                                label="人脸识别">
+                            <template slot-scope="scope">
 
-                            <el-button type="primary" @click="openCamers(scope.row.uid)">打开相机</el-button>
-                        </template>
-
-
-                    </el-table-column>
-                    <el-table-column
-                            align="right">
-                        <template slot="header" slot-scope="scope">
-                            <el-input
-
-                                    size="mini"
-                                    placeholder="输入关键字搜索"/>
-                        </template>
-
-                        <template slot-scope="scope">
-
-                            <el-radio v-model="radio[scope.row.uid]" label="0">已到</el-radio>
-                            <el-radio v-model="radio[scope.row.uid]" label="1">未到</el-radio>
-                        </template>
-
-                    </el-table-column>
-                </el-table>
-                <el-row :gutter="16">
-                    <el-col :span="4" :offset="20">
-                        <el-button type="primary" @click="submit()">立即创建</el-button>
-
-                    </el-col>
+                                <el-button type="primary" @click="openCamers(scope.row.uid)">打开相机</el-button>
+                            </template>
 
 
-                </el-row>
-            </el-col>
+                        </el-table-column>
+                        <el-table-column
+                                align="right">
+                            <template slot="header" slot-scope="scope">
+                                <el-input
 
-            <el-col :span="6">
+                                        size="mini"
+                                        placeholder="输入关键字搜索"/>
+                            </template>
 
+                            <template slot-scope="scope">
 
-                <el-card :body-style="{ padding: '5px' }">
-                    <el-row>
-                        请假同学信息(点击左侧展开详情)
-                    </el-row>
+                                <el-radio v-model="radio[scope.row.uid]" label="0">已到</el-radio>
+                                <el-radio v-model="radio[scope.row.uid]" label="1">未到</el-radio>
+                            </template>
+
+                        </el-table-column>
+                    </el-table>
                     <el-row :gutter="16">
+                        <el-col :span="4" :offset="20">
+                            <el-button type="primary" @click="submit()">立即创建</el-button>
 
-                        <el-table
-                                :data="tableData1"
-                                style="width: 100%">
-                            <el-table-column type="expand">
-                                <template slot-scope="props">
-                                    <el-form label-position="left" inline class="demo-table-expand">
-                                        <el-form-item label="学生学号">
-                                            <span>{{ props.row.uid}}</span>
-                                        </el-form-item>
-                                        <el-form-item label="学生姓名">
-                                            <span>{{ props.row.uname}}</span>
-                                        </el-form-item>
-                                        <el-form-item label="学生手机号">
-                                            <span>{{ props.row.phone }}</span>
-                                        </el-form-item>
-                                        <el-form-item label="学生请假类型">
-                                            <span>{{showVtype(props.row.vtype)}}</span>
-                                        </el-form-item>
-                                        <el-form-item label="请假时间">
-                                            <span>{{ props.row.vtime }}</span>
-                                        </el-form-item>
+                        </el-col>
 
-                                    </el-form>
-                                </template>
-                            </el-table-column>
-                            <el-table-column
-                                    label="学生姓名"
-                                    prop="uname">
-                            </el-table-column>
-                            <el-table-column
-                                    label="请假类型"
-                                    prop="vtype"
-                                    :formatter="showVtype">
-                            </el-table-column>
-                        </el-table>
+
                     </el-row>
-                </el-card>
+                </el-col>
 
-            </el-col>
-        </el-row>
-        <!-- 对话框-->
-        <el-dialog
-                title="提示"
-                width="30%"
-                :visible.sync="dialogVisible_"
-                @open="getMedia"
-        >
-            <div slot="footer">
-                <div class="container">
-                    <el-button type="danger" plain v-if="notsupport">获取摄像头权限失败，请检查后重试</el-button>
-                    <div v-show="!notsupport">
-                        该同学已上传{{successnum}}张
-                        <el-button type="primary" @click="getPhoto" round>拍照</el-button>
-                        <br>
-                        <video id="videovar" width="100%" autoplay></video>
-                        <br>
-                        <canvas id="canvasvar"></canvas>
-                    </div>
+                <el-col :span="6">
+
+
+                    <el-card :body-style="{ padding: '5px' }">
+                        <el-row>
+                            请假同学信息(点击左侧展开详情)
+                        </el-row>
+                        <el-row :gutter="16">
+
+                            <el-table
+                                    :data="tableData1"
+                                    style="width: 100%">
+                                <el-table-column type="expand">
+                                    <template slot-scope="props">
+                                        <el-form label-position="left" inline class="demo-table-expand">
+                                            <el-form-item label="学生学号">
+                                                <span>{{ props.row.uid}}</span>
+                                            </el-form-item>
+                                            <el-form-item label="学生姓名">
+                                                <span>{{ props.row.uname}}</span>
+                                            </el-form-item>
+                                            <el-form-item label="学生手机号">
+                                                <span>{{ props.row.phone }}</span>
+                                            </el-form-item>
+                                            <el-form-item label="学生请假类型">
+                                                <span>{{showVtype(props.row.vtype)}}</span>
+                                            </el-form-item>
+                                            <el-form-item label="请假时间">
+                                                <span>{{ props.row.vtime }}</span>
+                                            </el-form-item>
+
+                                        </el-form>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column
+                                        label="学生姓名"
+                                        prop="uname">
+                                </el-table-column>
+                                <el-table-column
+                                        label="请假类型"
+                                        prop="vtype"
+                                        :formatter="showVtype">
+                                </el-table-column>
+                            </el-table>
+                        </el-row>
+                    </el-card>
+
+                </el-col>
+            </el-row>
+        </div>
+
+        <div v-show="showimg">
+            <div class="container">
+                <el-button type="danger" plain v-if="notsupport">获取摄像头权限失败，请检查后重试</el-button>
+                <div v-show="!notsupport">
+                    该同学已上传{{successnum}}张
+                    <el-button type="primary" @click="getPhoto" round>拍照</el-button>
+                    <br>
+                    <video id="videovar" width="100%" autoplay></video>
+                    <br>
+                    <canvas id="canvasvar"></canvas>
                 </div>
             </div>
-
-        </el-dialog>
-
+        </div>
     </div>
 
 
@@ -161,11 +154,9 @@
         },
         data() {
             return {
-                param: new FormData(),
                 uid: '',
                 successnum: 0,
                 notsupport: false,
-                dialogVisible_: false,
                 tableData1: [],
                 count: '',
                 tableData: [],
@@ -174,7 +165,9 @@
                 courseid: '',
                 coursename: '',
                 rocalltype: '',
-                rocalldetail: '' //显示点名方式详情
+                rocalldetail: '', //显示点名方式详情
+
+                showimg: false,
 
             }
         },
@@ -188,7 +181,6 @@
             this.getCourseStudentWithoutVacate();
             //获取请假的学生
             this.getCourseStudentWhoVacate();
-
         },
         methods: {
             getMedia() {
@@ -235,7 +227,7 @@
 
                 //此处使用原生js，避免拦截器影响multipart/form-data
                 let url = this.$axios.defaults.baseURL + "/rollcall/faceRocall";
-                let data = this.param;
+                let data = new FormData();
                 //附加表单id
                 data.append('imgcode', image_code);
                 data.append('uid', this.uid);
@@ -244,20 +236,19 @@
                     if (xhr.readyState === 4 && xhr.status === 200) {
                         let resdata = JSON.parse(xhr.responseText);
                         console.log(resdata.data + "本人");
-                        //   that.successnum = resdata.successnum;
-                        if (resdata.data == "no") {
+                        if (resdata.data === "no") {
                             console.log(that.radio);
                             that.radio[that.uid] = "1";
                             console.log(that.radio);
                             that.$message.error('并非本人，请仔细检查该学生证件（或重新进行对其进行人脸识别）');
                         } else {
-                       that.dialogVisible_=false;
                             that.$message({
                                 type: 'success',
-                                message: '验证成功---'
+                                message: '验证成功'
                             });
                             that.radio[that.uid] = "0";
                             console.log(that.radio);
+                            that.showimg = false;
                         }
 
 
@@ -286,7 +277,8 @@
                     if (this.successnum < 1) {
                         this.$message.error('该同学未上传过图片，无法进行人脸识别');
                     } else {
-                        this.dialogVisible_ = true;
+                        this.showimg = true;
+                        this.getMedia();
                     }
                 })
 
