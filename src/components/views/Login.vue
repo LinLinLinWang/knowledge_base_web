@@ -245,11 +245,17 @@
         },
         mounted() {
             // eslint-disable-next-line no-console
-            console.clear();
+            // console.clear();
         },
         methods: {
             //判断登录类型
             CheckUserTypeEnv() {
+
+                console.log(this.$route.query.type)
+                if (this.$route.query.type === "401") {
+                    this.$message.error("登录状态失效，请重新登录");
+                }
+
                 if (!this.$store.state.isPc) {
                     //移动端
                     this.UserTypeEnv = 2;
@@ -372,18 +378,22 @@
                             } else {
                                 loading.close();
                                 this.$alert('手机号或密码错误', '', {
-                                    confirmButtonText: '确定'
+                                    confirmButtonText: '确定',
+                                    center: true,
+
                                 });
                             }
                         }).catch(() => {
                             loading.close();
                             this.$alert("连接服务器失败，请检查网络情况", '操作结果', {
                                 confirmButtonText: '确定',
+                                center: true,
                             });
                         })
                     } else {
                         this.$alert('请输入用户名和密码', '', {
-                            confirmButtonText: '确定'
+                            confirmButtonText: '确定',
+                            center: true,
                         });
                         return false;
                     }
@@ -550,7 +560,8 @@
                             }).then(response => {
                                 var resdata = response.data;
                                 this.$alert(response.data.msg, '', {
-                                    confirmButtonText: '确定'
+                                    confirmButtonText: '确定',
+                                    center: true,
                                 });
                                 if (resdata.state === "200") {
                                     that.$router.go(0);
@@ -558,7 +569,8 @@
                             })
                         } else {
                             this.$alert("姓名不规范 禁止提交", '', {
-                                confirmButtonText: '确定'
+                                confirmButtonText: '确定',
+                                center: true,
                             });
                         }
                     }

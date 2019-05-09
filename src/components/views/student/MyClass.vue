@@ -125,6 +125,7 @@
                     var resdata = response.data;
                     this.$alert(resdata.msg, '操作结果', {
                         confirmButtonText: '确定',
+                        center: true,
                     });
                 });
                 this.getJoinedClass();

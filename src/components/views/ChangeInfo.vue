@@ -76,8 +76,10 @@
                         }).then(response => {
                             let resdata = response.data;
                             if (resdata.state === "200") {
+
                                 this.$alert('修改成功!', '修改', {
                                     confirmButtonText: '确定',
+                                    center: true,
                                     callback: action => {
                                         if (action) {
                                             this.$store.commit(types.LOGOUT);
@@ -87,13 +89,15 @@
                                 });
                             } else {
                                 this.$alert('修改失败!请检查密码!', '修改', {
-                                    confirmButtonText: '确定'
+                                    confirmButtonText: '确定',
+                                    center: true,
                                 });
                             }
                         });
                     } else {
                         this.$alert(' 两次输入密码不一致!!', '修改', {
-                            confirmButtonText: '确定'
+                            confirmButtonText: '确定',
+                            center: true,
                         });
                     }
                 });

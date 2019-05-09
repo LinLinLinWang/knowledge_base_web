@@ -199,6 +199,7 @@
                     } else {
                         this.$alert(resdata.msg, '操作结果', {
                             confirmButtonText: '确定',
+                            center: true,
                         });
                     }
                 });
@@ -350,6 +351,7 @@
                         let resdata = JSON.parse(xhr.responseText);
                         that.$alert(resdata.msg, '操作结果', {
                             confirmButtonText: '确定',
+                            center: true,
                         });
                         that.$router.replace('/myVacate');
                     }

@@ -6,9 +6,9 @@
             <v-tags></v-tags>
             <div class="content">
                 <transition name="move" mode="out-in">
-                    <keep-alive :include="tagsList">
-                        <router-view></router-view>
-                    </keep-alive>
+                    <!--                    <keep-alive :include="tagsList">-->
+                    <router-view></router-view>
+                    <!--                    </keep-alive>-->
                 </transition>
             </div>
         </div>
@@ -40,17 +40,6 @@
             bus.$on('tags', msg => {
                 let arr = [];
                 for (let i = 0, len = msg.length; i < len; i++) {
-
-                    switch (msg[i].name) {
-                        case 'dashboard':
-                            continue;
-                        case 'TeacherDashboard':
-                            continue;
-                        case 'StudentDashboard':
-                            continue;
-                        case '概览':
-                            continue;
-                    }
                     msg[i].name && arr.push(msg[i].name);
                 }
                 this.tagsList = arr;

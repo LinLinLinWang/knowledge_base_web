@@ -124,6 +124,7 @@
 
 
     export default {
+        name: 'RocallUseNormal',
         components: {
             WeatherAndWeekDayAndDate
         },
@@ -143,17 +144,15 @@
             }
         },
         created() {
-
             //获取参数值
-            this.courseid = this.$route.params.courseid,
-                this.rocalltype = this.$route.params.rocalltype,
-                this.coursename = this.$route.params.coursename,
-                this.rocalldetail = this.$route.params.rocalldetail
+            this.courseid = this.$route.params.courseid;
+            this.rocalltype = this.$route.params.rocalltype;
+            this.coursename = this.$route.params.coursename;
+            this.rocalldetail = this.$route.params.rocalldetail;
             //执行函数
             this.getCourseStudentWithoutVacate();
             //获取请假的学生
             this.getCourseStudentWhoVacate();
-
         },
         methods: {
             //获取当前课程下的学生请假信息
@@ -193,22 +192,21 @@
             },
             //学生请假的类型
             showVtype(row) {
-             if(row.vtype==undefined){
+                if (row.vtype == undefined) {
 
-                 switch (row) {
-
-
-                     case '0':
-                         return "事假";
-                     case '1':
-                         return "病假";
-                     case '2':
-                         return "其他";
+                    switch (row) {
 
 
-                 }
-             }
+                        case '0':
+                            return "事假";
+                        case '1':
+                            return "病假";
+                        case '2':
+                            return "其他";
 
+
+                    }
+                }
 
 
                 switch (row.vtype) {
@@ -277,7 +275,12 @@
                                 type: 'success',
                                 message: '提交成功'
                             });
-                            this.$router.push('/ShowRollCallHistory');
+
+                            this.$router.push({
+                                name: 'ShowRollCallHistory',
+                                params: {courseid: this.courseid}
+                            });
+
                         } else {
                             this.$message.error('请稍后再试');
                             return;

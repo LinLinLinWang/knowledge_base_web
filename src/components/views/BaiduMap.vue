@@ -46,7 +46,7 @@
                 this.$notify({
                     title: '消息通知',
                     message: '正在定位，请授予相关权限',
-                    offset: 80,
+                    offset: 120,
                     type: 'warning'
                 });
                 let that = this;

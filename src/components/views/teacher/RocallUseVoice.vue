@@ -290,7 +290,10 @@
                                 type: 'success',
                                 message: '提交成功'
                             });
-                            this.$router.push('/ShowRollCallHistory');
+                            this.$router.push({
+                                name: 'ShowRollCallHistory',
+                                params: {courseid: this.courseid}
+                            });
                         } else {
                             this.$message.error('请稍后再试');
                         }

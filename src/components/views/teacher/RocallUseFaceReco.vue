@@ -129,7 +129,6 @@
                 width="30%"
                 :visible.sync="dialogVisible_"
                 @open="getMedia"
-                :before-close="handleClose"
         >
             <div slot="footer">
                 <div class="container">
@@ -270,12 +269,6 @@
                 xhr.setRequestHeader("Authorization", that.$store.state.token);
                 xhr.send(data);
             },
-            //关闭对话框
-            handleClose(done) {
-
-                        done();
-
-            },
             //打开相机
             openCamers(uid) {
                 //返回改用户训练图片的数目
@@ -379,7 +372,7 @@
             getCourseStudentWithoutVacate() {
                 this.$axios({
                     method: 'POST',
-                    url: '/rollcall/getStudentRollCallRandom',
+                    url: '/rollcall/getCourseStudentWithoutVacate',
                     data: {
                         courseid: this.courseid
                     }
@@ -418,8 +411,10 @@
                                 type: 'success',
                                 message: '提交成功'
                             });
-                            this.$router.push('/ShowRollCallHistory');
-
+                            this.$router.push({
+                                name: 'ShowRollCallHistory',
+                                params: {courseid: this.courseid}
+                            });
                         } else {
                             this.$message.error('请稍后再试');
                             return;

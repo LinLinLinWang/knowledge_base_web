@@ -13,7 +13,7 @@ if (localStorage.getItem('token')) {
 }
 
 //免登录页面
-const whiteList = ['/login', '/registe', '/404'];// no redirect whitelist
+const whiteList = ['/login','/404'];// no redirect whitelist
 
 router.beforeEach((to, from, next) => {
     //不需要登录

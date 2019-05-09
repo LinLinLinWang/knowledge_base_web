@@ -71,33 +71,38 @@
         },
         methods: {
             getUnReadNum() {
-                this.$axios({
-                    method: 'POST',
-                    url: '/usermessage/getUnReadNum',
-                    data: {}
-                }).then(response => {
-                    if (this.message !== response.data.data) {
-                        this.notify = 0;
-                    } else {
-                        this.notify = 1;
-                    }
+                var msgnum;
+                if (this.$store.state.user == null) {
+                    clearTimeout(msgnum);
+                    return;
+                } else {
+                    this.$axios({
+                        method: 'POST',
+                        url: '/usermessage/getUnReadNum',
+                        data: {}
+                    }).then(response => {
+                        if (this.message !== response.data.data) {
+                            this.notify = 0;
+                        } else {
+                            this.notify = 1;
+                        }
 
-                    if (this.notify === 0 && response.data.data !== "0") {
-                        this.message = response.data.data;
-                        this.notify = 1;
-                        this.$notify({
-                            title: '消息通知',
-                            message: '您有' + this.message + '条新消息，请到右上角的消息中心中查看',
-                            offset: 100,
-                            type: 'warning'
-                        });
-                    }
-                });
+                        if (this.notify === 0 && response.data.data !== "0") {
+                            this.message = response.data.data;
+                            this.notify = 1;
+                            this.$notify({
+                                title: '消息通知',
+                                message: '您有' + this.message + '条新消息，请到右上角的消息中心中查看',
+                                offset: 100,
+                                type: 'warning'
+                            });
+                        }
+                    });
 
-                setTimeout(() => {
-                    this.getUnReadNum();
-                }, 6000);
-
+                    msgnum = setTimeout(() => {
+                        this.getUnReadNum();
+                    }, 6000);
+                }
             },
             //退出操作
             handleCommand(command) {

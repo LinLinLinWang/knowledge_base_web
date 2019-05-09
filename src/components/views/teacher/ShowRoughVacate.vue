@@ -206,16 +206,7 @@
                         return "其他"
                 }
             },
-            handleClose(done) {
-                this.$confirm('确认关闭？')
-                    .then(() => {
 
-                        done();
-                    })
-                    .catch(() => {
-                    });
-
-            },
             //请假申请
             getAllVacateStateIsZero() {
                 this.$axios({

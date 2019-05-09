@@ -73,7 +73,7 @@
                 title="提示"
                 :visible.sync="dialogVisible"
                 width="30%"
-                :before-close="handleClose">
+               >
             <el-form :model="ruleForm" ref="ruleForm" label-width="100px" class="demo-ruleForm">
                 <el-form-item label="课程名称" prop="cname">
                     <el-input v-model="ruleForm.cname"></el-input>
@@ -132,16 +132,7 @@
             this.getAllCourseByCid();
         },
         methods: {
-            handleClose(done) {
-                this.$confirm('确认关闭？')
-                    .then(_ => {
 
-                        done();
-                    })
-                    .catch(_ => {
-                    });
-
-            },
             createCourse() {
                 this.$router.push('/createClass');
 

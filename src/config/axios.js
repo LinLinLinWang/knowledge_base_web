@@ -34,7 +34,7 @@ axios.interceptors.response.use(
             if (error.response.status === 401) {
                 store.commit(types.LOGOUT);
                 router.replace({
-                    path: '/login',
+                    path: '/login?type=401',
                 });
                 return Promise.reject('401')   // 返回接口返回的错误信息
             }

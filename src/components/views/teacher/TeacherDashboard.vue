@@ -88,7 +88,7 @@
 
     export default {
 
-        name: 'StudentDashboard',
+        name: 'TeacherDashboard',
         data() {
             return {
                 imgsrc: [],

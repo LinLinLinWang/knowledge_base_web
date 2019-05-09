@@ -135,7 +135,7 @@
                 title="提示"
                 :visible.sync="dialogVisible_"
                 width="30%"
-                :before-close="handleClose">
+                >
 
             <el-button type="primary" @click="showPersonaRollCall()">个人历史出勤</el-button>
             <el-button type="primary" @click="showRollCallDetailByCourseId">课程历史出勤</el-button>
@@ -362,22 +362,12 @@
                 return row.anum + "/" + row.snum;
             },
             showRollWays(row) {
-                console.log(row);
                 this.dialogVisible = true;
                 this.courseid = row.courseid;
                 this.ruleForm.cname = row.cname;
                 this.ruleForm.ctime = '1'
 
 
-            },
-            //关闭对话框
-            handleClose(done) {
-                this.$confirm('确认关闭？')
-                    .then(() => {
-                        done();
-                    })
-                    .catch(() => {
-                    });
             },
             //开始点名
             startRoll() {

@@ -97,6 +97,10 @@
             this.getLatestRollDetail(1);
             this.getHistoryRollCall();
         },
+        mounted() {
+            this.getLatestRollDetail(1);
+            this.getHistoryRollCall();
+        },
         methods: {
             goAnchor(selector) {
                 var anchor = this.$el.querySelector(selector)

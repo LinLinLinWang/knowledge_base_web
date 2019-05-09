@@ -63,15 +63,31 @@
                     return item.path === route.fullPath;
                 })
                 if (!isExist) {
-                    if (route.meta.title !== 'dashboard') {
-                        if (this.tagsList.length >= 8) {
-                            this.tagsList.shift();
-                        }
-                        this.tagsList.push({
-                            title: route.meta.title,
-                            path: route.fullPath,
-                            name: route.matched[1].components.default.name
-                        })
+                    console.log(route.meta.title);
+                    console.log("!!!")
+                    switch (route.meta.title) {
+                        case 'dashboard':
+                            break;
+                        case 'TeacherDashboard':
+                            break;
+                        case 'StudentDashboard':
+                            break;
+                        case '概览':
+                            break;
+                        case 'ShowRollCallHistory':
+                            break;
+                        case '常规点名':
+                            break;
+                        default :
+                            if (this.tagsList.length >= 8) {
+                                this.tagsList.shift();
+                            }
+                            this.tagsList.push({
+                                title: route.meta.title,
+                                path: route.fullPath,
+                                name: route.matched[1].components.default.name
+                            });
+                            break;
                     }
                 }
                 bus.$emit('tags', this.tagsList);
