@@ -39,14 +39,10 @@ axios.interceptors.response.use(
                 return Promise.reject('401')   // 返回接口返回的错误信息
             }
     }
-)
-;
+);
 
-if (process.env.NODE_ENV === "production") {
-    axios.defaults.baseURL = 'https://vue.aloli.cn/api';
-} else {
-    axios.defaults.baseURL = '/api';
-}
+
+axios.defaults.baseURL = '/api';
 
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'; //改为表单提交
 axios.defaults.withCredentials = true; //携带cookie
