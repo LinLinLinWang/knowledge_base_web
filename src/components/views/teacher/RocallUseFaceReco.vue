@@ -132,6 +132,8 @@
                 <div v-show="!notsupport">
                     该同学已上传{{successnum}}张
                     <el-button type="primary" @click="getPhoto" round>拍照</el-button>
+                    &nbsp;
+                    <el-button @click="showimg=false">取消</el-button>
                     <br>
                     <video id="videovar" width="100%" autoplay></video>
                     <br>
@@ -426,5 +428,9 @@
     .el-tabs__item {
         height: 50px !important;
         font-size: 25px;
+    }
+
+    #videovar {
+        max-width: 400px;
     }
 </style>
