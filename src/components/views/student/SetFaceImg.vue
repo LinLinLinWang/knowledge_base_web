@@ -91,6 +91,10 @@
                     if (xhr.readyState === 4 && xhr.status === 200) {
                         let resdata = JSON.parse(xhr.responseText);
                         that.successnum = resdata.successnum;
+                        if (that.successnum >= 10) {
+                            /*开始训练*/
+                            that.startTrain();
+                        }
                         if (resdata.state === "400") {
                             that.$message({
                                 message: resdata.msg,
@@ -122,6 +126,17 @@
                     this.successnum = resdata.num;
                 })
 
+            },
+            startTrain() {
+                this.$axios({
+                    method: 'POST',
+                    url: '/users/startTrain',
+                    data: {}
+                }).then(response => {
+                    this.$router.push({
+                        path: "/"
+                    });
+                })
             }
 
 
