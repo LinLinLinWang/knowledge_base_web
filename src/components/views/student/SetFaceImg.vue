@@ -86,6 +86,13 @@
                 //附加表单id
                 data.append('imgCode', image_code);
 
+                const loading = this.$loading({
+                    lock: true,
+                    text: 'Loading',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.7)'
+                });
+
                 let xhr = new XMLHttpRequest();
                 xhr.onreadystatechange = function () {
                     if (xhr.readyState === 4 && xhr.status === 200) {
@@ -95,6 +102,7 @@
                             /*开始训练*/
                             that.startTrain();
                         }
+                        loading.close();
                         if (resdata.state === "400") {
                             that.$message({
                                 message: resdata.msg,
@@ -106,6 +114,13 @@
                                 type: 'success'
                             });
                         }
+
+                    } else if (xhr.readyState === 4 && xhr.status === 500) {
+                        loading.close();
+                        that.$message({
+                            message: "上传图片失败，请检查网络后重试",
+                            type: 'error'
+                        });
 
                     }
                 };
