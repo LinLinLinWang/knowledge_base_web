@@ -50,6 +50,16 @@
                         </template>
                     </el-table-column>
                 </el-table>
+                <div class="pagination">
+                    <el-pagination
+                            background
+                            :current-page="currentPage"
+                            @current-change="handleCurrentChange"
+                            layout="total, prev, pager, next, jumper"
+                            :total="datatotal"
+                    >
+                    </el-pagination>
+                </div>
             </el-tab-pane>
             <el-tab-pane>
                 <span slot="label" class="tabs-span">
@@ -106,6 +116,16 @@
                         </template>
                     </el-table-column>
                 </el-table>
+                <div class="pagination">
+                    <el-pagination
+                            background
+                            :current-page="currentPage2"
+                            @current-change="handleCurrentChange"
+                            layout="total, prev, pager, next, jumper"
+                            :total="datatotal2"
+                    >
+                    </el-pagination>
+                </div>
             </el-tab-pane>
         </el-tabs>
 
@@ -120,10 +140,18 @@
 
         data() {
             return {
+
+                //当前页码
+                currentPage: 1,
+                //总记录数
+                datatotal: 0,
+                //当前页码
+                currentPage2: 1,
+                //总记录数
+                datatotal2: 0,
                 tableData: [],
                 tableData1: [],
                 search: '',
-
                 formInline: {
                     name: '',
                     region: ''
@@ -147,6 +175,17 @@
             this.getnotjoinedStudent();
         },
         methods: {
+
+            //加载当前页的数据
+            handleCurrentChange(nowpage) {
+                this.currentPage = nowpage;
+                this.getnotjoinedStudent();
+                this.getnotjoinedStudent();
+            },
+
+
+
+
             //同意申请
             apply(index, row) {
 
@@ -247,15 +286,15 @@
                     method: 'POST',
                     url: '/classstudents/getStudents',
                     data: {
+                        currentPage: this.currentPage,
                         cid: this.cid,
                         state: 1//已加入的
 
                     }
                 }).then(response => {
-                    var resdata = response.data;
-                    var jsondata = eval('(' + resdata.data + ')');
+                    this.tableData = JSON.parse(response.data.data);
+                    this.datatotal = JSON.parse(response.data.total);
 
-                    this.tableData = jsondata;
                 })
 
 
@@ -266,15 +305,14 @@
                     method: 'POST',
                     url: '/classstudents/getStudents',
                     data: {
+                        currentPage: this.currentPage2,
                         cid: this.cid,
                         state: 0//待审核
 
                     }
                 }).then(response => {
-                    var resdata = response.data;
-                    var jsondata = eval('(' + resdata.data + ')');
-
-                    this.tableData1 = jsondata;
+                    this.tableData1 = JSON.parse(response.data.data);
+                    this.datatotal2 = JSON.parse(response.data.total);
                 })
 
 
