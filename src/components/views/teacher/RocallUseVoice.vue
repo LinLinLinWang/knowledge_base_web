@@ -84,7 +84,7 @@
                 </el-row>
             </el-col>
 
-            <el-col :span="6">
+            <el-col :span="6"  class="hidden-md-and-down">
                 <el-card :body-style="{ padding: '5px' }">
                     <el-row>
                         请假同学信息(点击右侧箭头展开详情)
