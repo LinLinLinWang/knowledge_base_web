@@ -1,5 +1,6 @@
 <template>
     <div style="background-color: white">
+        <div v-show="showdiv===1">
         <el-tabs tab-position="top" :stretch="true">
             <el-tab-pane>
                 <span slot="label" class="tabs-span">
@@ -66,10 +67,8 @@
                 </el-form>
             </el-tab-pane>
         </el-tabs>
-        <el-dialog
-                title="提示"
-                :visible.sync="dialogVisible"
-                width="30%">
+        </div>
+        <div v-show="showdiv===0">
             <el-form :model="ruleForm" ref="ruleForm" label-width="100px" class="demo-ruleForm">
                 <el-form-item label="课程名称" prop="cname">
                     <el-input v-model="ruleForm.cname"></el-input>
@@ -90,10 +89,10 @@
 
             </el-form>
             <span slot="footer" class="dialog-footer">
-    <el-button @click="dialogVisible = false">取 消</el-button>
+    <el-button @click="canceladdcourse">取 消</el-button>
     <el-button type="primary" @click="updateAddCourse">确 定</el-button>
   </span>
-        </el-dialog>
+     </div>
     </div>
     <!-- 对话框-->
 
@@ -104,6 +103,7 @@
 
         data() {
             return {
+                showdiv:1,
                 tableData: [],
                 search: '',
 
@@ -127,6 +127,9 @@
             this.getAllClass();
         },
         methods: {
+            canceladdcourse(){
+                this.showdiv=1;
+            },
             updateAddCourse() {
                 this.$axios({
                     method: 'POST',
@@ -145,7 +148,7 @@
                             type: 'success',
                             message: '添加成功'
                         });
-                        this.dialogVisible = false;
+                        this.showdiv = 1;
                         this.getAllClass();
 
                     } else {
@@ -274,8 +277,9 @@
             //添加课程
             addCourse(index, row) {
 
-                this.dialogVisible = true;
+                //this.dialogVisible = true;
                 this.cid = row.cid;
+                this.showdiv=0;
 
 
             }
