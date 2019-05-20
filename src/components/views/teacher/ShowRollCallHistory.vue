@@ -9,24 +9,22 @@
 
         </el-tabs>
         <el-row :gutter="16">
-            <el-col :span="12">
+            <el-col :span="12" :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
 
                 <el-row>
-                    <el-row>
-                        <el-col :span="7" :offset="7">
-                            <el-button type="primary" @click="getLatestRollDetail(1)">最近一次</el-button>
+                    <el-col :span="7" :offset="5 ">
+                        <el-button type="primary" @click="getLatestRollDetail(1)">最近一次</el-button>
 
 
-                        </el-col>
-                        <el-col :span="10">
-                            <el-button type="success" @click="getLatestRollDetail(-1)">上次出勤</el-button>
-                        </el-col>
+                    </el-col>
+                    <el-col :span="10">
+                        <el-button type="success" @click="getLatestRollDetail(-1)">上次出勤</el-button>
+                    </el-col>
 
 
-                    </el-row>
-                    <el-row>
-                        <ve-pie :data="chartData"></ve-pie>
-                    </el-row>
+                </el-row>
+                <el-row>
+                    <ve-pie :data="chartData"></ve-pie>
                 </el-row>
 
             </el-col>
