@@ -2,7 +2,7 @@
     <div>
         <div v-show="showdiv===0">
             <el-row>
-                <WeatherAndWeekDayAndDate></WeatherAndWeekDayAndDate>
+                <WeatherAndWeekDayAndDate  class="hidden-md-and-down"></WeatherAndWeekDayAndDate>
                 <el-row :gutter="24">
                     <el-card :body-style="{ padding: '5px' }">
 
@@ -11,16 +11,16 @@
 
                                 style="width: 100%">
 
+<!--                            <el-table-column-->
+<!--                                    label="课程id"-->
+<!--                                    prop="courseid">-->
+<!--                            </el-table-column>-->
                             <el-table-column
-                                    label="课程id"
-                                    prop="courseid">
-                            </el-table-column>
-                            <el-table-column
-                                    label="班级名字"
+                                    label="班级名"
                                     prop="classname">
                             </el-table-column>
                             <el-table-column
-                                    label="课程名字"
+                                    label="课程名"
                                     prop="cname"
                             >
                             </el-table-column>
@@ -28,8 +28,6 @@
                                     label="应到人数/总人数"
                                     prop="cname"
                                     :formatter="snum_anum"
-
-
                             >
                             </el-table-column>
                             <el-table-column>
