@@ -2,7 +2,7 @@
     <div style="background-color: white">
         <div v-show="!showimg">
             <el-row :gutter="16">
-                <WeatherAndWeekDayAndDate></WeatherAndWeekDayAndDate>
+                <WeatherAndWeekDayAndDate  class="hidden-md-and-down"></WeatherAndWeekDayAndDate>
             </el-row>
             <el-row :gutter="16">
                 <el-col :span="8" :offset="8">
