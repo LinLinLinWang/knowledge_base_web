@@ -25,20 +25,24 @@
 
                     <el-col :span="2" :offset="2">
                         <svg-icon v-bind:icon-class="weather"/>
+                        <br>
                         <span>{{weathername}}</span>
 
                     </el-col>
                     <el-col :span="2">
                         <svg-icon icon-class="周"/>
+                        <br>
                         <span>{{temperature+"℃"}}</span>
                     </el-col>
                     <el-col :span="2">
                         <svg-icon icon-class="日期"/>
+                        <br>
                         <span>{{humidity+"%"}}</span>
 
                     </el-col>
-                    <el-col :span="2">
+                    <el-col :span="4">
                         <svg-icon icon-class="日期"/>
+                        <br>
                         <span>{{wind}}</span>
                     </el-col>
 
@@ -129,9 +133,9 @@
                     var resdata = response.data;
                     var jsondata = eval('(' + resdata.data + ')');
                     this.judgeWeather(jsondata.info);
-                    this.weathername = "当前：" + jsondata.info;
-                    this.wind = jsondata.direct + ":" + jsondata.power;
-                    this.temperature = "温度：" + jsondata.temperature;
+                    this.weathername = jsondata.info;
+                    this.wind = jsondata.direct + ":"+ jsondata.power;
+                    this.temperature = jsondata.temperature;
                     this.humidity = "湿度:" + jsondata.humidity;
                 })
 
