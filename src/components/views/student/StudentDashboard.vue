@@ -124,7 +124,9 @@
                         var resdata = response.data;
                         this.lastloginaddress = resdata.area;
                         this.lastlogintime = resdata.time;
-                        this.lastlogintype = resdata.lasttype;
+                        this.lastlogintype = resdata.type;
+
+                        console.log(resdata);
 
                         //用户第一次登录
                         if (resdata.isfirst === "true") {
@@ -132,7 +134,7 @@
                         } else {
                             this.beforelogintime = resdata.lasttime;
                             this.beforeloginaddress = resdata.lastarea;
-                            this.beforelogintype = resdata.type;
+                            this.beforelogintype = resdata.lasttype;
                         }
                     },
                 )
