@@ -41,10 +41,6 @@
                         style="width: 100%">
 
                     <el-table-column
-                            label="学生账号"
-                            prop="uid">
-                    </el-table-column>
-                    <el-table-column
                             label="学生姓名"
                             prop="uname">
                     </el-table-column>
@@ -75,9 +71,8 @@
                     </el-table-column>
                 </el-table>
                 <el-row :gutter="16">
-                    <el-col :span="4" :offset="20">
+                    <el-col :span="4" :offset="12">
                         <el-button type="primary" @click="submit()">立即创建</el-button>
-
                     </el-col>
 
 

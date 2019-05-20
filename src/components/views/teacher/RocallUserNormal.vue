@@ -19,10 +19,7 @@
                         border
                         style="width: 100%">
 
-                    <el-table-column
-                            label="学生账号"
-                            prop="uid">
-                    </el-table-column>
+
                     <el-table-column
                             label="学生姓名"
                             prop="uname">
