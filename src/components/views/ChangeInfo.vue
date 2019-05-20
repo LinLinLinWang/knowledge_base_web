@@ -88,7 +88,7 @@
                                     }
                                 });
                             } else {
-                                this.$alert('修改失败!请检查密码!', '修改', {
+                                this.$alert('修改失败!请检查密码长度是否小于6位!', '修改', {
                                     confirmButtonText: '确定',
                                     center: true,
                                 });
