@@ -2,7 +2,7 @@
     <div style="background-color: white">
         <div v-show="!showimg">
             <el-row :gutter="16">
-                <WeatherAndWeekDayAndDate  class="hidden-md-and-down"></WeatherAndWeekDayAndDate>
+                <WeatherAndWeekDayAndDate class="hidden-md-and-down"></WeatherAndWeekDayAndDate>
             </el-row>
             <el-row :gutter="16">
                 <el-col :span="8" :offset="8">
@@ -20,10 +20,7 @@
                             border
                             style="width: 100%">
 
-                        <el-table-column
-                                label="学生账号"
-                                prop="uid">
-                        </el-table-column>
+
                         <el-table-column
                                 label="学生姓名"
                                 prop="uname">
@@ -33,12 +30,7 @@
                                 prop="phone"
                         >
                         </el-table-column>
-                        <el-table-column
-                                label="请假情况"
-                                prop="state"
-                                :formatter="studentState"
-                        >
-                        </el-table-column>
+
                         <el-table-column
                                 label="人脸识别">
                             <template slot-scope="scope">
@@ -47,6 +39,12 @@
                             </template>
 
 
+                        </el-table-column>
+                        <el-table-column
+                                label="请假情况"
+                                prop="state"
+                                :formatter="studentState"
+                        >
                         </el-table-column>
                         <el-table-column
                                 align="right">
@@ -75,7 +73,7 @@
                     </el-row>
                 </el-col>
 
-                <el-col :span="6">
+                <el-col :span="6" class="hidden-md-and-down">
 
 
                     <el-card :body-style="{ padding: '5px' }">
