@@ -24,7 +24,7 @@
 
                 </el-row>
                 <el-row>
-                    <ve-pie :data="chartData"></ve-pie>
+                    <ve-pie :data="chartData" style="max-width: 90%"></ve-pie>
                 </el-row>
 
             </el-col>
@@ -162,9 +162,10 @@
                     }).then(response => {
                         var resdata = response.data;
                         if (resdata.state == 200) {
+                            let num = parseInt(this.index);
                             this.$message({
                                 type: 'success',
-                                message: '获取倒数第' + this.index + '次点名记录成功'
+                                message: '获取倒数第' + num + '次点名记录成功'
                             });
 
 
