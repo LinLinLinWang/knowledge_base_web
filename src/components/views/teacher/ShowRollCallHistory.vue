@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-row :gutter="16">
-            <WeatherAndWeekDayAndDate></WeatherAndWeekDayAndDate>
+            <WeatherAndWeekDayAndDate class="hidden-md-and-down"></WeatherAndWeekDayAndDate>
 
 
         </el-row>
@@ -30,7 +30,7 @@
                 </el-row>
 
             </el-col>
-            <el-col :span="12">
+            <el-col :span="12" class="hidden-md-and-down">
                 <el-row>
                     <ve-line :data="chartData1" :settings="chartSettings"></ve-line>
                 </el-row>
