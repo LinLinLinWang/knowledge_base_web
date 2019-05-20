@@ -14,7 +14,7 @@
 
             </el-row>
             <el-row :gutter="16">
-                <el-col :span="18">
+                <el-col :span="18" :xs="24" :sm="24" :md="24" :lg="18" :xl="18">
                     <el-table
                             :data="tableData"
                             border
